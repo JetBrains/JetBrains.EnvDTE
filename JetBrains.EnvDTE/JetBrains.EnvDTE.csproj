@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="JetBrains.RdFramework" Version="1.0.0-preview2-9" />
+        <Reference Include="EnvDTE">
+            <HintPath>..\Interfaces\envdte.dll</HintPath>
+        </Reference>
+        <Reference Include="EnvDTE80">
+            <HintPath>..\Interfaces\envdte80.dll</HintPath>
+        </Reference>
+        <Reference Include="EnvDTE90">
+            <HintPath>..\Interfaces\envdte90.dll</HintPath>
+        </Reference>
+        <Reference Include="EnvDTE90a">
+            <HintPath>..\Interfaces\envdte90a.dll</HintPath>
+        </Reference>
+        <Reference Include="EnvDTE100">
+            <HintPath>..\Interfaces\envdte100.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+</Project>

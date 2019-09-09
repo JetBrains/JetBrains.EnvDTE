@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetBrains.EnvDTE", "JetBrains.EnvDTE\JetBrains.EnvDTE.csproj", "{4C4946B0-8AE5-46F3-89FE-C225537843D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetBrains.EnvDTEHost", "JetBrains.EnvDTEHost\JetBrains.EnvDTEHost.csproj", "{9684555C-E68A-4D65-80FC-8F7A9DB9D8E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetBrains.EnvDTE.Interfaces", "JetBrains.EnvDTE.Interfaces\JetBrains.EnvDTE.Interfaces.csproj", "{54D19E01-3A73-402F-B5D5-F757813DC5F6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C4946B0-8AE5-46F3-89FE-C225537843D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C4946B0-8AE5-46F3-89FE-C225537843D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C4946B0-8AE5-46F3-89FE-C225537843D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C4946B0-8AE5-46F3-89FE-C225537843D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9684555C-E68A-4D65-80FC-8F7A9DB9D8E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9684555C-E68A-4D65-80FC-8F7A9DB9D8E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9684555C-E68A-4D65-80FC-8F7A9DB9D8E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9684555C-E68A-4D65-80FC-8F7A9DB9D8E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54D19E01-3A73-402F-B5D5-F757813DC5F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54D19E01-3A73-402F-B5D5-F757813DC5F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54D19E01-3A73-402F-B5D5-F757813DC5F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54D19E01-3A73-402F-B5D5-F757813DC5F6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
