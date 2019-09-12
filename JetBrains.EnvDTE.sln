@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetBrains.EnvDTEHost", "JetBrains.EnvDTEHost\JetBrains.EnvDTEHost.csproj", "{9684555C-E68A-4D65-80FC-8F7A9DB9D8E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE.Host", "EnvDTE.Host\EnvDTE.Host.csproj", "{9684555C-E68A-4D65-80FC-8F7A9DB9D8E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE", "EnvDTE\EnvDTE.csproj", "{2F2D3061-EE9C-4EA3-BA27-E672A2D66E3D}"
 EndProject
