@@ -74,7 +74,7 @@ configure<RdgenParams> {
   generator {
     language = "csharp"
     transform = "asis"
-    root = "com.jetbrains.rider.model.nova.ide.IdeRoot"
+    root = "model.T4Root"
     namespace = "com.jetbrains.rider.model"
     directory = "$clientOutput"
   }
@@ -82,7 +82,7 @@ configure<RdgenParams> {
   generator {
     language = "csharp"
     transform = "reversed"
-    root = "com.jetbrains.rider.model.nova.ide.IdeRoot"
+    root = "model.T4Root"
     namespace = "JetBrains.Rider.Model"
     directory = "$hostOutput"
   }
