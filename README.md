@@ -8,3 +8,11 @@ The solution:
 This project creates an assembly that looks exactly like Visual Studio EnvDTE, but can be obtained inside JetBrains Rider.
 
 Instead of accessing COM, this DTE mock uses RD protocol to access project model info built by Rider
+----
+Build instructions:  
+```bash
+cd Protocol
+gradlew
+cd ..
+msbuild
+```
