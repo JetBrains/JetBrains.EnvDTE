@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!--Project was exported from assembly: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\PublicAssemblies\envdte100.dll-->
+  <!--Project was exported from assembly: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\PublicAssemblies\envdte90a.dll-->
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0C3EAF9F-F664-4567-B583-498EAEB771EC}</ProjectGuid>
+    <ProjectGuid>{79D375EC-CCCA-4C47-B5E3-6A7D3D7CFB6B}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>EnvDTE100</AssemblyName>
-    <ApplicationVersion>10.0.0.0</ApplicationVersion>
-    <RootNamespace>EnvDTE100</RootNamespace>
+    <AssemblyName>EnvDTE90a</AssemblyName>
+    <ApplicationVersion>9.0.0.0</ApplicationVersion>
+    <RootNamespace>EnvDTE90a</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,30 +30,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="vsAddFromTemplateOptions.cs" />
-    <Compile Include="vsDocumentDockPreferenceOptions.cs" />
-    <Compile Include="vsRichClientExperienceOptions.cs" />
-    <Compile Include="Solution4.cs" />
-    <Compile Include="Expression2.cs" />
-    <Compile Include="Debugger5.cs" />
+    <Compile Include="Debugger4.cs" />
+    <Compile Include="Process4.cs" />
+    <Compile Include="Breakpoint3.cs" />
+    <Compile Include="StackFrame2.cs" />
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JetBrains.EnvDTE.Interfaces\JetBrains.EnvDTE.Interfaces.csproj">
+    <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj">
       <Project>{949a7537-794b-47db-bf00-61a48a96003e}</Project>
-      <Name>JetBrains.EnvDTE.Interfaces</Name>
+      <Name>EnvDTE.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\JetBrains.EnvDTE80.Interfaces\JetBrains.EnvDTE80.Interfaces.csproj">
+    <ProjectReference Include="..\EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj">
       <Project>{65da4be3-6a1e-4c57-8942-6a2b70bf4bc6}</Project>
-      <Name>JetBrains.EnvDTE80.Interfaces</Name>
+      <Name>EnvDTE80.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\JetBrains.EnvDTE90.Interfaces\JetBrains.EnvDTE90.Interfaces.csproj">
+    <ProjectReference Include="..\EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj">
       <Project>{a33a50a9-7e04-410f-b749-3958ff46ac5a}</Project>
-      <Name>JetBrains.EnvDTE90.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\JetBrains.EnvDTE90a.Interfaces\JetBrains.EnvDTE90a.Interfaces.csproj">
-      <Project>{79d375ec-ccca-4c47-b5e3-6a7d3d7cfb6b}</Project>
-      <Name>JetBrains.EnvDTE90a.Interfaces</Name>
+      <Name>EnvDTE90.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

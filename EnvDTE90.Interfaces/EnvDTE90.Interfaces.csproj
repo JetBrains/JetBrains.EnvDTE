@@ -50,13 +50,13 @@
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JetBrains.EnvDTE.Interfaces\JetBrains.EnvDTE.Interfaces.csproj">
+    <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj">
       <Project>{949a7537-794b-47db-bf00-61a48a96003e}</Project>
-      <Name>JetBrains.EnvDTE.Interfaces</Name>
+      <Name>EnvDTE.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\JetBrains.EnvDTE80.Interfaces\JetBrains.EnvDTE80.Interfaces.csproj">
+    <ProjectReference Include="..\EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj">
       <Project>{65da4be3-6a1e-4c57-8942-6a2b70bf4bc6}</Project>
-      <Name>JetBrains.EnvDTE80.Interfaces</Name>
+      <Name>EnvDTE80.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

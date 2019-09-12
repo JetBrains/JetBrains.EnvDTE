@@ -70,7 +70,7 @@ configure<RdgenParams> {
     val rdLibDirectory = File(sdkPath, "lib/rd").canonicalFile
     "$rdLibDirectory/rider-model.jar"
   })
-  sources(File(repoRoot, "Protocol/src/main/kotlin/model"))
+  sources(File(repoRoot, "src/main/kotlin/model"))
   packages = "model"
 
   generator {

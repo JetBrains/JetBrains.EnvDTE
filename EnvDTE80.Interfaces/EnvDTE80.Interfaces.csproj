@@ -168,9 +168,9 @@
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JetBrains.EnvDTE.Interfaces\JetBrains.EnvDTE.Interfaces.csproj">
+    <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj">
       <Project>{949a7537-794b-47db-bf00-61a48a96003e}</Project>
-      <Name>JetBrains.EnvDTE.Interfaces</Name>
+      <Name>EnvDTE.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

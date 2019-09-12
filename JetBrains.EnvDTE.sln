@@ -2,17 +2,17 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetBrains.EnvDTEHost", "JetBrains.EnvDTEHost\JetBrains.EnvDTEHost.csproj", "{9684555C-E68A-4D65-80FC-8F7A9DB9D8E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetBrains.EnvDTE", "JetBrains.EnvDTE\JetBrains.EnvDTE.csproj", "{2F2D3061-EE9C-4EA3-BA27-E672A2D66E3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE", "EnvDTE\EnvDTE.csproj", "{2F2D3061-EE9C-4EA3-BA27-E672A2D66E3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetBrains.EnvDTE.Interfaces", "JetBrains.EnvDTE.Interfaces\JetBrains.EnvDTE.Interfaces.csproj", "{949A7537-794B-47DB-BF00-61A48A96003E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE.Interfaces", "EnvDTE.Interfaces\EnvDTE.Interfaces.csproj", "{949A7537-794B-47DB-BF00-61A48A96003E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetBrains.EnvDTE80.Interfaces", "JetBrains.EnvDTE80.Interfaces\JetBrains.EnvDTE80.Interfaces.csproj", "{65DA4BE3-6A1E-4C57-8942-6A2B70BF4BC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE80.Interfaces", "EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj", "{65DA4BE3-6A1E-4C57-8942-6A2B70BF4BC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetBrains.EnvDTE90.Interfaces", "JetBrains.EnvDTE90.Interfaces\JetBrains.EnvDTE90.Interfaces.csproj", "{A33A50A9-7E04-410F-B749-3958FF46AC5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE90.Interfaces", "EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj", "{A33A50A9-7E04-410F-B749-3958FF46AC5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetBrains.EnvDTE90a.Interfaces", "JetBrains.EnvDTE90a.Interfaces\JetBrains.EnvDTE90a.Interfaces.csproj", "{79D375EC-CCCA-4C47-B5E3-6A7D3D7CFB6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE90a.Interfaces", "EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj", "{79D375EC-CCCA-4C47-B5E3-6A7D3D7CFB6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetBrains.EnvDTE100.Interfaces", "JetBrains.EnvDTE100.Interfaces\JetBrains.EnvDTE100.Interfaces.csproj", "{0C3EAF9F-F664-4567-B583-498EAEB771EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE100.Interfaces", "EnvDTE100.Interfaces\EnvDTE100.Interfaces.csproj", "{0C3EAF9F-F664-4567-B583-498EAEB771EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
