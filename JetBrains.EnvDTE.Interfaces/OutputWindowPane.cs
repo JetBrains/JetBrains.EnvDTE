@@ -2,7 +2,7 @@
 {
 	public interface OutputWindowPane
 	{
-		string this[] { get; }
+		string Name { get; }
 		DTE DTE { get; }
 		OutputWindowPanes Collection { get; }
 		string Guid { get; }

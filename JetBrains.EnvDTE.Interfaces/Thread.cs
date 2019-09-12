@@ -2,7 +2,7 @@
 {
 	public interface Thread
 	{
-		string this[] { get; }
+		string Name { get; }
 		int SuspendCount { get; }
 		int ID { get; }
 		StackFrames StackFrames { get; }

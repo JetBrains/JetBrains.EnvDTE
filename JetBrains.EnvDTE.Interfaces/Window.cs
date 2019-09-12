@@ -22,7 +22,7 @@
 		Document Document { get; }
 		object Selection { get; }
 		bool Linkable { get; set; }
-		string this[] { get; set; }
+		string Caption { get; set; }
 		bool IsFloating { get; set; }
 		bool AutoHides { get; set; }
 		ContextAttributes ContextAttributes { get; }

@@ -2,7 +2,7 @@
 {
 	public interface Language
 	{
-		string this[] { get; }
+		string Name { get; }
 		DTE DTE { get; }
 		Debugger Parent { get; }
 		Languages Collection { get; }

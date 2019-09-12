@@ -16,7 +16,7 @@
 		bool EqualTo(TextPoint Point);
 		bool LessThan(TextPoint Point);
 		bool GreaterThan(TextPoint Point);
-		bool TryToShow(vsPaneShowHow How = vsPaneShowHow.vsPaneShowCentered, object PointOrCount);
+		bool TryToShow(vsPaneShowHow How = vsPaneShowHow.vsPaneShowCentered, object PointOrCount = null);
 		CodeElement get_CodeElement(vsCMElement Scope);
 		EditPoint CreateEditPoint();
 	}

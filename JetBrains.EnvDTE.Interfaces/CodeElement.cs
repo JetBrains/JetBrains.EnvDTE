@@ -4,7 +4,7 @@
 	{
 		DTE DTE { get; }
 		CodeElements Collection { get; }
-		string this[] { get; set; }
+		string Name { get; set; }
 		string FullName { get; }
 		ProjectItem ProjectItem { get; }
 		vsCMElement Kind { get; }

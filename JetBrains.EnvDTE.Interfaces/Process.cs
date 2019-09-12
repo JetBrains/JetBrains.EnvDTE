@@ -2,7 +2,7 @@
 {
 	public interface Process
 	{
-		string this[] { get; }
+		string Name { get; }
 		int ProcessID { get; }
 		Programs Programs { get; }
 		DTE DTE { get; }

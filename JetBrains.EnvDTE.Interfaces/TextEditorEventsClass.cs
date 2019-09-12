@@ -4,7 +4,5 @@
 	{
 		public extern TextEditorEventsClass();
 		public virtual extern event _dispTextEditorEvents_LineChangedEventHandler LineChanged;
-		public virtual extern void add_LineChanged(_dispTextEditorEvents_LineChangedEventHandler A_1);
-		public virtual extern void remove_LineChanged(_dispTextEditorEvents_LineChangedEventHandler A_1);
 	}
 }

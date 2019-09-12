@@ -2,7 +2,7 @@
 {
 	public interface ToolBoxTab
 	{
-		string this[] { get; set; }
+		string Name { get; set; }
 		ToolBoxTabs Collection { get; }
 		DTE DTE { get; }
 		ToolBoxItems ToolBoxItems { get; }

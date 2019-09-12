@@ -13,7 +13,7 @@
 		int CurrentLine { get; }
 		bool IsEmpty { get; }
 		bool IsActiveEndGreater { get; }
-		string this[] { get; set; }
+		string Text { get; set; }
 		int TopLine { get; }
 		VirtualPoint TopPoint { get; }
 		TextPane TextPane { get; }

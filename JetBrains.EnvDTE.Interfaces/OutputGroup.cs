@@ -6,7 +6,7 @@
 		OutputGroups Collection { get; }
 		object FileNames { get; }
 		int FileCount { get; }
-		string this[] { get; }
+		string DisplayName { get; }
 		string CanonicalName { get; }
 		object FileURLs { get; }
 		string Description { get; }

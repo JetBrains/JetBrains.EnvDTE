@@ -2,7 +2,7 @@
 {
 	public interface Program
 	{
-		string this[] { get; }
+		string Name { get; }
 		Process Process { get; }
 		Threads Threads { get; }
 		bool IsBeingDebugged { get; }

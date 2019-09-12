@@ -16,7 +16,7 @@ namespace EnvDTE
 			string SubCategory,
 			string Description,
 			vsTaskPriority Priority = vsTaskPriority.vsTaskPriorityMedium,
-			object Icon,
+			object Icon = null,
 			bool Checkable = false,
 			string File = "",
 			int Line = -1,

@@ -2,7 +2,7 @@
 {
 	public interface Project
 	{
-		string this[] { get; set; }
+		string Name { get; set; }
 		string FileName { get; }
 		bool IsDirty { get; set; }
 		Projects Collection { get; }

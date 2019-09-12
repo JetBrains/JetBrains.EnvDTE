@@ -4,7 +4,7 @@
 	{
 		DTE DTE { get; }
 		DTE Parent { get; }
-		string this[] { set; get; }
+		string Text { set; get; }
 		void Clear();
 		void Animate(bool On, object AnimationType);
 		void Progress(bool InProgress, string Label = "", int AmountCompleted = 0, int Total = 0);

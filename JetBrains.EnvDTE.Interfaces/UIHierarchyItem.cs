@@ -4,7 +4,7 @@
 	{
 		DTE DTE { get; }
 		UIHierarchyItems Collection { get; }
-		string this[] { get; }
+		string Name { get; }
 		UIHierarchyItems UIHierarchyItems { get; }
 		object Object { get; }
 		bool IsSelected { get; }

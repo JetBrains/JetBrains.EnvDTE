@@ -4,7 +4,7 @@
 	{
 		DTE DTE { get; }
 		SolutionConfigurations Collection { get; }
-		string this[] { get; }
+		string Name { get; }
 		SolutionContexts SolutionContexts { get; }
 		void Delete();
 		void Activate();

@@ -2,7 +2,7 @@
 {
 	public interface Command
 	{
-		string this[] { get; }
+		string Name { get; }
 		Commands Collection { get; }
 		DTE DTE { get; }
 		string Guid { get; }

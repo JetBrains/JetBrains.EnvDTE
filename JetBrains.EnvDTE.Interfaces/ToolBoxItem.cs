@@ -2,7 +2,7 @@
 {
 	public interface ToolBoxItem
 	{
-		string this[] { get; set; }
+		string Name { get; set; }
 		ToolBoxItems Collection { get; }
 		DTE DTE { get; }
 		void Delete();

@@ -7,7 +7,7 @@
 		Documents Collection { get; }
 		Window ActiveWindow { get; }
 		string FullName { get; }
-		string this[] { get; }
+		string Name { get; }
 		string Path { get; }
 		bool ReadOnly { get; set; }
 		bool Saved { get; set; }

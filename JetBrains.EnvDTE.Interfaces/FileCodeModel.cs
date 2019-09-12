@@ -1,104 +1,57 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
-namespace EnvDTE
+﻿namespace EnvDTE
 {
-  
-  
-  
-  public interface FileCodeModel
-  {
-    
-    DTE DTE {   get; }
+	public interface FileCodeModel
+	{
+		DTE DTE { get; }
+		ProjectItem Parent { get; }
+		string Language { get; }
+		CodeElements CodeElements { get; }
+		CodeElement CodeElementFromPoint(TextPoint Point, vsCMElement Scope);
+		CodeNamespace AddNamespace(string Name, object Position = null);
 
-    
-    ProjectItem Parent {   get; }
+		CodeClass AddClass(
+			string Name,
+			object Position = null,
+			object Bases = null,
+			object ImplementedInterfaces = null,
+			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
-    
-    string Language {   get; }
+		CodeInterface AddInterface(
+			string Name,
+			object Position = null,
+			object Bases = null,
+			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
-    
-    CodeElements CodeElements {   get; }
+		CodeFunction AddFunction(
+			string Name,
+			vsCMFunction Kind,
+			object Type,
+			object Position = null,
+			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
-    
-    
-    
-    CodeElement CodeElementFromPoint( TextPoint Point, vsCMElement Scope);
+		CodeVariable AddVariable(
+			string Name,
+			object Type,
+			object Position = null,
+			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
-    
-    
-    
-    CodeNamespace AddNamespace( string Name,  object Position);
+		CodeAttribute AddAttribute(string Name, string Value, object Position = null);
 
-    
-    
-    
-    CodeClass AddClass(
-       string Name,
-       object Position,
-       object Bases,
-       object ImplementedInterfaces,
-      vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
+		CodeStruct AddStruct(
+			string Name,
+			object Position = null,
+			object Bases = null,
+			object ImplementedInterfaces = null,
+			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
-    
-    
-    
-    CodeInterface AddInterface(
-       string Name,
-       object Position,
-       object Bases,
-      vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
+		CodeEnum AddEnum(string Name, object Position, object Bases, vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
-    
-    
-    
-    CodeFunction AddFunction(
-       string Name,
-      vsCMFunction Kind,
-       object Type,
-       object Position,
-      vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
+		CodeDelegate AddDelegate(
+			string Name,
+			object Type,
+			object Position = null,
+			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
-    
-    
-    
-    CodeVariable AddVariable(
-       string Name,
-       object Type,
-       object Position,
-      vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
-
-    
-    
-    
-    CodeAttribute AddAttribute( string Name,  string Value,  object Position);
-
-    
-    
-    
-    CodeStruct AddStruct(
-       string Name,
-       object Position,
-       object Bases,
-       object ImplementedInterfaces,
-      vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
-
-    
-    
-    
-    CodeEnum AddEnum( string Name,  object Position,  object Bases, vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
-
-    
-    
-    
-    CodeDelegate AddDelegate(
-       string Name,
-       object Type,
-       object Position,
-      vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
-
-    
-    
-    void Remove( object Element);
-  }
+		void Remove(object Element);
+	}
 }

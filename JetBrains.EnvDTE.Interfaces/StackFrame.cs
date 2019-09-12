@@ -3,7 +3,7 @@
 	public interface StackFrame
 	{
 		string Language { get; }
-		string this[] { get; }
+		string FunctionName { get; }
 		string ReturnType { get; }
 		Expressions Locals { get; }
 		Expressions Arguments { get; }

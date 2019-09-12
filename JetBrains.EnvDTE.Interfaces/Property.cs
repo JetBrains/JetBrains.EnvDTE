@@ -2,7 +2,7 @@
 {
 	public interface Property
 	{
-		object this[] { get; set; }
+		object Value { get; set; }
 		short NumIndices { get; }
 		object Application { get; }
 		Properties Parent { get; }

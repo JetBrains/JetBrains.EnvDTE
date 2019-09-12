@@ -4,7 +4,7 @@
 	{
 		DTE DTE { get; }
 		CodeElements Collection { get; }
-		string this[] { get; set; }
+		string Name { get; set; }
 		string FullName { get; }
 		ProjectItem ProjectItem { get; }
 		vsCMElement Kind { get; }
@@ -41,45 +41,49 @@
 			string Name,
 			vsCMFunction Kind,
 			object Type,
-			object Position,
+			object Position = null,
 			vsCMAccess Access = vsCMAccess.vsCMAccessDefault,
-			object Location);
+			object Location = null);
 
 		CodeVariable AddVariable(
 			string Name,
 			object Type,
-			object Position,
+			object Position = null,
 			vsCMAccess Access = vsCMAccess.vsCMAccessDefault,
-			object Location);
+			object Location = null);
 
 		CodeProperty AddProperty(
 			string GetterName,
 			string PutterName,
 			object Type,
-			object Position,
+			object Position = null,
 			vsCMAccess Access = vsCMAccess.vsCMAccessDefault,
-			object Location);
+			object Location = null);
 
 		CodeClass AddClass(
 			string Name,
-			object Position,
-			object Bases,
-			object ImplementedInterfaces,
+			object Position = null,
+			object Bases = null,
+			object ImplementedInterfaces = null,
 			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
 		CodeStruct AddStruct(
 			string Name,
-			object Position,
-			object Bases,
-			object ImplementedInterfaces,
+			object Position = null,
+			object Bases = null,
+			object ImplementedInterfaces = null,
 			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
-		CodeEnum AddEnum(string Name, object Position, object Bases, vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
+		CodeEnum AddEnum(
+			string Name,
+			object Position = null,
+			object Bases = null,
+			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
 		CodeDelegate AddDelegate(
 			string Name,
 			object Type,
-			object Position,
+			object Position = null,
 			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
 		void RemoveInterface(object Element);

@@ -4,7 +4,7 @@
 	{
 		bool IsDirty { get; set; }
 		short FileCount { get; }
-		string this[] { get; set; }
+		string Name { get; set; }
 		ProjectItems Collection { get; }
 		Properties Properties { get; }
 		DTE DTE { get; }

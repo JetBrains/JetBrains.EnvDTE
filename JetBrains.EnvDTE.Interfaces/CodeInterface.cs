@@ -4,7 +4,7 @@
 	{
 		DTE DTE { get; }
 		CodeElements Collection { get; }
-		string this[] { get; set; }
+		string Name { get; set; }
 		string FullName { get; }
 		ProjectItem ProjectItem { get; }
 		vsCMElement Kind { get; }
@@ -38,15 +38,15 @@
 			string Name,
 			vsCMFunction Kind,
 			object Type,
-			object Position,
+			object Position = null,
 			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
 		CodeProperty AddProperty(
 			string GetterName,
 			string PutterName,
 			object Type,
-			object Position,
+			object Position = null,
 			vsCMAccess Access = vsCMAccess.vsCMAccessDefault,
-			object Location);
+			object Location = null);
 	}
 }
