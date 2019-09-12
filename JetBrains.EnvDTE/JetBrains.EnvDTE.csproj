@@ -4,20 +4,12 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="JetBrains.RdFramework" Version="1.0.0-preview2-9" />
-        <Reference Include="EnvDTE">
-            <HintPath>..\Interfaces\envdte.dll</HintPath>
-        </Reference>
-        <Reference Include="EnvDTE80">
-            <HintPath>..\Interfaces\envdte80.dll</HintPath>
-        </Reference>
-        <Reference Include="EnvDTE90">
-            <HintPath>..\Interfaces\envdte90.dll</HintPath>
-        </Reference>
-        <Reference Include="EnvDTE90a">
-            <HintPath>..\Interfaces\envdte90a.dll</HintPath>
-        </Reference>
-        <Reference Include="EnvDTE100">
-            <HintPath>..\Interfaces\envdte100.dll</HintPath>
-        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\JetBrains.EnvDTE.Interfaces\JetBrains.EnvDTE.Interfaces.csproj" />
+      <ProjectReference Include="..\JetBrains.EnvDTE100.Interfaces\JetBrains.EnvDTE100.Interfaces.csproj" />
+      <ProjectReference Include="..\JetBrains.EnvDTE80.Interfaces\JetBrains.EnvDTE80.Interfaces.csproj" />
+      <ProjectReference Include="..\JetBrains.EnvDTE90.Interfaces\JetBrains.EnvDTE90.Interfaces.csproj" />
+      <ProjectReference Include="..\JetBrains.EnvDTE90a.Interfaces\JetBrains.EnvDTE90a.Interfaces.csproj" />
     </ItemGroup>
 </Project>

@@ -1,24 +1,10 @@
+using System;
 using EnvDTE;
-using JetBrains.Annotations;
 
 namespace JetBrains.EnvDTE
 {
-    [UsedImplicitly]
     public sealed class DteImplementation : DTE
     {
-        public void Quit() => throw new System.NotImplementedException();
-        public object GetObject(string Name) => throw new System.NotImplementedException();
-
-        public Window OpenFile(string ViewKind, string FileName) => throw new System.NotImplementedException();
-
-        public void ExecuteCommand(string CommandName, string CommandArgs = "")
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public wizardResult LaunchWizard(string VSZFile, ref object[] ContextParams) => throw new System.NotImplementedException();
-
-        public string SatelliteDllPath(string Path, string Name) => throw new System.NotImplementedException();
         public string Name => "JetBrains Rider";
         public string FileName { get; }
         public string Version { get; }
@@ -31,11 +17,9 @@ namespace JetBrains.EnvDTE
         public vsDisplay DisplayMode { get; set; }
         public Solution Solution { get; }
         public Commands Commands { get; }
-        public Properties get_Properties(string Category, string Page) => throw new System.NotImplementedException();
         public SelectedItems SelectedItems { get; }
         public string CommandLineArguments { get; }
-        public bool get_IsOpenFile(string ViewKind, string FileName) => throw new System.NotImplementedException();
-        public global::EnvDTE.DTE DTE { get; }
+        public DTE DTE { get; }
         public int LocaleID { get; }
         public WindowConfigurations WindowConfigurations { get; }
         public Documents Documents { get; }
@@ -59,5 +43,20 @@ namespace JetBrains.EnvDTE
         public bool SuppressUI { get; set; }
         public Debugger Debugger { get; }
         public string Edition { get; }
+        public void Quit() => throw new NotImplementedException();
+        public object GetObject(string Name) => throw new NotImplementedException();
+        public Window OpenFile(string ViewKind, string FileName) => throw new NotImplementedException();
+
+        public void ExecuteCommand(string CommandName, string CommandArgs = "")
+        {
+            throw new NotImplementedException();
+        }
+
+        public wizardResult LaunchWizard(string VSZFile, ref object[] ContextParams) =>
+            throw new NotImplementedException();
+
+        public string SatelliteDllPath(string Path, string Name) => throw new NotImplementedException();
+        public Properties get_Properties(string Category, string Page) => throw new NotImplementedException();
+        public bool get_IsOpenFile(string ViewKind, string FileName) => throw new NotImplementedException();
     }
 }
