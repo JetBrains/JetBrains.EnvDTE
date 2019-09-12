@@ -23,6 +23,7 @@ namespace EnvDTE90
 		new void Detach(bool WaitForBreakOrEnd = true);
 		new void Break(bool WaitForBreakMode = true);
 		new void Terminate(bool WaitForBreakOrEnd = true);
-		new void Attach2(object Engines = "");
+		new void Attach2(object Engines);
+		new void Attach2();
 	}
 }

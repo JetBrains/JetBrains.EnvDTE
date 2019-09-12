@@ -50,15 +50,15 @@
 		bool FindPattern(
 			string Pattern,
 			int vsFindOptionsValue = 0,
-			ref EditPoint EndPoint = null,
-			ref TextRanges Tags = null);
+			EditPoint EndPoint = null,
+			TextRanges Tags = null);
 
 		bool ReplacePattern(
 			TextPoint Point,
 			string Pattern,
 			string Replace,
 			int vsFindOptionsValue = 0,
-			ref TextRanges Tags = null);
+			TextRanges Tags = null);
 
 		void Indent(TextPoint Point = null, int Count = 1);
 		void Unindent(TextPoint Point = null, int Count = 1);

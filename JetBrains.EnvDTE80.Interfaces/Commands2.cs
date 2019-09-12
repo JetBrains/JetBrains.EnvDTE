@@ -23,7 +23,7 @@ namespace EnvDTE80
 			string Tooltip,
 			bool MSOButton,
 			int Bitmap = 0,
-			ref object[] ContextUIGUIDs = null,
+			object[] ContextUIGUIDs = null,
 			int vsCommandDisabledFlagsValue = 16);
 
 		new object AddCommandBar(

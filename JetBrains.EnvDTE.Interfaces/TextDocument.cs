@@ -18,7 +18,7 @@
 			string Pattern,
 			string Replace,
 			int vsFindOptionsValue = 0,
-			ref TextRanges Tags = null);
+			TextRanges Tags = null);
 
 		EditPoint CreateEditPoint(TextPoint TextPoint = null);
 		bool ReplaceText(string FindText, string ReplaceText, int vsFindOptionsValue = 0);

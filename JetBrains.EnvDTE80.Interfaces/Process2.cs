@@ -21,6 +21,7 @@ namespace EnvDTE80
 		new void Detach(bool WaitForBreakOrEnd = true);
 		new void Break(bool WaitForBreakMode = true);
 		new void Terminate(bool WaitForBreakOrEnd = true);
-		void Attach2(object Engines = "");
+		void Attach2(object Engines);
+		void Attach2();
 	}
 }

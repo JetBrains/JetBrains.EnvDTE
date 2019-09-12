@@ -38,13 +38,13 @@
 
 		void EndOfDocument(bool Extend = false);
 		void StartOfDocument(bool Extend = false);
-		bool FindPattern(string Pattern, int vsFindOptionsValue = 0, ref TextRanges Tags = null);
+		bool FindPattern(string Pattern, int vsFindOptionsValue = 0, TextRanges Tags = null);
 
 		bool ReplacePattern(
 			string Pattern,
 			string Replace,
 			int vsFindOptionsValue = 0,
-			ref TextRanges Tags = null);
+			TextRanges Tags = null);
 
 		bool FindText(string Pattern, int vsFindOptionsValue = 0);
 		bool ReplaceText(string Pattern, string Replace, int vsFindOptionsValue = 0);

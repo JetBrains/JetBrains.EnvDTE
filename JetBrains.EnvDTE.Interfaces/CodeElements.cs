@@ -12,6 +12,6 @@ namespace EnvDTE
 		new IEnumerator GetEnumerator();
 		CodeElement Item(object index);
 		void Reserved1(object Element);
-		bool CreateUniqueID(string Prefix, ref string NewName = "0");
+		bool CreateUniqueID(string Prefix, string NewName = "0");
 	}
 }

@@ -54,15 +54,15 @@ namespace EnvDTE80
 		new bool FindPattern(
 			string Pattern,
 			int vsFindOptionsValue = 0,
-			ref EditPoint EndPoint = null,
-			ref TextRanges Tags = null);
+			EditPoint EndPoint = null,
+			TextRanges Tags = null);
 
 		new bool ReplacePattern(
 			TextPoint Point,
 			string Pattern,
 			string Replace,
 			int vsFindOptionsValue = 0,
-			ref TextRanges Tags = null);
+			TextRanges Tags = null);
 
 		new void Indent(TextPoint Point = null, int Count = 1);
 		new void Unindent(TextPoint Point = null, int Count = 1);
