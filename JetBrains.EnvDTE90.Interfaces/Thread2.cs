@@ -6,7 +6,7 @@ namespace EnvDTE90
 {
 	public interface Thread2 : Thread
 	{
-		new string this[] { get; }
+		new string Name { get; }
 		new int SuspendCount { get; }
 		new int ID { get; }
 		new StackFrames StackFrames { get; }

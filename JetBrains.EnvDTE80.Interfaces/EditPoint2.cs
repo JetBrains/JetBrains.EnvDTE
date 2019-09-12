@@ -20,7 +20,7 @@ namespace EnvDTE80
 		new bool EqualTo(TextPoint Point);
 		new bool LessThan(TextPoint Point);
 		new bool GreaterThan(TextPoint Point);
-		new bool TryToShow(vsPaneShowHow How = vsPaneShowHow.vsPaneShowCentered, object PointOrCount);
+		new bool TryToShow(vsPaneShowHow How = vsPaneShowHow.vsPaneShowCentered, object PointOrCount = null);
 		new CodeElement get_CodeElement(vsCMElement Scope);
 		new EditPoint CreateEditPoint();
 		new void CharLeft(int Count = 1);

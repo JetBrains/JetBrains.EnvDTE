@@ -8,7 +8,7 @@ namespace EnvDTE80
 	{
 		new DTE DTE { get; }
 		new SolutionConfigurations Collection { get; }
-		new string this[] { get; }
+		new string Name { get; }
 		new SolutionContexts SolutionContexts { get; }
 		string PlatformName { get; }
 		new void Delete();

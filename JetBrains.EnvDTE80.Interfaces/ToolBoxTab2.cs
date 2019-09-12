@@ -6,7 +6,7 @@ namespace EnvDTE80
 {
 	public interface ToolBoxTab2 : ToolBoxTab
 	{
-		new string this[] { get; set; }
+		new string Name { get; set; }
 		new ToolBoxTabs Collection { get; }
 		new DTE DTE { get; }
 		new ToolBoxItems ToolBoxItems { get; }

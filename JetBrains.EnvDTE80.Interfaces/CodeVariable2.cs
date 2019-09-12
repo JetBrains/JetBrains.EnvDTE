@@ -8,7 +8,7 @@ namespace EnvDTE80
 	{
 		new DTE DTE { get; }
 		new CodeElements Collection { get; }
-		new string this[] { get; set; }
+		new string Name { get; set; }
 		new string FullName { get; }
 		new ProjectItem ProjectItem { get; }
 		new vsCMElement Kind { get; }

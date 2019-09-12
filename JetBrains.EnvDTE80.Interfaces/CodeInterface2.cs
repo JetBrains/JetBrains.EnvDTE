@@ -8,7 +8,7 @@ namespace EnvDTE80
 	{
 		new DTE DTE { get; }
 		new CodeElements Collection { get; }
-		new string this[] { get; set; }
+		new string Name { get; set; }
 		new string FullName { get; }
 		new ProjectItem ProjectItem { get; }
 		new vsCMElement Kind { get; }
@@ -45,22 +45,22 @@ namespace EnvDTE80
 			string Name,
 			vsCMFunction Kind,
 			object Type,
-			object Position,
+			object Position = null,
 			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 
 		new CodeProperty AddProperty(
 			string GetterName,
 			string PutterName,
 			object Type,
-			object Position,
+			object Position = null,
 			vsCMAccess Access = vsCMAccess.vsCMAccessDefault,
-			object Location);
+			object Location = null);
 
 		CodeEvent AddEvent(
 			string Name,
 			string FullDelegateName,
 			bool CreatePropertyStyleEvent = false,
-			object Position,
+			object Position = null,
 			vsCMAccess Access = vsCMAccess.vsCMAccessDefault);
 	}
 }

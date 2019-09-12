@@ -1,6 +1,4 @@
-﻿
-using EnvDTE;
-
+﻿using EnvDTE;
 
 namespace EnvDTE80
 {
@@ -16,6 +14,11 @@ namespace EnvDTE80
 		IncrementalSearch IncrementalSearch { get; }
 		new void Activate();
 		new bool IsVisible(TextPoint Point, object PointOrCount);
-		new bool TryToShow(TextPoint Point, vsPaneShowHow How = vsPaneShowHow.vsPaneShowAsIs, object PointOrCount);
+
+		new bool TryToShow(
+			TextPoint Point,
+			vsPaneShowHow How = vsPaneShowHow.vsPaneShowAsIs,
+			object PointOrCount = null
+		);
 	}
 }

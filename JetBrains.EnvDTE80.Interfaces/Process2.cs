@@ -6,7 +6,7 @@ namespace EnvDTE80
 {
 	public interface Process2 : Process
 	{
-		new string this[] { get; }
+		new string Name { get; }
 		new int ProcessID { get; }
 		new Programs Programs { get; }
 		new DTE DTE { get; }

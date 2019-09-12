@@ -26,7 +26,7 @@ namespace EnvDTE80
 		new Document Document { get; }
 		new object Selection { get; }
 		new bool Linkable { get; set; }
-		new string this[] { get; set; }
+		new string Caption { get; set; }
 		new bool IsFloating { get; set; }
 		new bool AutoHides { get; set; }
 		new ContextAttributes ContextAttributes { get; }

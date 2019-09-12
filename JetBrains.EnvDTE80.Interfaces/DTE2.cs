@@ -6,7 +6,7 @@ namespace EnvDTE80
 {
 	public interface DTE2 : _DTE
 	{
-		new string this[] { get; }
+		new string Name { get; }
 		new string FileName { get; }
 		new string Version { get; }
 		new object CommandBars { get; }

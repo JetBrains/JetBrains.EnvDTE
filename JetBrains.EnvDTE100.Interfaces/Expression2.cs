@@ -6,7 +6,7 @@ namespace EnvDTE100
 {
 	public interface Expression2 : Expression
 	{
-		new string this[] { get; }
+		new string Name { get; }
 		new string Type { get; }
 		new Expressions DataMembers { get; }
 		new string Value { get; set; }

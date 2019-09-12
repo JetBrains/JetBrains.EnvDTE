@@ -9,7 +9,7 @@ namespace EnvDTE90a
 {
 	public interface Process4 : Process3
 	{
-		new string this[] { get; }
+		new string Name { get; }
 		new int ProcessID { get; }
 		new Programs Programs { get; }
 		new DTE DTE { get; }

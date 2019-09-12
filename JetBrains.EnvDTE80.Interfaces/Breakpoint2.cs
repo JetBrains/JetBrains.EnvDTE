@@ -7,7 +7,7 @@ namespace EnvDTE80
 	public interface Breakpoint2 : Breakpoint
 	{
 		new dbgBreakpointType Type { get; }
-		new string this[] { get; set; }
+		new string Name { get; set; }
 		new dbgBreakpointLocationType LocationType { get; }
 		new string FunctionName { get; }
 		new int FunctionLineOffset { get; }

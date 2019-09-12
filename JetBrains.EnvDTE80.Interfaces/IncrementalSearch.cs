@@ -8,7 +8,7 @@ namespace EnvDTE80
 	{
 		DTE DTE { get; }
 		bool IncrementalSearchModeOn { get; }
-		string this[] { get; }
+		string Pattern { get; }
 		void StartForward();
 		void StartBackward();
 		vsIncrementalSearchResult SearchWithLastPattern();

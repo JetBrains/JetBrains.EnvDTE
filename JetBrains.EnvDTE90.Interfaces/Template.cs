@@ -2,7 +2,7 @@
 {
 	public interface Template
 	{
-		string this[] { get; }
+		string ID { get; }
 		string Name { get; }
 		string Description { get; }
 		string FilePath { get; }

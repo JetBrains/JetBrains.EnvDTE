@@ -7,7 +7,7 @@ namespace EnvDTE90a
 	public interface StackFrame2 : StackFrame
 	{
 		new string Language { get; }
-		new string this[] { get; }
+		new string Name { get; }
 		new string ReturnType { get; }
 		new Expressions Locals { get; }
 		new Expressions Arguments { get; }
