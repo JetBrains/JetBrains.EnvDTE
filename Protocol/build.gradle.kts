@@ -58,19 +58,17 @@ intellij {
 val repoRoot = projectDir.parentFile!!
 
 configure<RdgenParams> {
-  val hostOutput = File(repoRoot, "hostOutput")
-  val clientOutput = File(repoRoot, "clientOutput")
+  val hostOutput = File(repoRoot, "EnvDTE.Host/Protocol")
+  val clientOutput = File(repoRoot, "EnvDTE/Protocol")
 
   verbose = true
   hashFolder = "build/rdgen"
-  logger.info("Configuring rdgen params")
   classpath({
-    logger.info("Calculating classpath for rdgen, intellij.ideaDependency is ${intellij.ideaDependency}")
     val sdkPath = intellij.ideaDependency.classes
     val rdLibDirectory = File(sdkPath, "lib/rd").canonicalFile
     "$rdLibDirectory/rider-model.jar"
   })
-  sources(File(repoRoot, "src/main/kotlin/model"))
+  sources(File(repoRoot, "Protocol/src/main/kotlin/model"))
   packages = "model"
 
   generator {
@@ -89,3 +87,5 @@ configure<RdgenParams> {
     directory = "$hostOutput"
   }
 }
+
+defaultTasks("rdgen")

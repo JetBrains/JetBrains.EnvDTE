@@ -7,3 +7,6 @@ bin
 
 # Ignore IntelliJ-specific configuration files
 .idea
+
+# Ignore generated protocol files
+**.Generated.cs
