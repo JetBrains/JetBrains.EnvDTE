@@ -1,5 +1,5 @@
-﻿
-[![Incubator JetBrains Project](http://jb.gg/badges/incubator.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+﻿[![Incubator JetBrains Project](http://jb.gg/badges/incubator.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+[![Build status](https://ci.appveyor.com/api/projects/status/3k72xhgntrj5t9h2?svg=true)](https://ci.appveyor.com/project/kirillgla/jetbrains-envdte)
 
 JetBrains.EnvDTE
 ----
