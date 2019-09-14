@@ -13,9 +13,10 @@ Instead of accessing COM, this DTE mock uses RD protocol to access project model
 
 Build instructions:
 ----
+```powershell
+.\build.ps1
+```
+or
 ```bash
-cd Protocol
-gradlew
-cd ..
-msbuild
+bash build.sh
 ```
