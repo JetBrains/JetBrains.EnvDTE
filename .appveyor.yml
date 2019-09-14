@@ -1,3 +1,4 @@
 ﻿image: Visual Studio 2019
 build_script:
-- ps: . .\build.ps1 -Verbose
+- ps: . .\build.ps1
+test: off
