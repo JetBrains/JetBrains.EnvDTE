@@ -3,7 +3,7 @@ using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using JetBrains.Rd.Impl;
 
-namespace JetBrains.EnvDTEHost
+namespace JetBrains.EnvDTE.Host
 {
     [PublicAPI]
     public sealed class ConnectionManager

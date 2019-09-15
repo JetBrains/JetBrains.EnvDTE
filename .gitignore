@@ -10,3 +10,7 @@ bin
 
 # Ignore generated protocol files
 **.Generated.cs
+
+# Ignore path to Rider SDK
+/NuGet.Config
+/RiderSdkPackageVersion.props

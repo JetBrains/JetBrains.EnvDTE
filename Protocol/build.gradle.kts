@@ -4,6 +4,8 @@ import org.jetbrains.intellij.tasks.PrepareSandboxTask
 import org.jetbrains.kotlin.daemon.common.toHexString
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+// Some build script code borrowed from F# and T4 plugins
+
 buildscript {
   repositories {
     maven { setUrl("https://cache-redirector.jetbrains.com/www.myget.org/F/rd-snapshots/maven") }
@@ -88,4 +90,57 @@ configure<RdgenParams> {
   }
 }
 
-defaultTasks("rdgen")
+val nugetConfigPath = File(repoRoot, "NuGet.Config")
+val riderSdkVersionPropsPath = File(repoRoot, "RiderSdkPackageVersion.props")
+val nugetPackagesPath by lazy {
+  val sdkPath = intellij.ideaDependency.classes
+  val path = File(sdkPath, "lib/ReSharperHostSdk")
+  if (!path.isDirectory) error("$path does not exist or not a directory")
+  return@lazy path
+}
+val riderSdkPackageVersion by lazy {
+  val sdkPackageName = "JetBrains.Rider.SDK"
+  val regex = Regex("${Regex.escape(sdkPackageName)}\\.([\\d\\.]+.*)\\.nupkg")
+  nugetPackagesPath.listFiles()
+    ?.mapNotNull { regex.matchEntire(it.name)?.groupValues?.drop(1)?.first() }
+    ?.singleOrNull() ?: error("$nugetPackagesPath does not conatin unique $sdkPackageName package")
+}
+
+fun File.writeTextIfChanged(content: String) {
+  val bytes = content.toByteArray()
+  if (exists() && readBytes().toHexString() == bytes.toHexString()) return
+  writeBytes(bytes)
+}
+
+tasks {
+  create("writeRiderSdkVersionProps") {
+    doLast {
+      riderSdkVersionPropsPath.writeTextIfChanged(
+        """<Project>
+  <PropertyGroup>
+    <RiderSDKVersion>[$riderSdkPackageVersion]</RiderSDKVersion>
+  </PropertyGroup>
+</Project>
+"""
+      )
+    }
+  }
+  create("writeNuGetConfig") {
+    doLast {
+      nugetConfigPath.writeTextIfChanged(
+        """<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <add key="resharper-sdk" value="$nugetPackagesPath" />
+  </packageSources>
+</configuration>
+"""
+      )
+    }
+  }
+  create("prepare") {
+    dependsOn("writeRiderSdkVersionProps", "writeNuGetConfig", "rdgen")
+  }
+}
+
+defaultTasks("prepare")
