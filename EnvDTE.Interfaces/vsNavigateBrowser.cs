@@ -1,9 +1,9 @@
 ﻿namespace EnvDTE
 {
-	public enum vsNavigateBrowser
-	{
-		vsNavigateBrowserDefault,
-		vsNavigateBrowserHelp,
-		vsNavigateBrowserNewWindow
-	}
+    public enum vsNavigateBrowser
+    {
+        vsNavigateBrowserDefault,
+        vsNavigateBrowserHelp,
+        vsNavigateBrowserNewWindow
+    }
 }

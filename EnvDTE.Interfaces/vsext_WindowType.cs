@@ -1,30 +1,30 @@
 ﻿namespace EnvDTE
 {
-	public enum vsext_WindowType
-	{
-		vsext_wt_CodeWindow,
-		vsext_wt_Designer,
-		vsext_wt_Browser,
-		vsext_wt_Watch,
-		vsext_wt_Locals,
-		vsext_wt_Immediate,
-		vsext_wt_ProjectWindow,
-		vsext_wt_PropertyWindow,
-		vsext_wt_Find,
-		vsext_wt_FindReplace,
-		vsext_wt_Toolbox,
-		vsext_wt_LinkedWindowFrame,
-		vsext_wt_MainWindow,
-		vsext_wt_Preview,
-		vsext_wt_ColorPalette,
-		vsext_wt_ToolWindow,
-		vsext_wt_Document,
-		vsext_wt_OutPutWindow,
-		vsext_wt_TaskList,
-		vsext_wt_Autos,
-		vsext_wt_CallStack,
-		vsext_wt_Threads,
-		vsext_wt_DocumentOutline,
-		vsext_wt_RunningDocuments
-	}
+    public enum vsext_WindowType
+    {
+        vsext_wt_CodeWindow,
+        vsext_wt_Designer,
+        vsext_wt_Browser,
+        vsext_wt_Watch,
+        vsext_wt_Locals,
+        vsext_wt_Immediate,
+        vsext_wt_ProjectWindow,
+        vsext_wt_PropertyWindow,
+        vsext_wt_Find,
+        vsext_wt_FindReplace,
+        vsext_wt_Toolbox,
+        vsext_wt_LinkedWindowFrame,
+        vsext_wt_MainWindow,
+        vsext_wt_Preview,
+        vsext_wt_ColorPalette,
+        vsext_wt_ToolWindow,
+        vsext_wt_Document,
+        vsext_wt_OutPutWindow,
+        vsext_wt_TaskList,
+        vsext_wt_Autos,
+        vsext_wt_CallStack,
+        vsext_wt_Threads,
+        vsext_wt_DocumentOutline,
+        vsext_wt_RunningDocuments
+    }
 }

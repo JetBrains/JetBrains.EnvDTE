@@ -1,8 +1,8 @@
 ﻿namespace EnvDTE
 {
-	public enum vsHTMLTabs
-	{
-		vsHTMLTabsSource,
-		vsHTMLTabsDesign
-	}
+    public enum vsHTMLTabs
+    {
+        vsHTMLTabsSource,
+        vsHTMLTabsDesign
+    }
 }

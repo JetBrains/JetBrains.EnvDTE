@@ -1,10 +1,10 @@
 ﻿namespace EnvDTE
 {
-	public enum vsLinkedWindowType
-	{
-		vsLinkedWindowTypeDocked,
-		vsLinkedWindowTypeTabbed,
-		vsLinkedWindowTypeVertical,
-		vsLinkedWindowTypeHorizontal
-	}
+    public enum vsLinkedWindowType
+    {
+        vsLinkedWindowTypeDocked,
+        vsLinkedWindowTypeTabbed,
+        vsLinkedWindowTypeVertical,
+        vsLinkedWindowTypeHorizontal
+    }
 }

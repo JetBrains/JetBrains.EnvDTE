@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE
 {
-	public interface Solution : _Solution
-	{
-	}
+    public interface Solution : _Solution
+    {
+    }
 }

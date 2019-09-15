@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE80
 {
-	public interface _DebuggerProcessEvents
-	{
-	}
+    public interface _DebuggerProcessEvents
+    {
+    }
 }

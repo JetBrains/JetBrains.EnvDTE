@@ -1,8 +1,8 @@
 ﻿namespace EnvDTE
 {
-	public enum vsWhitespaceOptions
-	{
-		vsWhitespaceOptionsHorizontal,
-		vsWhitespaceOptionsVertical
-	}
+    public enum vsWhitespaceOptions
+    {
+        vsWhitespaceOptionsHorizontal,
+        vsWhitespaceOptionsVertical
+    }
 }

@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE
 {
-	public interface _WindowEvents
-	{
-	}
+    public interface _WindowEvents
+    {
+    }
 }

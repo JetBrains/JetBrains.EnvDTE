@@ -1,33 +1,28 @@
-﻿
-using System;
-using System.Collections;
-using System.Runtime.InteropServices;
-using System.Threading;
-
+﻿using System;
 
 namespace EnvDTE
 {
-	internal sealed class _dispDTEEvents_EventProvider : _dispDTEEvents_Event, IDisposable
-	{
-		public _dispDTEEvents_EventProvider(object A_1)
-		{
-		}
+    internal sealed class _dispDTEEvents_EventProvider : _dispDTEEvents_Event, IDisposable
+    {
+        public _dispDTEEvents_EventProvider(object A_1)
+        {
+        }
 
-		public event _dispDTEEvents_OnStartupCompleteEventHandler OnStartupComplete;
-		public event _dispDTEEvents_OnBeginShutdownEventHandler OnBeginShutdown;
-		public event _dispDTEEvents_ModeChangedEventHandler ModeChanged;
-		public event _dispDTEEvents_OnMacrosRuntimeResetEventHandler OnMacrosRuntimeReset;
+        public event _dispDTEEvents_OnStartupCompleteEventHandler OnStartupComplete;
+        public event _dispDTEEvents_OnBeginShutdownEventHandler OnBeginShutdown;
+        public event _dispDTEEvents_ModeChangedEventHandler ModeChanged;
+        public event _dispDTEEvents_OnMacrosRuntimeResetEventHandler OnMacrosRuntimeReset;
 
-		public void Dispose()
-		{
-		}
+        public void Dispose()
+        {
+        }
 
-		private void Init()
-		{
-		}
+        private void Init()
+        {
+        }
 
-		public void Finalize()
-		{
-		}
-	}
+        public void Finalize()
+        {
+        }
+    }
 }

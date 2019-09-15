@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE
 {
-	public interface _DebuggerEvents
-	{
-	}
+    public interface _DebuggerEvents
+    {
+    }
 }

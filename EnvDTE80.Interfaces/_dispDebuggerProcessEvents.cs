@@ -1,11 +1,9 @@
-﻿
-using EnvDTE;
-
+﻿using EnvDTE;
 
 namespace EnvDTE80
 {
-	public interface _dispDebuggerProcessEvents
-	{
-		void OnProcessStateChanged(Process NewProcess, dbgProcessState processState);
-	}
+    public interface _dispDebuggerProcessEvents
+    {
+        void OnProcessStateChanged(Process NewProcess, dbgProcessState processState);
+    }
 }

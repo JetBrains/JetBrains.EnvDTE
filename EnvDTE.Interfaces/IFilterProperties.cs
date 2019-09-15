@@ -1,7 +1,7 @@
 ﻿namespace EnvDTE
 {
-	public interface IFilterProperties
-	{
-		vsFilterProperties IsPropertyHidden(string PropertyName);
-	}
+    public interface IFilterProperties
+    {
+        vsFilterProperties IsPropertyHidden(string PropertyName);
+    }
 }

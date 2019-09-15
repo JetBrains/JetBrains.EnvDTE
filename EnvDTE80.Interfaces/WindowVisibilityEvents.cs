@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE80
 {
-	public interface WindowVisibilityEvents : _WindowVisibilityEvents, _dispWindowVisibilityEvents_Event
-	{
-	}
+    public interface WindowVisibilityEvents : _WindowVisibilityEvents, _dispWindowVisibilityEvents_Event
+    {
+    }
 }

@@ -35,9 +35,9 @@ namespace JetBrains.EnvDTE
         public UndoContext UndoContext { get; }
         public Macros Macros { get; }
         public object ActiveSolutionProjects { get; }
-        public global::EnvDTE.DTE MacrosIDE { get; }
+        public DTE MacrosIDE { get; }
         public string RegistryRoot { get; }
-        public global::EnvDTE.DTE Application { get; }
+        public DTE Application { get; }
         public ContextAttributes ContextAttributes { get; }
         public SourceControl SourceControl { get; }
         public bool SuppressUI { get; set; }

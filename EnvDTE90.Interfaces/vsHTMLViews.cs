@@ -1,8 +1,8 @@
 ﻿namespace EnvDTE90
 {
-	public enum vsHTMLViews
-	{
-		vsHTMLViewSource,
-		vsHTMLViewDesign
-	}
+    public enum vsHTMLViews
+    {
+        vsHTMLViewSource,
+        vsHTMLViewDesign
+    }
 }

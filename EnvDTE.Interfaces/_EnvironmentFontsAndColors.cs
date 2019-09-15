@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE
 {
-	public interface _EnvironmentFontsAndColors
-	{
-	}
+    public interface _EnvironmentFontsAndColors
+    {
+    }
 }

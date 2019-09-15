@@ -1,12 +1,10 @@
-﻿
-using EnvDTE;
-
+﻿using EnvDTE;
 
 namespace EnvDTE80
 {
-	public interface _dispWindowVisibilityEvents
-	{
-		void WindowHiding(Window Window);
-		void WindowShowing(Window Window);
-	}
+    public interface _dispWindowVisibilityEvents
+    {
+        void WindowHiding(Window Window);
+        void WindowShowing(Window Window);
+    }
 }

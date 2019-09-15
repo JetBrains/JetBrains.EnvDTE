@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE
 {
-	public interface TaskListEvents : _TaskListEvents, _dispTaskListEvents_Event
-	{
-	}
+    public interface TaskListEvents : _TaskListEvents, _dispTaskListEvents_Event
+    {
+    }
 }

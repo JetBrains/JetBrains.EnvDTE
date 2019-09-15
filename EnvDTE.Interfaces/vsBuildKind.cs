@@ -1,9 +1,9 @@
 ﻿namespace EnvDTE
 {
-	public enum vsBuildKind
-	{
-		vsBuildKindSolution,
-		vsBuildKindProject,
-		vsBuildKindProjectItem
-	}
+    public enum vsBuildKind
+    {
+        vsBuildKindSolution,
+        vsBuildKindProject,
+        vsBuildKindProjectItem
+    }
 }

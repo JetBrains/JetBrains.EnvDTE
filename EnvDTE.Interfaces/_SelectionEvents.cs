@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE
 {
-	public interface _SelectionEvents
-	{
-	}
+    public interface _SelectionEvents
+    {
+    }
 }

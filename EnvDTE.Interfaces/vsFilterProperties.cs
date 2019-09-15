@@ -1,9 +1,9 @@
 ﻿namespace EnvDTE
 {
-	public enum vsFilterProperties
-	{
-		vsFilterPropertiesNone,
-		vsFilterPropertiesAll,
-		vsFilterPropertiesSet
-	}
+    public enum vsFilterProperties
+    {
+        vsFilterPropertiesNone,
+        vsFilterPropertiesAll,
+        vsFilterPropertiesSet
+    }
 }

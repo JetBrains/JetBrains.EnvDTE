@@ -1,4 +1,4 @@
 ﻿namespace EnvDTE
 {
-	public delegate void _dispDTEEvents_OnStartupCompleteEventHandler();
+    public delegate void _dispDTEEvents_OnStartupCompleteEventHandler();
 }

@@ -1,8 +1,8 @@
 ﻿namespace EnvDTE
 {
-	public enum vsNavigateOptions
-	{
-		vsNavigateOptionsDefault,
-		vsNavigateOptionsNewWindow
-	}
+    public enum vsNavigateOptions
+    {
+        vsNavigateOptionsDefault,
+        vsNavigateOptionsNewWindow
+    }
 }

@@ -1,9 +1,9 @@
 ﻿namespace EnvDTE
 {
-	public enum vsCommandStatusTextWanted
-	{
-		vsCommandStatusTextWantedNone,
-		vsCommandStatusTextWantedName,
-		vsCommandStatusTextWantedStatus
-	}
+    public enum vsCommandStatusTextWanted
+    {
+        vsCommandStatusTextWantedNone,
+        vsCommandStatusTextWantedName,
+        vsCommandStatusTextWantedStatus
+    }
 }

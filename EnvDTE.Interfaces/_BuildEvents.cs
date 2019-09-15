@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE
 {
-	public interface _BuildEvents
-	{
-	}
+    public interface _BuildEvents
+    {
+    }
 }

@@ -1,8 +1,8 @@
 ﻿namespace EnvDTE80
 {
-	public enum vsSourceControlCheckOutOptions
-	{
-		vsSourceControlCheckOutOptionLatestVersion,
-		vsSourceControlCheckOutOptionLocalVersion
-	}
+    public enum vsSourceControlCheckOutOptions
+    {
+        vsSourceControlCheckOutOptionLatestVersion,
+        vsSourceControlCheckOutOptionLocalVersion
+    }
 }

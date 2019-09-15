@@ -1,8 +1,8 @@
 ﻿namespace EnvDTE
 {
-	public enum vsSaveStatus
-	{
-		vsSaveSucceeded = 1,
-		vsSaveCancelled = 2
-	}
+    public enum vsSaveStatus
+    {
+        vsSaveSucceeded = 1,
+        vsSaveCancelled = 2
+    }
 }

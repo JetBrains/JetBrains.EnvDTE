@@ -1,8 +1,8 @@
 ﻿namespace EnvDTE
 {
-	public enum vsInitializeMode
-	{
-		vsInitializeModeStartup,
-		vsInitializeModeReset
-	}
+    public enum vsInitializeMode
+    {
+        vsInitializeModeStartup,
+        vsInitializeModeReset
+    }
 }

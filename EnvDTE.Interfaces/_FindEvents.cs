@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE
 {
-	public interface _FindEvents
-	{
-	}
+    public interface _FindEvents
+    {
+    }
 }

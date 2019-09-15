@@ -1,8 +1,8 @@
 ﻿namespace EnvDTE
 {
-	public enum DsMovementOptions
-	{
-		dsMove,
-		dsExtend
-	}
+    public enum DsMovementOptions
+    {
+        dsMove,
+        dsExtend
+    }
 }

@@ -1,7 +1,7 @@
 ﻿namespace EnvDTE
 {
-	public interface ISupportVSProperties
-	{
-		void NotifyPropertiesDelete();
-	}
+    public interface ISupportVSProperties
+    {
+        void NotifyPropertiesDelete();
+    }
 }

@@ -1,9 +1,9 @@
 ﻿namespace EnvDTE
 {
-	public enum vsSmartFormatOptions
-	{
-		vsSmartFormatOptionsNone,
-		vsSmartFormatOptionsBlock,
-		vsSmartFormatOptionsSmart
-	}
+    public enum vsSmartFormatOptions
+    {
+        vsSmartFormatOptionsNone,
+        vsSmartFormatOptionsBlock,
+        vsSmartFormatOptionsSmart
+    }
 }

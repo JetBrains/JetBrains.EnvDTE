@@ -1,7 +1,7 @@
 ﻿namespace EnvDTE80
 {
-	public interface LifetimeInformation
-	{
-		bool HasBeenDeleted { get; }
-	}
+    public interface LifetimeInformation
+    {
+        bool HasBeenDeleted { get; }
+    }
 }

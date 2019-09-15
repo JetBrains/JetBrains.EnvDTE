@@ -1,9 +1,9 @@
 ﻿namespace EnvDTE90
 {
-	public enum vsHTMLPanes
-	{
-		vsHTMLPaneSource,
-		vsHTMLPaneDesign,
-		vsHTMLPaneSplit
-	}
+    public enum vsHTMLPanes
+    {
+        vsHTMLPaneSource,
+        vsHTMLPaneDesign,
+        vsHTMLPaneSplit
+    }
 }

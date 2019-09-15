@@ -1,8 +1,8 @@
 ﻿namespace EnvDTE
 {
-	public enum vsConfigurationType
-	{
-		vsConfigurationTypeProject = 1,
-		vsConfigurationTypeProjectItem = 2
-	}
+    public enum vsConfigurationType
+    {
+        vsConfigurationTypeProject = 1,
+        vsConfigurationTypeProjectItem = 2
+    }
 }

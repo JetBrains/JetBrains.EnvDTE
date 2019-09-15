@@ -1,7 +1,7 @@
 ﻿namespace EnvDTE
 {
-	public interface _DebuggerEventsRoot
-	{
-		object DebuggerEvents { get; }
-	}
+    public interface _DebuggerEventsRoot
+    {
+        object DebuggerEvents { get; }
+    }
 }

@@ -1,4 +1,4 @@
 ﻿namespace EnvDTE
 {
-	public delegate void _dispOutputWindowEvents_PaneClearingEventHandler(OutputWindowPane pPane);
+    public delegate void _dispOutputWindowEvents_PaneClearingEventHandler(OutputWindowPane pPane);
 }

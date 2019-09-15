@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE
 {
-	public interface _ProjectsEvents
-	{
-	}
+    public interface _ProjectsEvents
+    {
+    }
 }

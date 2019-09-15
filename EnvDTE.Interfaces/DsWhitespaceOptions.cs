@@ -1,8 +1,8 @@
 ﻿namespace EnvDTE
 {
-	public enum DsWhitespaceOptions
-	{
-		dsHorizontal,
-		dsVertical
-	}
+    public enum DsWhitespaceOptions
+    {
+        dsHorizontal,
+        dsVertical
+    }
 }

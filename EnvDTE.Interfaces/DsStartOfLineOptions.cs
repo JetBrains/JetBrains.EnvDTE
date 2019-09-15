@@ -1,8 +1,8 @@
 ﻿namespace EnvDTE
 {
-	public enum DsStartOfLineOptions
-	{
-		dsFirstColumn,
-		dsFirstText
-	}
+    public enum DsStartOfLineOptions
+    {
+        dsFirstColumn,
+        dsFirstText
+    }
 }

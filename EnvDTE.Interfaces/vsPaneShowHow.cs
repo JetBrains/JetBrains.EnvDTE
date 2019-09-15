@@ -1,9 +1,9 @@
 ﻿namespace EnvDTE
 {
-	public enum vsPaneShowHow
-	{
-		vsPaneShowCentered,
-		vsPaneShowTop,
-		vsPaneShowAsIs
-	}
+    public enum vsPaneShowHow
+    {
+        vsPaneShowCentered,
+        vsPaneShowTop,
+        vsPaneShowAsIs
+    }
 }

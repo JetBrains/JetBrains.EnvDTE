@@ -1,4 +1,4 @@
 ﻿namespace EnvDTE
 {
-	public delegate void _dispProjectItemsEvents_ItemRemovedEventHandler(ProjectItem ProjectItem);
+    public delegate void _dispProjectItemsEvents_ItemRemovedEventHandler(ProjectItem ProjectItem);
 }

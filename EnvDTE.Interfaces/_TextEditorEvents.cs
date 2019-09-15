@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE
 {
-	public interface _TextEditorEvents
-	{
-	}
+    public interface _TextEditorEvents
+    {
+    }
 }

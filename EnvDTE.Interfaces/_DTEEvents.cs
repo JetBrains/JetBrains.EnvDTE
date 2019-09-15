@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE
 {
-	public interface _DTEEvents
-	{
-	}
+    public interface _DTEEvents
+    {
+    }
 }

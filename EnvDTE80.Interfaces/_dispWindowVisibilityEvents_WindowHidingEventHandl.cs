@@ -1,8 +1,6 @@
-﻿
-using EnvDTE;
-
+﻿using EnvDTE;
 
 namespace EnvDTE80
 {
-	public delegate void _dispWindowVisibilityEvents_WindowHidingEventHandler(Window Window);
+    public delegate void _dispWindowVisibilityEvents_WindowHidingEventHandler(Window Window);
 }

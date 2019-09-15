@@ -1,7 +1,7 @@
 ﻿namespace EnvDTE
 {
-	public interface _dispSelectionEvents
-	{
-		void OnChange();
-	}
+    public interface _dispSelectionEvents
+    {
+        void OnChange();
+    }
 }

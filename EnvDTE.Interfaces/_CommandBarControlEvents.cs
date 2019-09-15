@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE
 {
-	public interface _CommandBarControlEvents
-	{
-	}
+    public interface _CommandBarControlEvents
+    {
+    }
 }

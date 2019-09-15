@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 namespace JetBrains.EnvDTE
 {
     [UsedImplicitly]
-	public sealed class ConnectionManager
-	{
-	}
+    public sealed class ConnectionManager
+    {
+    }
 }

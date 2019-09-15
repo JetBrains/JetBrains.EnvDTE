@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE80
 {
-	public interface _TextDocumentKeyPressEvents
-	{
-	}
+    public interface _TextDocumentKeyPressEvents
+    {
+    }
 }

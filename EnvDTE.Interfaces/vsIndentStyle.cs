@@ -1,9 +1,9 @@
 ﻿namespace EnvDTE
 {
-	public enum vsIndentStyle
-	{
-		vsIndentStyleNone,
-		vsIndentStyleDefault,
-		vsIndentStyleSmart
-	}
+    public enum vsIndentStyle
+    {
+        vsIndentStyleNone,
+        vsIndentStyleDefault,
+        vsIndentStyleSmart
+    }
 }

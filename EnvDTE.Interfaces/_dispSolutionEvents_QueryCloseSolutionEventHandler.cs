@@ -1,4 +1,4 @@
 ﻿namespace EnvDTE
 {
-	public delegate void _dispSolutionEvents_QueryCloseSolutionEventHandler(ref bool fCancel);
+    public delegate void _dispSolutionEvents_QueryCloseSolutionEventHandler(ref bool fCancel);
 }

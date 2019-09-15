@@ -1,6 +1,6 @@
 ﻿namespace EnvDTE80
 {
-	public interface _PublishEvents
-	{
-	}
+    public interface _PublishEvents
+    {
+    }
 }

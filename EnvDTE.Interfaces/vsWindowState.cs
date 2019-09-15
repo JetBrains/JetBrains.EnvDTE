@@ -1,9 +1,9 @@
 ﻿namespace EnvDTE
 {
-	public enum vsWindowState
-	{
-		vsWindowStateNormal,
-		vsWindowStateMinimize,
-		vsWindowStateMaximize
-	}
+    public enum vsWindowState
+    {
+        vsWindowStateNormal,
+        vsWindowStateMinimize,
+        vsWindowStateMaximize
+    }
 }

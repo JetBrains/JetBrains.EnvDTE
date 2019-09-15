@@ -1,8 +1,8 @@
 ﻿namespace EnvDTE
 {
-	public enum vsSelectionMode
-	{
-		vsSelectionModeStream,
-		vsSelectionModeBox
-	}
+    public enum vsSelectionMode
+    {
+        vsSelectionModeStream,
+        vsSelectionModeBox
+    }
 }

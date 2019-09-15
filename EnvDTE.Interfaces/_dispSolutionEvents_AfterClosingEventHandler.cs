@@ -1,4 +1,4 @@
 ﻿namespace EnvDTE
 {
-	public delegate void _dispSolutionEvents_AfterClosingEventHandler();
+    public delegate void _dispSolutionEvents_AfterClosingEventHandler();
 }
