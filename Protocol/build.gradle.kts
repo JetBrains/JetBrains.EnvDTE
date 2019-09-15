@@ -61,7 +61,7 @@ val repoRoot = projectDir.parentFile!!
 
 configure<RdgenParams> {
   val hostOutput = File(repoRoot, "EnvDTE.Host/Protocol")
-  val clientOutput = File(repoRoot, "EnvDTE/Protocol")
+  val clientOutput = File(repoRoot, "EnvDTE.Client/Protocol")
 
   verbose = true
   hashFolder = "build/rdgen"
@@ -76,7 +76,7 @@ configure<RdgenParams> {
   generator {
     language = "csharp"
     transform = "asis"
-    root = "model.T4Root"
+    root = "model.DteRoot"
     namespace = "com.jetbrains.rider.model"
     directory = "$clientOutput"
   }
@@ -84,7 +84,7 @@ configure<RdgenParams> {
   generator {
     language = "csharp"
     transform = "reversed"
-    root = "model.T4Root"
+    root = "model.DteRoot"
     namespace = "JetBrains.Rider.Model"
     directory = "$hostOutput"
   }
