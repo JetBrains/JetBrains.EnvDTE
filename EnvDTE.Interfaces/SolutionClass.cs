@@ -1,43 +1,45 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 
 namespace EnvDTE
 {
     public class SolutionClass : _Solution, Solution, IEnumerable
     {
-        public extern SolutionClass();
-        public virtual extern Project Item(object index);
-        public virtual extern IEnumerator GetEnumerator();
-        public virtual extern DTE DTE { get; }
-        public virtual extern DTE Parent { get; }
-        public virtual extern int Count { get; }
-        public virtual extern string FileName { get; }
-        public virtual extern void SaveAs(string FileName);
+        public virtual Project Item(object index) => throw new NotImplementedException();
+        public virtual IEnumerator GetEnumerator() => throw new NotImplementedException();
+        public virtual DTE DTE => throw new NotImplementedException();
+        public virtual DTE Parent => throw new NotImplementedException();
+        public virtual int Count => throw new NotImplementedException();
+        public virtual string FileName => throw new NotImplementedException();
+        public virtual void SaveAs(string FileName) => throw new NotImplementedException();
 
-        public virtual extern Project AddFromTemplate(
+        public virtual Project AddFromTemplate(
             string FileName,
             string Destination,
             string ProjectName,
-            bool Exclusive = false);
+            bool Exclusive = false) => throw new NotImplementedException();
 
-        public virtual extern Project AddFromFile(string FileName, bool Exclusive = false);
-        public virtual extern void Open(string FileName);
-        public virtual extern void Close(bool SaveFirst = false);
-        public virtual extern Properties Properties { get; }
-        public virtual extern bool IsDirty { get; set; }
-        public virtual extern void Remove(Project proj);
-        public virtual extern string get_TemplatePath(string ProjectType);
-        public virtual extern string FullName { get; }
-        public virtual extern bool Saved { get; set; }
-        public virtual extern Globals Globals { get; }
-        public virtual extern AddIns AddIns { get; }
-        public virtual extern object get_Extender(string ExtenderName);
-        public virtual extern object ExtenderNames { get; }
-        public virtual extern string ExtenderCATID { get; }
-        public virtual extern bool IsOpen { get; }
-        public virtual extern SolutionBuild SolutionBuild { get; }
-        public virtual extern void Create(string Destination, string Name);
-        public virtual extern Projects Projects { get; }
-        public virtual extern ProjectItem FindProjectItem(string FileName);
-        public virtual extern string ProjectItemsTemplatePath(string ProjectKind);
+        public virtual Project AddFromFile(string FileName, bool Exclusive = false) =>
+            throw new NotImplementedException();
+
+        public virtual void Open(string FileName) => throw new NotImplementedException();
+        public virtual void Close(bool SaveFirst = false) => throw new NotImplementedException();
+        public virtual Properties Properties => throw new NotImplementedException();
+        public virtual bool IsDirty { get; set; }
+        public virtual void Remove(Project proj) => throw new NotImplementedException();
+        public virtual string get_TemplatePath(string ProjectType) => throw new NotImplementedException();
+        public virtual string FullName => throw new NotImplementedException();
+        public virtual bool Saved { get; set; }
+        public virtual Globals Globals => throw new NotImplementedException();
+        public virtual AddIns AddIns => throw new NotImplementedException();
+        public virtual object get_Extender(string ExtenderName) => throw new NotImplementedException();
+        public virtual object ExtenderNames => throw new NotImplementedException();
+        public virtual string ExtenderCATID => throw new NotImplementedException();
+        public virtual bool IsOpen => throw new NotImplementedException();
+        public virtual SolutionBuild SolutionBuild => throw new NotImplementedException();
+        public virtual void Create(string Destination, string Name) => throw new NotImplementedException();
+        public virtual Projects Projects => throw new NotImplementedException();
+        public virtual ProjectItem FindProjectItem(string FileName) => throw new NotImplementedException();
+        public virtual string ProjectItemsTemplatePath(string ProjectKind) => throw new NotImplementedException();
     }
 }
