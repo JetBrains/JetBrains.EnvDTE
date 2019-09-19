@@ -1,18 +1,18 @@
 using System;
-using com.jetbrains.rider.model;
 using EnvDTE;
 using JetBrains.Annotations;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl
 {
     public class ProjectImplementation : Project
     {
         [NotNull]
-        private DteImplementation Implementation { get; }
+        private DTEImplementation Implementation { get; }
 
         private ProjectModel ProjectModel { get; }
 
-        public ProjectImplementation([NotNull] DteImplementation implementation, ProjectModel projectModel)
+        public ProjectImplementation([NotNull] DTEImplementation implementation, ProjectModel projectModel)
         {
             Implementation = implementation;
             ProjectModel = projectModel;
@@ -52,4 +52,5 @@ namespace JetBrains.EnvDTE.Client.Impl
         public void Save(string FileName = "") => throw new NotImplementedException();
         public void Delete() => throw new NotImplementedException();
     }
+
 }

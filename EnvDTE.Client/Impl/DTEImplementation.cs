@@ -1,16 +1,16 @@
 using System;
-using com.jetbrains.rider.model;
 using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
 using JetBrains.Core;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl
 {
     [UsedImplicitly]
-    public sealed class DteImplementation : DTE, DTE2
+    public sealed class DTEImplementation : DTE, DTE2
     {
-        public DteImplementation([NotNull] DteProtocolModel dteProtocolModel)
+        public DTEImplementation([NotNull] DteProtocolModel dteProtocolModel)
         {
             DteProtocolModel = dteProtocolModel;
             Solution = new SolutionImplementation(this);
@@ -88,4 +88,5 @@ namespace JetBrains.EnvDTE.Client.Impl
         public Properties get_Properties(string Category, string Page) => throw new NotImplementedException();
         public bool get_IsOpenFile(string ViewKind, string FileName) => throw new NotImplementedException();
     }
+
 }

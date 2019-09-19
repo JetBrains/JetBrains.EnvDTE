@@ -1,8 +1,5 @@
 import com.jetbrains.rd.generator.gradle.RdgenParams
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.jetbrains.intellij.tasks.PrepareSandboxTask
 import org.jetbrains.kotlin.daemon.common.toHexString
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 // Some build script code borrowed from F# and T4 plugins
 
@@ -77,7 +74,7 @@ configure<RdgenParams> {
     language = "csharp"
     transform = "asis"
     root = "model.DteRoot"
-    namespace = "com.jetbrains.rider.model"
+    namespace = "JetBrains.Rider.Model"
     directory = "$clientOutput"
   }
 

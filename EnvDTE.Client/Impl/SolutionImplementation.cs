@@ -1,17 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using com.jetbrains.rider.model;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.Core;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl
 {
     public sealed class SolutionImplementation : SolutionClass
     {
         [NotNull]
-        private DteImplementation Implementation { get; }
+        private DTEImplementation Implementation { get; }
 
         [NotNull, ItemNotNull]
         private List<ProjectModel> ProjectModels => Implementation
@@ -19,7 +19,7 @@ namespace JetBrains.EnvDTE.Client.Impl
             .Solution_get_Projects
             .Sync(Unit.Instance);
 
-        internal SolutionImplementation([NotNull] DteImplementation dte) => Implementation = dte;
+        internal SolutionImplementation([NotNull] DTEImplementation dte) => Implementation = dte;
         public override DTE DTE => Implementation;
         public override DTE Parent => Implementation;
         public override string FileName => Implementation.DteProtocolModel.Solution_FileName.Sync(Unit.Instance);
@@ -37,4 +37,5 @@ namespace JetBrains.EnvDTE.Client.Impl
         public override Projects Projects => new ProjectsImplementation(Implementation, ProjectModels);
         public override IEnumerator GetEnumerator() => Projects.GetEnumerator();
     }
+
 }
