@@ -1,73 +1,40 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using com.jetbrains.rider.model;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.Core;
 
-namespace JetBrains.EnvDTE.Impl
+namespace JetBrains.EnvDTE.Client.Impl
 {
-    public class SolutionImplementation : SolutionClass
+    public sealed class SolutionImplementation : SolutionClass
     {
         [NotNull]
         private DteImplementation Implementation { get; }
 
+        [NotNull, ItemNotNull]
+        private List<ProjectModel> ProjectModels => Implementation
+            .DteProtocolModel
+            .Solution_get_Projects
+            .Sync(Unit.Instance);
+
         internal SolutionImplementation([NotNull] DteImplementation dte) => Implementation = dte;
-        public override Project Item(object index) => base.Item(index);
-        public override IEnumerator GetEnumerator() => base.GetEnumerator();
         public override DTE DTE => Implementation;
         public override DTE Parent => Implementation;
-        public override int Count { get; }
         public override string FileName => Implementation.DteProtocolModel.Solution_FileName.Sync(Unit.Instance);
+        public override string FullName => FileName;
 
-        public override void SaveAs(string FileName)
+        public override Project Item(object index)
         {
-            base.SaveAs(FileName);
+            if (!(index is int number)) throw new ArgumentException();
+            var item = Implementation.DteProtocolModel.Solution_Item.Sync(number);
+            if (item.Id == -1) throw new ArgumentException();
+            return new ProjectImplementation(Implementation, item);
         }
 
-        public override Project AddFromTemplate(string FileName, string Destination, string ProjectName,
-            bool Exclusive = false) => base.AddFromTemplate(FileName, Destination, ProjectName, Exclusive);
-
-        public override Project AddFromFile(string FileName, bool Exclusive = false) =>
-            base.AddFromFile(FileName, Exclusive);
-
-        public override void Open(string FileName)
-        {
-            base.Open(FileName);
-        }
-
-        public override void Close(bool SaveFirst = false)
-        {
-            base.Close(SaveFirst);
-        }
-
-        public override Properties Properties { get; }
-        public override bool IsDirty { get; set; }
-
-        public override void Remove(Project proj)
-        {
-            base.Remove(proj);
-        }
-
-        public override string get_TemplatePath(string ProjectType) => base.get_TemplatePath(ProjectType);
-        public override string FullName { get; }
-        public override bool Saved { get; set; }
-        public override Globals Globals { get; }
-        public override AddIns AddIns => throw new NotImplementedException();
-        public override object get_Extender(string ExtenderName) => base.get_Extender(ExtenderName);
-        public override object ExtenderNames { get; }
-        public override string ExtenderCATID { get; }
-        public override bool IsOpen { get; }
-        public override SolutionBuild SolutionBuild { get; }
-
-        public override void Create(string Destination, string Name)
-        {
-            base.Create(Destination, Name);
-        }
-
-        public override Projects Projects { get; }
-        public override ProjectItem FindProjectItem(string FileName) => base.FindProjectItem(FileName);
-
-        public override string ProjectItemsTemplatePath(string ProjectKind) =>
-            base.ProjectItemsTemplatePath(ProjectKind);
+        public override int Count => Implementation.DteProtocolModel.Solution_Count.Sync(Unit.Instance);
+        public override Projects Projects => new ProjectsImplementation(Implementation, ProjectModels);
+        public override IEnumerator GetEnumerator() => Projects.GetEnumerator();
     }
 }

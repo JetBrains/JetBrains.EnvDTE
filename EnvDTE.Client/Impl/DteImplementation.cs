@@ -5,7 +5,7 @@ using EnvDTE80;
 using JetBrains.Annotations;
 using JetBrains.Core;
 
-namespace JetBrains.EnvDTE.Impl
+namespace JetBrains.EnvDTE.Client.Impl
 {
     [UsedImplicitly]
     public sealed class DteImplementation : DTE, DTE2
@@ -27,6 +27,11 @@ namespace JetBrains.EnvDTE.Impl
 
         [NotNull]
         public string FileName => DteProtocolModel.DTE_FileName.Sync(Unit.Instance);
+
+        [NotNull]
+        public string FullName => FileName;
+
+        public vsIDEMode Mode => vsIDEMode.vsIDEModeDesign;
 
         [NotNull]
         public Solution Solution { get; }
@@ -54,11 +59,9 @@ namespace JetBrains.EnvDTE.Impl
         public Document ActiveDocument => throw new NotImplementedException();
         public Globals Globals => throw new NotImplementedException();
         public StatusBar StatusBar => throw new NotImplementedException();
-        public string FullName => throw new NotImplementedException();
         public bool UserControl { get; set; }
         public ObjectExtenders ObjectExtenders => throw new NotImplementedException();
         public Find Find => throw new NotImplementedException();
-        public vsIDEMode Mode => throw new NotImplementedException();
         public ItemOperations ItemOperations => throw new NotImplementedException();
         public UndoContext UndoContext => throw new NotImplementedException();
         public Macros Macros => throw new NotImplementedException();
