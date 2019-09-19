@@ -5,7 +5,7 @@ using com.jetbrains.rider.model;
 using EnvDTE;
 using JetBrains.Annotations;
 
-namespace JetBrains.EnvDTE.Client.Impl
+namespace JetBrains.EnvDTE.Client.Core.Impl
 {
     public sealed class ProjectsImplementation : Projects
     {

@@ -5,7 +5,7 @@ using JetBrains.Lifetimes;
 using JetBrains.Rd;
 using JetBrains.Rd.Impl;
 
-namespace JetBrains.EnvDTE.Client
+namespace JetBrains.EnvDTE.Client.Framework
 {
     public sealed class ConnectionManager
     {

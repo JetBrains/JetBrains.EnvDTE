@@ -1,11 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.2</TargetFramework>
-        <RootNamespace>JetBrains.EnvDTE.Client</RootNamespace>
+        <TargetFramework>net461</TargetFramework>
+        <RootNamespace>JetBrains.EnvDTE.Client.Framework</RootNamespace>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
+
     <ItemGroup>
-        <PackageReference Include="JetBrains.RdFramework" Version="1.0.0-preview2-9" />
+      <PackageReference Include="JetBrains.RdFramework" Version="1.0.0-preview2-9" />
     </ItemGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj" />
       <ProjectReference Include="..\EnvDTE100.Interfaces\EnvDTE100.Interfaces.csproj" />
@@ -13,4 +17,6 @@
       <ProjectReference Include="..\EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj" />
       <ProjectReference Include="..\EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj" />
     </ItemGroup>
+
+
 </Project>

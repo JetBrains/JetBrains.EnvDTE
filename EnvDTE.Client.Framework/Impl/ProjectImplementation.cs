@@ -1,9 +1,9 @@
 using System;
 using com.jetbrains.rider.model;
-using EnvDTE;
 using JetBrains.Annotations;
+using JetBrains.EnvDTE.Client.Framework.Impl;
 
-namespace JetBrains.EnvDTE.Client.Impl
+namespace EnvDTE.Client.Framework.Impl
 {
     public class ProjectImplementation : Project
     {

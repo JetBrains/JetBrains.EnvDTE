@@ -5,7 +5,7 @@ using EnvDTE80;
 using JetBrains.Annotations;
 using JetBrains.Core;
 
-namespace JetBrains.EnvDTE.Client.Impl
+namespace JetBrains.EnvDTE.Client.Core.Impl
 {
     [UsedImplicitly]
     public sealed class DteImplementation : DTE, DTE2

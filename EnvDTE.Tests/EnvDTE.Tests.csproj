@@ -1,20 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.2</TargetFramework>
-        <IsPackable>false</IsPackable>
+        <TargetFramework>net461</TargetFramework>
         <RootNamespace>JetBrains.EnvDTE.Tests</RootNamespace>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="nunit" Version="3.11.0" />
-        <PackageReference Include="NUnit3TestAdapter" Version="3.11.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+      <ProjectReference Include="..\EnvDTE.Client.Framework\EnvDTE.Client.Framework.csproj" />
+      <ProjectReference Include="..\EnvDTE.Host\EnvDTE.Host.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EnvDTE.Client\EnvDTE.Client.csproj" />
-      <ProjectReference Include="..\EnvDTE.Host\EnvDTE.Host.csproj" />
+      <PackageReference Include="JetBrains.Rider.SDK" Version="2019.2.2" />
+      <PackageReference Include="NUnit" Version="3.10.1" />
     </ItemGroup>
 
 </Project>
