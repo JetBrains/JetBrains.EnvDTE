@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE90a.Interfaces", "Env
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE100.Interfaces", "EnvDTE100.Interfaces\EnvDTE100.Interfaces.csproj", "{0C3EAF9F-F664-4567-B583-498EAEB771EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE.Tests", "EnvDTE.Tests\EnvDTE.Tests.csproj", "{FB1F439F-3521-4AD2-B498-71B55CD274AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{0C3EAF9F-F664-4567-B583-498EAEB771EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C3EAF9F-F664-4567-B583-498EAEB771EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C3EAF9F-F664-4567-B583-498EAEB771EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB1F439F-3521-4AD2-B498-71B55CD274AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB1F439F-3521-4AD2-B498-71B55CD274AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB1F439F-3521-4AD2-B498-71B55CD274AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB1F439F-3521-4AD2-B498-71B55CD274AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
