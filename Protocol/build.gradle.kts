@@ -58,7 +58,7 @@ val repoRoot = projectDir.parentFile!!
 
 configure<RdgenParams> {
   val hostOutput = File(repoRoot, "EnvDTE.Host/Protocol")
-  val clientOutput = File(repoRoot, "EnvDTE.Client.Common/Protocol")
+  val clientOutput = File(repoRoot, "EnvDTE.Client/Protocol")
 
   verbose = true
   hashFolder = "build/rdgen"

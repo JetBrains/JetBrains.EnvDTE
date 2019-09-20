@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EnvDTE.Client.Framework\EnvDTE.Client.Framework.csproj" />
+      <ProjectReference Include="..\EnvDTE.Client\EnvDTE.Client.csproj" />
       <ProjectReference Include="..\EnvDTE.Host\EnvDTE.Host.csproj" />
     </ItemGroup>
 

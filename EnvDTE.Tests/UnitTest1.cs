@@ -1,5 +1,5 @@
 ﻿using JetBrains.Annotations;
-using JetBrains.EnvDTE.Host;
+using JetBrains.EnvDTE.Client;
 using JetBrains.Lifetimes;
 using NUnit.Framework;
 
@@ -7,22 +7,19 @@ namespace JetBrains.EnvDTE.Tests
 {
     public sealed class Tests
     {
-        [NotNull]
-        private LifetimeDefinition Definition { get; set; }
+        [NotNull] private LifetimeDefinition Definition { get; set; }
 
-        [NotNull]
-        private ConnectionManager HostConnectionManager { get; set; }
+        [NotNull] private Host.ConnectionManager HostConnectionManager { get; set; }
 
-        [NotNull]
-        private EnvDTE.Client.ConnectionManager ClientConnectionManager { get; set; }
+        [NotNull] private ConnectionManager ClientConnectionManager { get; set; }
 
         [SetUp]
         public void Setup()
         {
             Definition = new LifetimeDefinition();
-            // Lifetime library should've been referenced through EnvDTE.Client project
-            HostConnectionManager = new ConnectionManager(Definition.Lifetime, null);
-            ClientConnectionManager = new EnvDTE.Client.ConnectionManager(Definition.Lifetime, HostConnectionManager.Port);
+            // Lifetime library should be same version in client and host version
+            HostConnectionManager = new Host.ConnectionManager(Definition.Lifetime, null);
+            ClientConnectionManager = new ConnectionManager(Definition.Lifetime, HostConnectionManager.Port);
         }
 
         [Test]
