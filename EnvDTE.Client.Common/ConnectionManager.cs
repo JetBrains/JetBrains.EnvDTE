@@ -1,11 +1,11 @@
-using com.jetbrains.rider.model;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using JetBrains.Rd;
 using JetBrains.Rd.Impl;
+using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Framework
+namespace JetBrains.EnvDTE.Client
 {
     public sealed class ConnectionManager
     {

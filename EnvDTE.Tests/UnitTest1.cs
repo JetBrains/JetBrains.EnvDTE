@@ -14,7 +14,7 @@ namespace JetBrains.EnvDTE.Tests
         private ConnectionManager HostConnectionManager { get; set; }
 
         [NotNull]
-        private EnvDTE.Client.Framework.ConnectionManager ClientConnectionManager { get; set; }
+        private EnvDTE.Client.ConnectionManager ClientConnectionManager { get; set; }
 
         [SetUp]
         public void Setup()
@@ -22,7 +22,7 @@ namespace JetBrains.EnvDTE.Tests
             Definition = new LifetimeDefinition();
             // Lifetime library should've been referenced through EnvDTE.Client project
             HostConnectionManager = new ConnectionManager(Definition.Lifetime, null);
-            ClientConnectionManager = new EnvDTE.Client.Framework.ConnectionManager(Definition.Lifetime, HostConnectionManager.Port);
+            ClientConnectionManager = new EnvDTE.Client.ConnectionManager(Definition.Lifetime, HostConnectionManager.Port);
         }
 
         [Test]

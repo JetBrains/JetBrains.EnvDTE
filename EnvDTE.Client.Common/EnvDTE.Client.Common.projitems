@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>1B45BC41-859D-474B-8D6E-5C990088F599</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>EnvDTE.Client.Common</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\DTEImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protocol\DteProtocolModel.Generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protocol\DteRoot.Generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\ProjectImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\ProjectsImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\SolutionImplementation.cs" />
+  </ItemGroup>
+</Project>

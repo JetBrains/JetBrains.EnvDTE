@@ -1,18 +1,18 @@
 using System;
-using com.jetbrains.rider.model;
+using EnvDTE;
 using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Framework.Impl;
+using JetBrains.Rider.Model;
 
-namespace EnvDTE.Client.Framework.Impl
+namespace JetBrains.EnvDTE.Client.Impl
 {
     public class ProjectImplementation : Project
     {
         [NotNull]
-        private DteImplementation Implementation { get; }
+        private DTEImplementation Implementation { get; }
 
         private ProjectModel ProjectModel { get; }
 
-        public ProjectImplementation([NotNull] DteImplementation implementation, ProjectModel projectModel)
+        public ProjectImplementation([NotNull] DTEImplementation implementation, ProjectModel projectModel)
         {
             Implementation = implementation;
             ProjectModel = projectModel;

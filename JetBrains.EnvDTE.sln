@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE.Client.Framework", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE.Tests", "EnvDTE.Tests\EnvDTE.Tests.csproj", "{D0ADE80A-18D7-4756-8D8D-64A13BCE795C}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "EnvDTE.Client.Common", "EnvDTE.Client.Common\EnvDTE.Client.Common.shproj", "{5EB27CAF-6721-4FE8-9FBF-D41292A88E06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,22 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using com.jetbrains.rider.model;
 using EnvDTE;
 using JetBrains.Annotations;
+using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Core.Impl
+namespace JetBrains.EnvDTE.Client.Impl
 {
     public sealed class ProjectsImplementation : Projects
     {
         [NotNull]
-        private DteImplementation Implementation { get; }
+        private DTEImplementation Implementation { get; }
 
         [NotNull, ItemNotNull]
         private IReadOnlyList<ProjectModel> Projects { get; }
 
         public ProjectsImplementation(
-            [NotNull] DteImplementation implementation,
+            [NotNull] DTEImplementation implementation,
             [NotNull, ItemNotNull] IReadOnlyList<ProjectModel> projects
         )
         {
