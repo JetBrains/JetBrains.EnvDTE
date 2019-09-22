@@ -1,6 +1,7 @@
 # Ignore .NET build output
 obj
 bin
+/output
 
 # Ignore personal settings store
 *.sln.DotSettings.user
