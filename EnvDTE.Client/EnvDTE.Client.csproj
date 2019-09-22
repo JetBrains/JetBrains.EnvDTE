@@ -1,19 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFrameworks>netcoreapp3.0;net461</TargetFrameworks>
-        <RootNamespace>JetBrains.EnvDTE.Client</RootNamespace>
+        <LangVersion>latest</LangVersion>
         <AssemblyName>JetBrains.EnvDTE.Client</AssemblyName>
+        <RootNamespace>JetBrains.EnvDTE.Client</RootNamespace>
+        <OutputPath>..\output\JetBrains.EnvDTE.Client\$(Configuration)\</OutputPath>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj" />
-        <ProjectReference Include="..\EnvDTE100.Interfaces\EnvDTE100.Interfaces.csproj" />
-        <ProjectReference Include="..\EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj" />
-        <ProjectReference Include="..\EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj" />
-        <ProjectReference Include="..\EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj" />
+        <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj"/>
+        <ProjectReference Include="..\EnvDTE100.Interfaces\EnvDTE100.Interfaces.csproj"/>
+        <ProjectReference Include="..\EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj"/>
+        <ProjectReference Include="..\EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj"/>
+        <ProjectReference Include="..\EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj"/>
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
-      <PackageReference Include="JetBrains.Lifetimes" Version="1.0.0-preview2-9" />
-      <PackageReference Include="JetBrains.RdFramework" Version="1.0.0-preview2-9" />
+        <PackageReference Include="JetBrains.Annotations" Version="2019.1.1"/>
+        <PackageReference Include="JetBrains.Lifetimes" Version="1.0.0-preview3-14"/>
+        <PackageReference Include="JetBrains.RdFramework" Version="1.0.0-preview3-14"/>
     </ItemGroup>
 </Project>

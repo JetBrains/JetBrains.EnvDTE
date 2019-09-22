@@ -5,9 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{79D375EC-CCCA-4C47-B5E3-6A7D3D7CFB6B}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <LangVersion>latest</LangVersion>
     <AssemblyName>EnvDTE90a</AssemblyName>
     <ApplicationVersion>9.0.0.0</ApplicationVersion>
     <RootNamespace>EnvDTE90a</RootNamespace>
+    <OutputPath>..\output\JetBrains.EnvDTE90a\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
