@@ -28,5 +28,4 @@ namespace JetBrains.EnvDTE.Client
             return new DteProtocolModel(lifetime, protocol);
         }
     }
-
 }
