@@ -50,13 +50,36 @@ namespace JetBrains.EnvDTE.Host
 
         private void RegisterCallbacks([NotNull] DteProtocolModel model)
         {
-            model.DTE_Name.Set(_ => "JetBrains Rider");
-            model.DTE_Name.Set(_ => FileSystemPath
-                .Parse(AppDomain.CurrentDomain.BaseDirectory)
-                .Combine(AppDomain.CurrentDomain.FriendlyName)
-                .FullPath
-            );
-            model.DTE_CommandLineArgs.Set(_ => Environment.GetCommandLineArgs().AggregateString(" "));
+            RegisterDTECallbacks(model);
+            RegisterSolutionCallbacks(model);
+            RegisterProjectCallbacks(model);
+        }
+
+        private void RegisterProjectCallbacks([NotNull] DteProtocolModel model)
+        {
+            model.Project_get_Name.Set(projectModel =>
+                ProjectModelViewHost.GetItemById<IProject>(projectModel.Id)?.Name ?? "");
+            model.Project_set_Name.Set(request =>
+            {
+                string name = request.NewName;
+                var project = ProjectModelViewHost.GetItemById<IProject>(request.Model.Id);
+                if (project == null) return Unit.Instance;
+                Solution.InvokeUnderTransaction(cookie => cookie.Rename(project, name));
+                return Unit.Instance;
+            });
+            model.Project_get_FileName.Set(projectModel =>
+                ProjectModelViewHost.GetItemById<IProject>(projectModel.Id)?.ProjectFile?.Name ?? "");
+            model.Project_Delete.Set(projectModel =>
+            {
+                var project = ProjectModelViewHost.GetItemById<IProject>(projectModel.Id);
+                if (project == null) return Unit.Instance;
+                Solution.InvokeUnderTransaction(cookie => cookie.Remove(project));
+                return Unit.Instance;
+            });
+        }
+
+        private void RegisterSolutionCallbacks([NotNull] DteProtocolModel model)
+        {
             model.Solution_FileName.Set(_ => Solution.SolutionFilePath.FullPath);
             model.Solution_Count.Set(_ => Solution.GetAllProjects().Count);
             model.Solution_Item.Set(index =>
@@ -72,18 +95,17 @@ namespace JetBrains.EnvDTE.Host
                 .Select(ProjectModelViewHost.GetIdByItem)
                 .Select(id => new Rider.Model.ProjectModel(id))
                 .AsList());
-            model.Project_get_Name.Set(projectModel =>
-                ProjectModelViewHost.GetItemById<IProject>(projectModel.Id)?.Name ?? "");
-            model.Project_set_Name.Set(request =>
-            {
-                string name = request.NewName;
-                var project = ProjectModelViewHost.GetItemById<IProject>(request.Model.Id);
-                if (project == null) return Unit.Instance;
-                Solution.InvokeUnderTransaction(cookie => cookie.Rename(project, name));
-                return Unit.Instance;
-            });
-            model.Project_get_FileName.Set(projectModel =>
-                ProjectModelViewHost.GetItemById<IProject>(projectModel.Id)?.ProjectFile?.Name ?? "");
+        }
+
+        private static void RegisterDTECallbacks([NotNull] DteProtocolModel model)
+        {
+            model.DTE_Name.Set(_ => "JetBrains Rider");
+            model.DTE_Name.Set(_ => FileSystemPath
+                .Parse(AppDomain.CurrentDomain.BaseDirectory)
+                .Combine(AppDomain.CurrentDomain.FriendlyName)
+                .FullPath
+            );
+            model.DTE_CommandLineArgs.Set(_ => Environment.GetCommandLineArgs().AggregateString(" "));
         }
     }
 }
