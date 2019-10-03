@@ -37,5 +37,4 @@ namespace JetBrains.EnvDTE.Client.Impl
         public override Projects Projects => new ProjectsImplementation(Implementation, ProjectModels);
         public override IEnumerator GetEnumerator() => Projects.GetEnumerator();
     }
-
 }
