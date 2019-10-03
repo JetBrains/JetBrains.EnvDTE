@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.Rider.Model;
@@ -13,39 +14,40 @@ namespace JetBrains.EnvDTE.Client.Impl
         private DTEImplementation Implementation { get; }
 
         [NotNull, ItemNotNull]
-        private IReadOnlyList<ProjectModel> Projects { get; }
+        private IReadOnlyList<ProjectModel> ProjectModels { get; }
 
         public ProjectsImplementation(
             [NotNull] DTEImplementation implementation,
-            [NotNull, ItemNotNull] IReadOnlyList<ProjectModel> projects
+            [NotNull, ItemNotNull] IReadOnlyList<ProjectModel> projectModels
         )
         {
             Implementation = implementation;
-            Projects = projects;
+            ProjectModels = projectModels;
         }
 
         [NotNull]
         public DTE Parent => Implementation;
 
-        public int Count => Projects.Count;
+        public int Count => ProjectModels.Count;
 
         [NotNull]
         public DTE DTE => Implementation;
 
         [NotNull]
-        IEnumerator Projects.GetEnumerator() => Projects.GetEnumerator();
+        IEnumerator Projects.GetEnumerator() => ProjectModels
+            .Select(model => new ProjectImplementation(Implementation, model))
+            .GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => Projects.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => (this as Projects).GetEnumerator();
 
         [NotNull]
         public Project Item(object index)
         {
             if (!(index is int number)) throw new ArgumentException();
-            return new ProjectImplementation(Implementation, Projects[number]);
+            return new ProjectImplementation(Implementation, ProjectModels[number]);
         }
 
         public Properties Properties => throw new NotImplementedException();
         public string Kind => throw new NotImplementedException();
     }
-
 }
