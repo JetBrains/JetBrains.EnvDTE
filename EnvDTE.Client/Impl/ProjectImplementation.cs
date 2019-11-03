@@ -35,11 +35,17 @@ namespace JetBrains.EnvDTE.Client.Impl
                 .Sync(new Project_set_NameRequest(ProjectModel, value));
         }
 
+        public ProjectItems ProjectItems => new ProjectItemsImplementation(Implementation, ProjectItemModels);
         public DTE DTE => Implementation;
         public string FileName => Implementation.DteProtocolModel.Project_get_FileName.Sync(ProjectModel);
         public string FullName => FileName;
         public Projects Collection => Implementation.Solution.Projects;
         public void Delete() => Implementation.DteProtocolModel.Project_Delete.Sync(ProjectModel);
+
+        public ProjectItem ParentProjectItem => new ProjectItemImplementation(Implementation, Implementation
+            .DteProtocolModel
+            .ProjectItem_get_ParentProjectItem
+            .Sync(new ProjectItemModel(ProjectModel.Id)));
 
         public bool IsDirty
         {
@@ -48,7 +54,6 @@ namespace JetBrains.EnvDTE.Client.Impl
         }
 
         public string Kind => throw new NotImplementedException();
-        public ProjectItems ProjectItems => throw new NotImplementedException();
         public Properties Properties => throw new NotImplementedException();
         public string UniqueName => throw new NotImplementedException();
         public object Object => throw new NotImplementedException();
@@ -63,7 +68,6 @@ namespace JetBrains.EnvDTE.Client.Impl
 
         public ConfigurationManager ConfigurationManager => throw new NotImplementedException();
         public Globals Globals => throw new NotImplementedException();
-        public ProjectItem ParentProjectItem => throw new NotImplementedException();
         public CodeModel CodeModel => throw new NotImplementedException();
         public void SaveAs(string NewFileName) => throw new NotImplementedException();
         public object get_Extender(string ExtenderName) => throw new NotImplementedException();

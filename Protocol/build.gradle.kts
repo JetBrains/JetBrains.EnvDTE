@@ -40,7 +40,6 @@ java {
   targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-
 val baseVersion = "2019.3"
 version = baseVersion
 

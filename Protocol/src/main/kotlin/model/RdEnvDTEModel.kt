@@ -23,18 +23,26 @@ object DteProtocolModel : Ext(DteRoot) {
     }
 
     init {
-        // DTE callbacks
+        createDteCallbacks()
+        createSolutionCallbacks()
+        createProjectCallbacks()
+        createProjectItemCallbacks()
+    }
+
+    private fun createDteCallbacks() {
         call("DTE_Name", void, string)
         call("DTE_FileName", void, string)
         call("DTE_CommandLineArgs", void, string)
+    }
 
-        // Solution callbacks
+    private fun createSolutionCallbacks() {
         call("Solution_FileName", void, string)
         call("Solution_Count", void, int)
 		call("Solution_Item", int, projectModel)
         call("Solution_get_Projects", void, immutableList(projectModel))
+    }
 
-        // Project callbacks
+    private fun createProjectCallbacks() {
         call("Project_get_Name", projectModel, string)
         call("Project_set_Name", structdef("Project_set_NameRequest") {
             field("model", projectModel)
@@ -43,12 +51,14 @@ object DteProtocolModel : Ext(DteRoot) {
         call("Project_get_FileName", projectModel, string)
         call("Project_Delete", projectModel, void)
         call("Project_get_ProjectItems", void, immutableList(projectItemModel))
+    }
 
-        // Project item callbacks
+    private fun createProjectItemCallbacks() {
         call("ProjectItem_get_Name", projectItemModel, string)
         call("ProjectItem_set_Name", structdef("ProjectItem_set_NameRequest") {
             field("model", projectItemModel)
             field("newName", string)
         }, void)
+        call("ProjectItem_get_ParentProjectItem", projectItemModel, projectItemModel)
     }
 }
