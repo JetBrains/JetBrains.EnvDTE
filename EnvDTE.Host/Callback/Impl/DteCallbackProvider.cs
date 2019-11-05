@@ -1,5 +1,6 @@
 using System;
 using JetBrains.ProjectModel;
+using JetBrains.Rd.Tasks;
 using JetBrains.ReSharper.Host.Features.ProjectModel.View;
 using JetBrains.Rider.Model;
 using JetBrains.Util;
