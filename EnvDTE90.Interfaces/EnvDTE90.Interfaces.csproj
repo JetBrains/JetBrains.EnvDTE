@@ -9,7 +9,7 @@
     <AssemblyName>EnvDTE90</AssemblyName>
     <ApplicationVersion>9.0.0.0</ApplicationVersion>
     <RootNamespace>EnvDTE90</RootNamespace>
-    <OutputPath>..\output\JetBrains.EnvDTE90\$(Configuration)\</OutputPath>
+    <OutputPath>..\output\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ToolBoxTab3.cs" />

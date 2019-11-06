@@ -9,7 +9,7 @@
     <AssemblyName>EnvDTE90a</AssemblyName>
     <ApplicationVersion>9.0.0.0</ApplicationVersion>
     <RootNamespace>EnvDTE90a</RootNamespace>
-    <OutputPath>..\output\JetBrains.EnvDTE90a\$(Configuration)\</OutputPath>
+    <OutputPath>..\output\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
