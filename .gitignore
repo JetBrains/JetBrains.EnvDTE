@@ -15,3 +15,9 @@ bin
 # Ignore path to Rider SDK
 /NuGet.Config
 /RiderSdkPackageVersion.props
+
+# Ignore NuGet packages
+*.nupkg
+
+# Ignore Nuke output
+.tmp/
