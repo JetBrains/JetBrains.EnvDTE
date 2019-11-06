@@ -9,7 +9,7 @@
     <AssemblyName>EnvDTE</AssemblyName>
     <ApplicationVersion>8.0.0.0</ApplicationVersion>
     <RootNamespace>EnvDTE</RootNamespace>
-    <OutputPath>..\output\JetBrains.EnvDTE\$(Configuration)\</OutputPath>
+    <OutputPath>..\output\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="_DTE.cs" />

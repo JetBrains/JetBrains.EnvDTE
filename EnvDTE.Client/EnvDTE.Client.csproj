@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFrameworks>netcoreapp3.0;net461</TargetFrameworks>
+        <TargetFramework>net461</TargetFramework>
         <LangVersion>latest</LangVersion>
         <AssemblyName>JetBrains.EnvDTE.Client</AssemblyName>
         <RootNamespace>JetBrains.EnvDTE.Client</RootNamespace>
-        <OutputPath>..\output\JetBrains.EnvDTE.Client\$(Configuration)\</OutputPath>
+        <OutputPath>..\output\Client</OutputPath>
+        <RdVersion>193.20190913.130</RdVersion>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj"/>
@@ -14,8 +15,8 @@
         <ProjectReference Include="..\EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations" Version="2019.1.1"/>
-        <PackageReference Include="JetBrains.Lifetimes" Version="1.0.0-preview3-14"/>
-        <PackageReference Include="JetBrains.RdFramework" Version="1.0.0-preview3-14"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2019.1.3"/>
+        <PackageReference Include="JetBrains.Lifetimes" Version="$(RdVersion)"/>
+        <PackageReference Include="JetBrains.RdFramework" Version="$(RDVersion)"/>
     </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@
     <AssemblyName>EnvDTE100</AssemblyName>
     <ApplicationVersion>10.0.0.0</ApplicationVersion>
     <RootNamespace>EnvDTE100</RootNamespace>
-    <OutputPath>..\output\JetBrains.EnvDTE100\$(Configuration)\</OutputPath>
+    <OutputPath>..\output\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="vsAddFromTemplateOptions.cs" />
