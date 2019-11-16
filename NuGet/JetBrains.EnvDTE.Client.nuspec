@@ -8,7 +8,7 @@
         <owners>JetBrains</owners>
         <licenseUrl>https://github.com/kirillgla/JetBrains.EnvDTE/blob/master/LICENSE</licenseUrl>
         <projectUrl>https://github.com/kirillgla/JetBrains.EnvDTE</projectUrl>
-        <iconUrl>https://github.com/kirillgla/JetBrains.EnvDTE/blob/master/Icons/JetBrains.EnvDTE.png</iconUrl>
+        <icon>JetBrains.EnvDTE.png</icon>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Performs connection to JetBrains Rider serving as EnvDTE host</description>
         <releaseNotes>Test release</releaseNotes>
@@ -23,6 +23,8 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="output\net461\JetBrains.EnvDTE.Host.dll" target="lib\net461"/>
+        <file src="output\net461\JetBrains.EnvDTE.Client.dll" target="lib\net461"/>
+        <file src="output\net461\JetBrains.EnvDTE.Client.pdb" target="lib\net461"/>
+        <file src="Icons\JetBrains.EnvDTE.png" target="" />
     </files>
 </package>

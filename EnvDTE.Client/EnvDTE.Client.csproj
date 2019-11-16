@@ -4,7 +4,7 @@
         <LangVersion>latest</LangVersion>
         <AssemblyName>JetBrains.EnvDTE.Client</AssemblyName>
         <RootNamespace>JetBrains.EnvDTE.Client</RootNamespace>
-        <OutputPath>..\output\Client</OutputPath>
+        <OutputPath>..\output\</OutputPath>
         <RdVersion>193.20190913.130</RdVersion>
     </PropertyGroup>
     <ItemGroup>

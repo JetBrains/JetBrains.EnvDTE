@@ -59,6 +59,10 @@ sealed class Build : NukeBuild
             PackProject("JetBrains.EnvDTE.Client.nuspec");
             PackProject("JetBrains.EnvDTE.Host.nuspec");
             PackProject("JetBrains.EnvDTE.nuspec");
+            PackProject("JetBrains.EnvDTE80.nuspec");
+            PackProject("JetBrains.EnvDTE90.nuspec");
+            PackProject("JetBrains.EnvDTE90a.nuspec");
+            PackProject("JetBrains.EnvDTE100.nuspec");
         });
 
     public void PackProject(string projectName) =>
