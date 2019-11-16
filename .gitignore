@@ -5,6 +5,7 @@ bin
 
 # Ignore personal settings store
 *.sln.DotSettings.user
+*.csproj.DotSettings.user
 
 # Ignore IntelliJ-specific configuration files
 .idea
