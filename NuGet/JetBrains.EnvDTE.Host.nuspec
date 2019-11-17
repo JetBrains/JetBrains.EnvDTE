@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>JetBrains.EnvDTE.Host</id>
-        <version>0.1.0.0</version>
+        <version>0.1.0.1</version>
         <title>JetBrains.EnvDTE.Host</title>
         <authors>JetBrains</authors>
         <owners>JetBrains</owners>
@@ -10,11 +10,11 @@
         <projectUrl>https://github.com/kirillgla/JetBrains.EnvDTE</projectUrl>
         <icon>JetBrains.EnvDTE.png</icon>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Allows JetBrains Rider to serve as EnvDTE host</description>
+        <description>JetBrains implementation of EnvDTE.Host</description>
         <releaseNotes>Test release</releaseNotes>
         <copyright>Copyright 2019 JetBrains</copyright>
-        <tags>JetBrains Rider EnvDTE Host</tags>
-        <summary>Allows JetBrains Rider to serve as EnvDTE host</summary>
+        <tags>JetBrains Rider EnvDTE.Host</tags>
+        <summary>JetBrains implementation of EnvDTE.Host</summary>
     </metadata>
     <files>
         <file src="output\net461\JetBrains.EnvDTE.Host.dll" target="lib\net461"/>

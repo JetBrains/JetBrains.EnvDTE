@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<package>
+    <metadata>
+<#@ include file="JetBrains.EnvDTE.Template.Metadata.ttinclude" #>
+    </metadata>
+<#@ include file="JetBrains.EnvDTE.Template.Files.ttinclude" #>
+</package><#+
+    const string NamePrefix = "";
+#>

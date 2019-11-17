@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <package>
     <metadata>
         <id>JetBrains.EnvDTE.Client</id>
-        <version>0.1.0.0</version>
+        <version>0.1.0.1</version>
         <title>JetBrains.EnvDTE.Client</title>
         <authors>JetBrains</authors>
         <owners>JetBrains</owners>
@@ -10,21 +10,21 @@
         <projectUrl>https://github.com/kirillgla/JetBrains.EnvDTE</projectUrl>
         <icon>JetBrains.EnvDTE.png</icon>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Performs connection to JetBrains Rider serving as EnvDTE host</description>
+        <description>JetBrains implementation of EnvDTE.Client</description>
         <releaseNotes>Test release</releaseNotes>
         <copyright>Copyright 2019 JetBrains</copyright>
-        <tags>JetBrains Rider EnvDTE Client</tags>
-        <summary>Allows JetBrains Rider to serve as EnvDTE host</summary>
+        <tags>JetBrains Rider EnvDTE.Client</tags>
+        <summary>JetBrains implementation of EnvDTE.Client</summary>
         <dependencies>
             <dependency id="JetBrains.Lifetimes" version="193.20190913.130"/>
             <dependency id="JetBrains.RdFramework" version="193.20190913.130"/>
             <dependency id="JetBrains.Annotations" version="2019.1.3"/>
-            <dependency id="JetBrains.EnvDTE" version="0.1.0.0"/>
+            <dependency id="JetBrains.EnvDTE" version="0.1.0.1"/>
         </dependencies>
     </metadata>
     <files>
         <file src="output\net461\JetBrains.EnvDTE.Client.dll" target="lib\net461"/>
         <file src="output\net461\JetBrains.EnvDTE.Client.pdb" target="lib\net461"/>
-        <file src="Icons\JetBrains.EnvDTE.png" target="" />
+        <file src="Icons\JetBrains.EnvDTE.png" target=""/>
     </files>
 </package>

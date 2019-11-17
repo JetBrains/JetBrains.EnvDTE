@@ -1,0 +1,17 @@
+<#@ output extension="nuspec" #>
+        <id>JetBrains.EnvDTE<#= NameSuffix #></id>
+        <version><#= Version #></version>
+        <title>JetBrains.EnvDTE<#= NameSuffix #></title>
+        <authors>JetBrains</authors>
+        <owners>JetBrains</owners>
+        <licenseUrl>https://github.com/kirillgla/JetBrains.EnvDTE/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/kirillgla/JetBrains.EnvDTE</projectUrl>
+        <icon>JetBrains.EnvDTE.png</icon>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>JetBrains implementation of EnvDTE<#= NameSuffix #></description>
+        <releaseNotes>Test release</releaseNotes>
+        <copyright>Copyright 2019 JetBrains</copyright>
+        <tags>JetBrains Rider EnvDTE<#= NameSuffix #></tags>
+        <summary>JetBrains implementation of EnvDTE<#= NameSuffix #></summary><#+
+    const string Version = "0.1.0.1";
+#>

@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <package>
     <metadata>
         <id>JetBrains.EnvDTE90a</id>
-        <version>0.1.0.0</version>
+        <version>0.1.0.1</version>
         <title>JetBrains.EnvDTE90a</title>
         <authors>JetBrains</authors>
         <owners>JetBrains</owners>
@@ -10,10 +10,10 @@
         <projectUrl>https://github.com/kirillgla/JetBrains.EnvDTE</projectUrl>
         <icon>JetBrains.EnvDTE.png</icon>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>JetBrains implementation of EnvDTE</description>
+        <description>JetBrains implementation of EnvDTE90a</description>
         <releaseNotes>Test release</releaseNotes>
         <copyright>Copyright 2019 JetBrains</copyright>
-        <tags>JetBrains Rider EnvDTE</tags>
+        <tags>JetBrains Rider EnvDTE90a</tags>
         <summary>JetBrains implementation of EnvDTE90a</summary>
     </metadata>
     <files>

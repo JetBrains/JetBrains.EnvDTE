@@ -1,0 +1,4 @@
+<#@ template language="C#" #>
+<#@ include file="JetBrains.EnvDTE.Template.ttinclude" #><#+
+    const string NameSuffix = "";
+#>
