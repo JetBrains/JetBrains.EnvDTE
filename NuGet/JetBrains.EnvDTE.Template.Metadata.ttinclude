@@ -13,5 +13,5 @@
         <copyright>Copyright 2019 JetBrains</copyright>
         <tags>JetBrains Rider EnvDTE<#= NameSuffix #></tags>
         <summary>JetBrains implementation of EnvDTE<#= NameSuffix #></summary><#+
-    const string Version = "0.1.0.1";
+    const string Version = "0.1.0.3";
 #>
