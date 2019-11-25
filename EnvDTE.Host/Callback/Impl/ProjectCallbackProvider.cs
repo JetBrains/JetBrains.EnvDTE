@@ -7,7 +7,8 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl
 {
-    public sealed class ProjectCallbackProvider : ICallbackProvider
+    [SolutionComponent]
+    public sealed class ProjectCallbackProvider : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(ISolution solution, ProjectModelViewHost host, DteProtocolModel model)
         {

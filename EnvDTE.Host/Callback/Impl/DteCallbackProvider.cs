@@ -7,12 +7,13 @@ using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl
 {
-    public sealed class DteCallbackProvider : ICallbackProvider
+    [SolutionComponent]
+    public sealed class DteCallbackProvider : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(ISolution solution, ProjectModelViewHost host, DteProtocolModel model)
         {
             model.DTE_Name.Set(_ => "JetBrains Rider");
-            model.DTE_Name.Set(_ => FileSystemPath
+            model.DTE_FileName.Set(_ => FileSystemPath
                 .Parse(AppDomain.CurrentDomain.BaseDirectory)
                 .Combine(AppDomain.CurrentDomain.FriendlyName)
                 .FullPath

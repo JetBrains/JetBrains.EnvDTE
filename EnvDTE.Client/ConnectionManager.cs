@@ -7,6 +7,7 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client
 {
+    [PublicAPI]
     public sealed class ConnectionManager
     {
         private const string Host = "EnvDTE Communication Host";

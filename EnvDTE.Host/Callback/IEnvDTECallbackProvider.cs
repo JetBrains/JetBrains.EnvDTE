@@ -5,7 +5,7 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Host.Callback
 {
-    public interface ICallbackProvider
+    public interface IEnvDteCallbackProvider
     {
         void RegisterCallbacks(
             [NotNull] ISolution solution,
