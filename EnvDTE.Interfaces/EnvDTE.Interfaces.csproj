@@ -46,7 +46,6 @@
     <Compile Include="ProjectItem.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="vsSaveChanges.cs" />
-    <Compile Include="DTEClass.cs" />
     <Compile Include="ProjectItems.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="FileCodeModel.cs" />
@@ -242,7 +241,6 @@
     <Compile Include="_dispTextEditorEvents_Event.cs" />
     <Compile Include="_dispTextEditorEvents_LineChangedEventHandler.cs" />
     <Compile Include="_dispTextEditorEvents.cs" />
-    <Compile Include="SolutionClass.cs" />
     <Compile Include="_Solution.cs" />
     <Compile Include="SolutionBuild.cs" />
     <Compile Include="SolutionConfiguration.cs" />

@@ -10,14 +10,14 @@ namespace JetBrains.EnvDTE.Client.Impl
     public sealed class ProjectImplementation : Project
     {
         [NotNull]
-        private DTEImplementation Implementation { get; }
+        private DteImplementation Implementation { get; }
 
         private ProjectModel ProjectModel { get; }
 
         private List<ProjectItemModel> ProjectItemModels =>
             Implementation.DteProtocolModel.Project_get_ProjectItems.Sync(Unit.Instance);
 
-        public ProjectImplementation([NotNull] DTEImplementation implementation, ProjectModel projectModel)
+        public ProjectImplementation([NotNull] DteImplementation implementation, ProjectModel projectModel)
         {
             Implementation = implementation;
             ProjectModel = projectModel;

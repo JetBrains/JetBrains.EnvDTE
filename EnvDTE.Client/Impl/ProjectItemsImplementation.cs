@@ -8,10 +8,10 @@ namespace JetBrains.EnvDTE.Client.Impl
 {
     public sealed class ProjectItemsImplementation : ProjectItems
     {
-        private DTEImplementation Implementation { get; }
+        private DteImplementation Implementation { get; }
         private List<ProjectItemModel> ProjectItems { get; }
 
-        public ProjectItemsImplementation(DTEImplementation implementation, List<ProjectItemModel> projectItems)
+        public ProjectItemsImplementation(DteImplementation implementation, List<ProjectItemModel> projectItems)
         {
             Implementation = implementation;
             ProjectItems = projectItems;

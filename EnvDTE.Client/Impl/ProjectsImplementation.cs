@@ -11,13 +11,13 @@ namespace JetBrains.EnvDTE.Client.Impl
     public sealed class ProjectsImplementation : Projects
     {
         [NotNull]
-        private DTEImplementation Implementation { get; }
+        private DteImplementation Implementation { get; }
 
         [NotNull, ItemNotNull]
         private IReadOnlyList<ProjectModel> ProjectModels { get; }
 
         public ProjectsImplementation(
-            [NotNull] DTEImplementation implementation,
+            [NotNull] DteImplementation implementation,
             [NotNull, ItemNotNull] IReadOnlyList<ProjectModel> projectModels
         )
         {
