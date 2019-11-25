@@ -2,6 +2,7 @@
 obj
 bin
 /output
+/artifacts
 
 # Ignore personal settings store
 *.sln.DotSettings.user
