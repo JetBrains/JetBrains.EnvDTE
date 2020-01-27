@@ -14,9 +14,9 @@ Instead of accessing COM, this DTE mock uses RD protocol to access project model
 Build instructions:
 ----
 ```powershell
-.\build.ps1
+.\CI\build.ps1
 ```
 or
 ```bash
-bash build.sh
+bash CI/build.sh
 ```
