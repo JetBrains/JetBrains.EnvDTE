@@ -9,7 +9,5 @@ Finally {
     Pop-Location
 }
 
-./build.ps1
-$code = $LastExitCode
-Write-Host "Nuke build finished: $code"
-if ($code -ne 0) { throw "Error: unable to build project: Nuke exit code $code" }
+dotnet restore
+dotnet msbuild
