@@ -9,8 +9,9 @@ Finally {
     Pop-Location
 }
 
-dotnet restore
-dotnet msbuild
+dotnet build
+$code = $LastExitCode
+if ($code -ne 0) { throw "Could not build solution" }
 $packages = @(
   "JetBrains.EnvDTE.Client.nuspec",
   "JetBrains.EnvDTE.Host.nuspec",
@@ -22,4 +23,6 @@ $packages = @(
 
 foreach ($package in $packages) {
     nuget pack ".\NuGet\$package" -BasePath .
+    $code = $LastExitCode
+    if ($code -ne 0) { throw "Could not pack $package" }
 }
