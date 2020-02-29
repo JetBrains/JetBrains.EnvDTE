@@ -6,9 +6,6 @@
         <RootNamespace>JetBrains.EnvDTE.Host</RootNamespace>
         <OutputPath>..\output\</OutputPath>
     </PropertyGroup>
-    <ItemGroup>
-        <PackageReference Include="JetBrains.Rider.SDK" Version="$(RiderSDKVersion)">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-    </ItemGroup>
+    <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props')"/>
+    <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props')"/>
 </Project>

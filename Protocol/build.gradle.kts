@@ -10,8 +10,8 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath("com.jetbrains.rd:rd-gen:0.193.100")
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.31")
+    classpath("com.jetbrains.rd:rd-gen:0.201.57")
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.50")
     classpath("org.jetbrains.kotlin:kotlin-reflect:1.3")
   }
 }
@@ -40,7 +40,7 @@ java {
   targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-val baseVersion = "2019.3"
+val baseVersion = "2020.1"
 version = baseVersion
 
 intellij {
@@ -86,21 +86,16 @@ configure<RdgenParams> {
   }
 }
 
+val dotNetSdkPath by lazy {
+  val sdkPath = intellij.ideaDependency.classes.resolve("lib").resolve("DotNetSdkForRdPlugins")
+  if (sdkPath.isDirectory.not()) error("$sdkPath does not exist or not a directory")
+
+  println("SDK path: $sdkPath")
+  return@lazy sdkPath
+}
+
 val nugetConfigPath = File(repoRoot, "NuGet.Config")
-val riderSdkVersionPropsPath = File(repoRoot, "RiderSdkPackageVersion.props")
-val nugetPackagesPath by lazy {
-  val sdkPath = intellij.ideaDependency.classes
-  val path = File(sdkPath, "lib/ReSharperHostSdk")
-  if (!path.isDirectory) error("$path does not exist or not a directory")
-  return@lazy path
-}
-val riderSdkPackageVersion by lazy {
-  val sdkPackageName = "JetBrains.Rider.SDK"
-  val regex = Regex("${Regex.escape(sdkPackageName)}\\.([\\d\\.]+.*)\\.nupkg")
-  nugetPackagesPath.listFiles()
-    ?.mapNotNull { regex.matchEntire(it.name)?.groupValues?.drop(1)?.first() }
-    ?.singleOrNull() ?: error("$nugetPackagesPath does not conatin unique $sdkPackageName package")
-}
+val dotNetSdkPathPropsPath = File("build", "DotNetSdkPath.generated.props")
 
 fun File.writeTextIfChanged(content: String) {
   val bytes = content.toByteArray()
@@ -109,12 +104,11 @@ fun File.writeTextIfChanged(content: String) {
 }
 
 tasks {
-  create("writeRiderSdkVersionProps") {
+  create("writeDotNetSdkPathProps") {
     doLast {
-      riderSdkVersionPropsPath.writeTextIfChanged(
-        """<Project>
+      dotNetSdkPathPropsPath.writeTextIfChanged("""<Project>
   <PropertyGroup>
-    <RiderSDKVersion>[$riderSdkPackageVersion]</RiderSDKVersion>
+    <DotNetSdkPath>$dotNetSdkPath</DotNetSdkPath>
   </PropertyGroup>
 </Project>
 """
@@ -127,7 +121,7 @@ tasks {
         """<?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <packageSources>
-    <add key="resharper-sdk" value="$nugetPackagesPath" />
+    <add key="resharper-sdk" value="$dotNetSdkPath" />
   </packageSources>
 </configuration>
 """
@@ -135,7 +129,7 @@ tasks {
     }
   }
   create("prepare") {
-    dependsOn("writeRiderSdkVersionProps", "writeNuGetConfig", "rdgen")
+    dependsOn("writeDotNetSdkPathProps", "writeNuGetConfig", "rdgen")
   }
 }
 

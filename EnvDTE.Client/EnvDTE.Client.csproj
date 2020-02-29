@@ -5,7 +5,7 @@
         <AssemblyName>JetBrains.EnvDTE.Client</AssemblyName>
         <RootNamespace>JetBrains.EnvDTE.Client</RootNamespace>
         <OutputPath>..\output\</OutputPath>
-        <RdVersion>193.20190913.130</RdVersion>
+        <RdVersion>2020.1.0</RdVersion>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj"/>
