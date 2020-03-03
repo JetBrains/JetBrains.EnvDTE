@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>JetBrains.EnvDTE90a</id>
-        <version>0.1.0.3</version>
+        <version>$packageVersion$</version>
         <title>JetBrains.EnvDTE90a</title>
         <authors>JetBrains</authors>
         <owners>JetBrains</owners>

@@ -1,6 +1,6 @@
 <#@ output extension="nuspec" #>
         <id>JetBrains.EnvDTE<#= NameSuffix #></id>
-        <version><#= Version #></version>
+        <version>$packageVersion$</version>
         <title>JetBrains.EnvDTE<#= NameSuffix #></title>
         <authors>JetBrains</authors>
         <owners>JetBrains</owners>
@@ -13,5 +13,4 @@
         <copyright>Copyright 2019 JetBrains</copyright>
         <tags>JetBrains Rider EnvDTE<#= NameSuffix #></tags>
         <summary>JetBrains implementation of EnvDTE<#= NameSuffix #></summary><#+
-    const string Version = "0.1.0.3";
 #>

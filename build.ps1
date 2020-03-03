@@ -1,3 +1,5 @@
+packageVersion="0.1.0.5"
+
 Push-Location -Path Protocol
 Try {
     .\gradlew
@@ -22,7 +24,7 @@ $packages = @(
   "JetBrains.EnvDTE100.nuspec")
 
 foreach ($package in $packages) {
-    nuget pack ".\NuGet\$package" -BasePath .
+    nuget pack ".\NuGet\$package" -BasePath . -OutputDirectory .\artifacts -Properties packageVersion=$packageVersion
     $code = $LastExitCode
     if ($code -ne 0) { throw "Could not pack $package" }
 }
