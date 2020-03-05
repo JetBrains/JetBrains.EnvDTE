@@ -2,7 +2,7 @@ using System;
 using EnvDTE;
 using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Impl
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 {
     public sealed class ProjectItemImplementation : ProjectItem
     {

@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
-using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Impl
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 {
     public sealed class ProjectsImplementation : Projects
     {
@@ -14,11 +13,11 @@ namespace JetBrains.EnvDTE.Client.Impl
         private DteImplementation Implementation { get; }
 
         [NotNull, ItemNotNull]
-        private IReadOnlyList<ProjectModel> ProjectModels { get; }
+        private IReadOnlyList<Rider.Model.ProjectModel> ProjectModels { get; }
 
         public ProjectsImplementation(
             [NotNull] DteImplementation implementation,
-            [NotNull, ItemNotNull] IReadOnlyList<ProjectModel> projectModels
+            [NotNull, ItemNotNull] IReadOnlyList<Rider.Model.ProjectModel> projectModels
         )
         {
             Implementation = implementation;

@@ -5,19 +5,19 @@ using JetBrains.Annotations;
 using JetBrains.Core;
 using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Impl
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 {
     public sealed class ProjectImplementation : Project
     {
         [NotNull]
         private DteImplementation Implementation { get; }
 
-        private ProjectModel ProjectModel { get; }
+        private Rider.Model.ProjectModel ProjectModel { get; }
 
         private List<ProjectItemModel> ProjectItemModels =>
             Implementation.DteProtocolModel.Project_get_ProjectItems.Sync(Unit.Instance);
 
-        public ProjectImplementation([NotNull] DteImplementation implementation, ProjectModel projectModel)
+        public ProjectImplementation([NotNull] DteImplementation implementation, Rider.Model.ProjectModel projectModel)
         {
             Implementation = implementation;
             ProjectModel = projectModel;

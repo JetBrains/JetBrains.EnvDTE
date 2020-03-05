@@ -1,4 +1,4 @@
-packageVersion="0.1.0.5"
+$packageVersion="0.1.0.6"
 
 Push-Location -Path Protocol
 Try {

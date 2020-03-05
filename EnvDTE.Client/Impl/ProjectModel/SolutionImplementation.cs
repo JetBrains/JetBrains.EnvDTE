@@ -7,9 +7,8 @@ using EnvDTE80;
 using EnvDTE90;
 using JetBrains.Annotations;
 using JetBrains.Core;
-using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Impl
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 {
     public sealed class SolutionImplementation : Solution, Solution4
     {
@@ -17,7 +16,7 @@ namespace JetBrains.EnvDTE.Client.Impl
         private DteImplementation Implementation { get; }
 
         [NotNull, ItemNotNull]
-        private List<ProjectModel> ProjectModels => Implementation
+        private List<Rider.Model.ProjectModel> ProjectModels => Implementation
             .DteProtocolModel
             .Solution_get_Projects
             .Sync(Unit.Instance);
