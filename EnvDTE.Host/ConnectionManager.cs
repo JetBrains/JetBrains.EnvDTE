@@ -19,31 +19,29 @@ namespace JetBrains.EnvDTE.Host
         public int Port { get; private set; }
         private IReadOnlyList<IEnvDteCallbackProvider> CallbackProviders { get; }
 
-        public ConnectionManager(Lifetime lifetime, [NotNull] ISolution solution)
-        {
-            var host = solution.GetComponent<ProjectModelViewHost>();
-            var model = SetupModel(lifetime);
-            RegisterCallbacks(model, host, solution);
-        }
+        public ConnectionManager(Lifetime lifetime, [NotNull] ISolution solution) => SetupModel(lifetime, solution);
 
-        [NotNull]
-        private DteProtocolModel SetupModel(Lifetime lifetime)
+        private void SetupModel(Lifetime lifetime, ISolution solution)
         {
             var scheduler = SingleThreadScheduler.RunOnSeparateThread(lifetime, Host);
             var server = new SocketWire.Server(lifetime, scheduler);
             Port = server.Port;
             var serializers = new Serializers();
             var identities = new Identities(IdKind.Server);
-            var protocol = new Protocol(Protocol, serializers, identities, scheduler, server, lifetime);
-            return new DteProtocolModel(lifetime, protocol);
+            scheduler.Queue(() =>
+            {
+                var protocol = new Protocol(Protocol, serializers, identities, scheduler, server, lifetime);
+                var model = new DteProtocolModel(lifetime, protocol);
+                RegisterCallbacks(model, solution);
+            });
         }
 
         private void RegisterCallbacks(
             [NotNull] DteProtocolModel model,
-            [NotNull] ProjectModelViewHost host,
             [NotNull] ISolution solution
         )
         {
+            var host = solution.GetComponent<ProjectModelViewHost>();
             foreach (var provider in solution.GetComponents<IEnvDteCallbackProvider>())
             {
                 provider.RegisterCallbacks(solution, host, model);
