@@ -1,16 +1,17 @@
 using JetBrains.Annotations;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
+using JetBrains.Platform.RdFramework.Impl;
 using JetBrains.Rd;
 using JetBrains.Rd.Impl;
 using JetBrains.Rider.Model;
+using JetBrains.Util.Logging;
 
 namespace JetBrains.EnvDTE.Client
 {
     [PublicAPI]
     public sealed class ConnectionManager
     {
-        private const string Host = "EnvDTE Communication Host";
         private const string Protocol = "EnvDTE Communication Protocol";
 
         [NotNull]
@@ -21,7 +22,7 @@ namespace JetBrains.EnvDTE.Client
         [NotNull]
         private static DteProtocolModel SetupModel(Lifetime lifetime, int port)
         {
-            var scheduler = SingleThreadScheduler.RunOnSeparateThread(lifetime, Host);
+            IScheduler scheduler = new SimpleInpaceExecutingScheduler(Logger.GetLogger<ConnectionManager>());
             var server = new SocketWire.Client(lifetime, scheduler, port);
             var serializers = new Serializers();
             var identities = new Identities(IdKind.Client);
