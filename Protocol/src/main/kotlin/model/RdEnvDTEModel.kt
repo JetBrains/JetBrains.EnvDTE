@@ -1,4 +1,4 @@
-﻿package model
+package model
 
 import com.jetbrains.rd.generator.nova.csharp.CSharp50Generator
 import com.jetbrains.rd.generator.nova.setting
@@ -30,12 +30,14 @@ object DteProtocolModel : Ext(DteRoot) {
     }
 
     private fun createDteCallbacks() {
+        // see DteCallbackProvider
         call("DTE_Name", void, string)
         call("DTE_FileName", void, string)
         call("DTE_CommandLineArgs", void, string)
     }
 
     private fun createSolutionCallbacks() {
+        // see SolutionCallbackProvider
         call("Solution_FileName", void, string)
         call("Solution_Count", void, int)
 		call("Solution_Item", int, projectModel)
@@ -43,6 +45,7 @@ object DteProtocolModel : Ext(DteRoot) {
     }
 
     private fun createProjectCallbacks() {
+        // see ProjectCallbackProvider
         call("Project_get_Name", projectModel, string)
         call("Project_set_Name", structdef("Project_set_NameRequest") {
             field("model", projectModel)
@@ -54,6 +57,7 @@ object DteProtocolModel : Ext(DteRoot) {
     }
 
     private fun createProjectItemCallbacks() {
+        // see ProjectItemCallbackProvider
         call("ProjectItem_get_Name", projectItemModel, string)
         call("ProjectItem_set_Name", structdef("ProjectItem_set_NameRequest") {
             field("model", projectItemModel)
