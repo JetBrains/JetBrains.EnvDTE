@@ -63,6 +63,7 @@
         public const string vsMiscFilesProjectUniqueName = "<MiscFiles>";
         public const string vsSolutionItemsProjectUniqueName = "<SolnItems>";
         public const string vsProjectItemKindPhysicalFile = "{6BB5F8EE-4483-11D3-8BCF-00C04F8EC28C}";
+        public const string vsProjectItemKindUnknown = "{D4131D2D-6385-4C61-AD02-32CBC74079CA}";
         public const string vsProjectItemKindPhysicalFolder = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";
         public const string vsProjectItemKindVirtualFolder = "{6BB5F8F0-4483-11D3-8BCF-00C04F8EC28C}";
         public const string vsProjectItemKindSubProject = "{EA6618E8-6E24-4528-94BE-6889FE16485C}";

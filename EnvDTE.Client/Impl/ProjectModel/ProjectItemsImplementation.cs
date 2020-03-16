@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using EnvDTE;
 using JetBrains.Rider.Model;
 
@@ -9,21 +10,28 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
     public sealed class ProjectItemsImplementation : ProjectItems
     {
         private DteImplementation Implementation { get; }
-        private List<ProjectItemModel> ProjectItems { get; }
+        private List<ProjectItemModel> ProjectItemModels { get; }
 
-        public ProjectItemsImplementation(DteImplementation implementation, List<ProjectItemModel> projectItems)
+        public ProjectItemsImplementation(
+            DteImplementation implementation,
+            List<ProjectItemModel> projectItemModels,
+            object parent)
         {
             Implementation = implementation;
-            ProjectItems = projectItems;
+            ProjectItemModels = projectItemModels;
+            Parent = parent;
         }
 
         public DTE DTE => Implementation;
-        public object Parent => throw new NotImplementedException();
-        public int Count => throw new NotImplementedException();
+        public object Parent { get; }
+        public int Count => ProjectItemModels.Count;
         public string Kind => throw new NotImplementedException();
         public Project ContainingProject => throw new NotImplementedException();
         public ProjectItem Item(object index) => throw new NotImplementedException();
-        IEnumerator ProjectItems.GetEnumerator() => throw new NotImplementedException();
+
+        IEnumerator ProjectItems.GetEnumerator() =>
+            ProjectItemModels.Select(model => new ProjectItemImplementation(Implementation, model)).GetEnumerator();
+
         public ProjectItem AddFromFile(string FileName) => throw new NotImplementedException();
         public ProjectItem AddFromTemplate(string FileName, string Name) => throw new NotImplementedException();
         public ProjectItem AddFromDirectory(string Directory) => throw new NotImplementedException();

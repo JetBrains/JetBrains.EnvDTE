@@ -1,4 +1,4 @@
-package model
+﻿package model
 
 import com.jetbrains.rd.generator.nova.csharp.CSharp50Generator
 import com.jetbrains.rd.generator.nova.setting
@@ -20,6 +20,14 @@ object DteProtocolModel : Ext(DteRoot) {
 
     val projectModel = structdef {
         field("id", int)
+    }
+
+    val projectItemKindModel = enum {
+      +"Unknown"
+      +"PhysicalFile"
+      +"PhysicalFolder"
+      +"Project"
+      +"VirtualDirectory"
     }
 
     init {
@@ -53,7 +61,7 @@ object DteProtocolModel : Ext(DteRoot) {
         }, void)
         call("Project_get_FileName", projectModel, string)
         call("Project_Delete", projectModel, void)
-        call("Project_get_ProjectItems", void, immutableList(projectItemModel))
+        call("Project_get_ProjectItems", projectModel, immutableList(projectItemModel))
     }
 
     private fun createProjectItemCallbacks() {
@@ -63,6 +71,6 @@ object DteProtocolModel : Ext(DteRoot) {
             field("model", projectItemModel)
             field("newName", string)
         }, void)
-        call("ProjectItem_get_ParentProjectItem", projectItemModel, projectItemModel)
+        call("ProjectItem_get_Kind", projectItemModel, projectItemKindModel)
     }
 }

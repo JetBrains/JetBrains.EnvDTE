@@ -1,23 +1,34 @@
 using System;
 using EnvDTE;
+using JetBrains.Annotations;
+using JetBrains.EnvDTE.Client.Impl.Model;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 {
     public sealed class ProjectItemImplementation : ProjectItem
     {
+        [NotNull]
         private DteImplementation Implementation { get; }
+
+        [NotNull]
         private ProjectItemModel ProjectItemModel { get; }
 
-        public ProjectItemImplementation(DteImplementation implementation, ProjectItemModel projectItemModel)
+        public ProjectItemImplementation(
+            [NotNull] DteImplementation implementation,
+            [NotNull] ProjectItemModel projectItemModel
+        )
         {
             Implementation = implementation;
             ProjectItemModel = projectItemModel;
         }
 
+        [NotNull]
         public DTE DTE => Implementation;
+
         public short FileCount => 1;
 
+        [NotNull]
         public string Name
         {
             get => Implementation.DteProtocolModel.ProjectItem_get_Name.Sync(ProjectItemModel);
@@ -25,6 +36,26 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
                 .DteProtocolModel
                 .ProjectItem_set_Name
                 .Sync(new ProjectItem_set_NameRequest(ProjectItemModel, value));
+        }
+
+        [NotNull]
+        public string Kind => Implementation.DteProtocolModel.ProjectItem_get_Kind.Sync(ProjectItemModel) switch
+        {
+            ProjectItemKindModel.PhysicalFile => Constants.vsProjectItemKindPhysicalFile,
+            ProjectItemKindModel.PhysicalFolder => Constants.vsProjectItemKindPhysicalFolder,
+            ProjectItemKindModel.Project => Constants.vsProjectItemKindSubProject,
+            ProjectItemKindModel.VirtualDirectory => Constants.vsProjectItemKindVirtualFolder,
+            _ => Constants.vsProjectItemKindUnknown
+        };
+
+        [CanBeNull]
+        public FileCodeModel FileCodeModel
+        {
+            get
+            {
+                if (Kind != Constants.vsProjectItemKindPhysicalFile) return null;
+                return new FileCodeModelImpl(Implementation, this);
+            }
         }
 
         public bool IsDirty
@@ -35,7 +66,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 
         public ProjectItems Collection => throw new NotImplementedException();
         public Properties Properties => throw new NotImplementedException();
-        public string Kind => throw new NotImplementedException();
         public ProjectItems ProjectItems => throw new NotImplementedException();
         public object Object => throw new NotImplementedException();
         public object ExtenderNames => throw new NotImplementedException();
@@ -48,7 +78,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         }
 
         public ConfigurationManager ConfigurationManager => throw new NotImplementedException();
-        public FileCodeModel FileCodeModel => throw new NotImplementedException();
         public Document Document => throw new NotImplementedException();
         public Project SubProject => throw new NotImplementedException();
         public Project ContainingProject => throw new NotImplementedException();
