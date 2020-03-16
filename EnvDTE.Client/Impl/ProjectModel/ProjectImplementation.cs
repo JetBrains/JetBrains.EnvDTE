@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using EnvDTE;
 using JetBrains.Annotations;
-using JetBrains.Core;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
@@ -12,15 +11,22 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         [NotNull]
         private DteImplementation Implementation { get; }
 
+        [NotNull]
         private Rider.Model.ProjectModel ProjectModel { get; }
 
+        [NotNull, ItemNotNull]
         private List<ProjectItemModel> ProjectItemModels =>
-            Implementation.DteProtocolModel.Project_get_ProjectItems.Sync(Unit.Instance);
+            Implementation.DteProtocolModel.Project_get_ProjectItems.Sync(ProjectModel);
 
-        public ProjectImplementation([NotNull] DteImplementation implementation, Rider.Model.ProjectModel projectModel)
+        public ProjectImplementation(
+            [NotNull] DteImplementation implementation,
+            [NotNull] Rider.Model.ProjectModel projectModel,
+            [CanBeNull] ProjectItem parentProjectItem = null
+        )
         {
             Implementation = implementation;
             ProjectModel = projectModel;
+            ParentProjectItem = parentProjectItem;
         }
 
         public string Name
@@ -35,17 +41,17 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
                 .Sync(new Project_set_NameRequest(ProjectModel, value));
         }
 
-        public ProjectItems ProjectItems => new ProjectItemsImplementation(Implementation, ProjectItemModels);
+        [NotNull]
+        public ProjectItems ProjectItems => new ProjectItemsImplementation(Implementation, ProjectItemModels, this);
+
+        [NotNull]
         public DTE DTE => Implementation;
+
         public string FileName => Implementation.DteProtocolModel.Project_get_FileName.Sync(ProjectModel);
         public string FullName => FileName;
         public Projects Collection => Implementation.Solution.Projects;
         public void Delete() => Implementation.DteProtocolModel.Project_Delete.Sync(ProjectModel);
-
-        public ProjectItem ParentProjectItem => new ProjectItemImplementation(Implementation, Implementation
-            .DteProtocolModel
-            .ProjectItem_get_ParentProjectItem
-            .Sync(new ProjectItemModel(ProjectModel.Id)));
+        public ProjectItem ParentProjectItem { get; }
 
         public bool IsDirty
         {
