@@ -1,6 +1,9 @@
+using System;
 using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
+using JetBrains.EnvDTE.Client.Impl.ProjectModel;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Model
 {
@@ -8,122 +11,134 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
     {
         [NotNull]
         private DteImplementation DteImplementation { get; }
+        private ProjectItemImplementation MyParent { get; }
 
-        public FileCodeModelImpl([NotNull] DteImplementation dteImplementation, [NotNull] ProjectItem parent)
+        public FileCodeModelImpl([NotNull] DteImplementation dteImplementation, [NotNull] ProjectItemImplementation parent)
         {
             DteImplementation = dteImplementation;
-            Parent = parent;
+            MyParent = parent;
         }
 
         [NotNull]
         public DTE DTE => DteImplementation;
 
         [NotNull]
-        public ProjectItem Parent { get; }
+        public ProjectItem Parent => MyParent;
 
-        public string Language => throw new System.NotImplementedException();
-        public CodeElements CodeElements => throw new System.NotImplementedException();
-        public vsCMParseStatus ParseStatus => throw new System.NotImplementedException();
-        public bool IsBatchOpen => throw new System.NotImplementedException();
+        [CanBeNull]
+        public string Language => DteImplementation
+                .DteProtocolModel
+                .FileCodeModel_get_Language
+                .Sync(MyParent.ProjectItemModel)
+            switch
+            {
+                LanguageModel.CSharp => CodeModelLanguageConstants.vsCMLanguageCSharp,
+                LanguageModel.VB => CodeModelLanguageConstants.vsCMLanguageVB,
+                _ => null
+            };
+
+        public CodeElements CodeElements => throw new NotImplementedException();
+        public vsCMParseStatus ParseStatus => throw new NotImplementedException();
+        public bool IsBatchOpen => throw new NotImplementedException();
 
         CodeElement FileCodeModel.CodeElementFromPoint(TextPoint Point, vsCMElement Scope) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeNamespace FileCodeModel2.AddNamespace(string Name, object Position) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeClass FileCodeModel2.AddClass(string Name, object Position, object Bases, object ImplementedInterfaces,
             vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeInterface FileCodeModel2.AddInterface(string Name, object Position, object Bases,
             vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeFunction FileCodeModel2.AddFunction(string Name, vsCMFunction Kind, object Type, object Position,
             vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeVariable FileCodeModel2.AddVariable(string Name, object Type, object Position, vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeAttribute FileCodeModel2.AddAttribute(string Name, string Value, object Position) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeStruct FileCodeModel2.AddStruct(string Name, object Position, object Bases, object ImplementedInterfaces,
             vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeEnum FileCodeModel2.AddEnum(string Name, object Position, object Bases, vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeDelegate FileCodeModel2.AddDelegate(string Name, object Type, object Position, vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         void FileCodeModel2.Remove(object Element)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void Synchronize()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public CodeImport AddImport(string Name, object Position, string Alias = "") =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         public void BeginBatch()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void EndBatch()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public CodeElement ElementFromID(string ID) => throw new System.NotImplementedException();
+        public CodeElement ElementFromID(string ID) => throw new NotImplementedException();
 
         CodeElement FileCodeModel2.CodeElementFromPoint(TextPoint Point, vsCMElement Scope) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeNamespace FileCodeModel.AddNamespace(string Name, object Position) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeClass FileCodeModel.AddClass(string Name, object Position, object Bases, object ImplementedInterfaces,
             vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeInterface FileCodeModel.AddInterface(string Name, object Position, object Bases,
             vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeFunction FileCodeModel.AddFunction(string Name, vsCMFunction Kind, object Type, object Position,
             vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeVariable FileCodeModel.AddVariable(string Name, object Type, object Position,
             vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeAttribute FileCodeModel.AddAttribute(string Name, string Value, object Position) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeStruct FileCodeModel.AddStruct(string Name, object Position, object Bases, object ImplementedInterfaces,
             vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeEnum FileCodeModel.AddEnum(string Name, object Position, object Bases, vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         CodeDelegate FileCodeModel.AddDelegate(string Name, object Type, object Position,
             vsCMAccess Access) =>
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
 
         void FileCodeModel.Remove(object Element)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

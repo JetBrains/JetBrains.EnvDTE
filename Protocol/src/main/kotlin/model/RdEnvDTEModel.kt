@@ -30,11 +30,18 @@ object DteProtocolModel : Ext(DteRoot) {
       +"VirtualDirectory"
     }
 
+    val languageModel = enum {
+      +"Unknown"
+      +"CSharp"
+      +"VB"
+    }
+
     init {
         createDteCallbacks()
         createSolutionCallbacks()
         createProjectCallbacks()
         createProjectItemCallbacks()
+        createFileCodeModelCallbacks()
     }
 
     private fun createDteCallbacks() {
@@ -72,5 +79,10 @@ object DteProtocolModel : Ext(DteRoot) {
             field("newName", string)
         }, void)
         call("ProjectItem_get_Kind", projectItemModel, projectItemKindModel)
+    }
+
+    private fun createFileCodeModelCallbacks() {
+      // see FileCodeModelCallbackProvider
+      call("FileCodeModel_get_Language", projectItemModel, languageModel)
     }
 }

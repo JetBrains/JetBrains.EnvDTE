@@ -12,7 +12,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         private DteImplementation Implementation { get; }
 
         [NotNull]
-        private ProjectItemModel ProjectItemModel { get; }
+        internal ProjectItemModel ProjectItemModel { get; }
 
         public ProjectItemImplementation(
             [NotNull] DteImplementation implementation,
