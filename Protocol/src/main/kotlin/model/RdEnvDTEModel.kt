@@ -36,6 +36,32 @@ object DteProtocolModel : Ext(DteRoot) {
       +"VB"
     }
 
+    // #region AST
+
+    val methodModel = structdef {
+      field("Name", string)
+    }
+
+    val typeKind = enum {
+      +"Interface"
+      +"Class"
+      +"Struct"
+    }
+
+    val typeModel = structdef {
+      field("Name", string)
+      field("Kind", typeKind)
+      field("Methods", immutableList(methodModel))
+      field("Types", immutableList(
+    }
+
+    val namespaceModel = structdef {
+      field("Name", string)
+      field("Types", immutableList(typeModel))
+    }
+
+    // #endregion AST
+
     init {
         createDteCallbacks()
         createSolutionCallbacks()
@@ -84,5 +110,7 @@ object DteProtocolModel : Ext(DteRoot) {
     private fun createFileCodeModelCallbacks() {
       // see FileCodeModelCallbackProvider
       call("FileCodeModel_get_Language", projectItemModel, languageModel)
+      call("FileCodeModel_get_Namespaces", projectItemModel, immutableList(namespaceModel))
+      call("FileCodeModel_get_Types", projectItemModel, immutableList(typeModel))
     }
 }

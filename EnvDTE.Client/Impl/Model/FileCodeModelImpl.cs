@@ -11,9 +11,11 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
     {
         [NotNull]
         private DteImplementation DteImplementation { get; }
+
         private ProjectItemImplementation MyParent { get; }
 
-        public FileCodeModelImpl([NotNull] DteImplementation dteImplementation, [NotNull] ProjectItemImplementation parent)
+        public FileCodeModelImpl([NotNull] DteImplementation dteImplementation,
+            [NotNull] ProjectItemImplementation parent)
         {
             DteImplementation = dteImplementation;
             MyParent = parent;
@@ -37,7 +39,9 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
                 _ => null
             };
 
-        public CodeElements CodeElements => throw new NotImplementedException();
+        [NotNull]
+        public CodeElements CodeElements => new CodeElementsImplementation(DteImplementation, this);
+
         public vsCMParseStatus ParseStatus => throw new NotImplementedException();
         public bool IsBatchOpen => throw new NotImplementedException();
 

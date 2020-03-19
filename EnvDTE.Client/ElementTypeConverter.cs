@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using EnvDTE;
+using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Impl.Ast;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client
 {
@@ -15,6 +18,8 @@ namespace JetBrains.EnvDTE.Client
 
         static ElementTypeConverter()
         {
+            Register<CodeNamespaceImpl, ICSharpNamespaceDeclaration>();
+
             Register<CodeClassImpl, IClassDeclaration>();
             Register<CodeStructImpl, IStructDeclaration>();
             Register<CodeInterfaceImpl, IInterfaceDeclaration>();
@@ -32,5 +37,10 @@ namespace JetBrains.EnvDTE.Client
             Dictionary.Add(CurrentId, new ElementDescription(CurrentId, typeof(EnvDTEType), typeof(PsiType)));
             CurrentId += 1;
         }
+
+        [NotNull]
+        public static CodeElement ConvertNamespace([NotNull] this NamespaceModel model) =>
+
+        public
     }
 }
