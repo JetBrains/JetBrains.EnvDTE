@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
+using JetBrains.EnvDTE.Client.Converting;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Model
@@ -11,6 +13,9 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
     {
         [NotNull]
         private DteImplementation Implementation { get; }
+
+        [NotNull]
+        private ModelElementConverter Converter { get; }
 
         [NotNull, ItemNotNull]
         private IReadOnlyList<CodeElementModel> CodeElementModels { get; }
@@ -23,6 +28,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
         {
             Implementation = implementation;
             Parent = parent;
+            Converter = new ModelElementConverter(Implementation);
             CodeElementModels = codeElementModels;
         }
 
@@ -32,21 +38,16 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
         public object Parent { get; }
         public int Count => CodeElementModels.Count;
 
-        [NotNull]
-        IEnumerator CodeElements.GetEnumerator() => CodeElementModels.GetEnumerator();
+        public IEnumerator GetEnumerator() => CodeElementModels.Select(Converter.Convert).GetEnumerator();
 
-        public CodeElement Item(object index)
+        [NotNull]
+        public CodeElement Item([NotNull] object index)
         {
             if (!(index is int number)) throw new ArgumentException();
-            return new CodeElementImplementation(Implementation, ProjectModels[number]);
+            return Converter.Convert(CodeElementModels[number]);
         }
 
-        public void Reserved1(object Element)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool CreateUniqueID(string Prefix, string NewName = "0") => throw new System.NotImplementedException();
-        IEnumerator IEnumerable.GetEnumerator() => throw new System.NotImplementedException();
+        public void Reserved1(object Element) => throw new NotImplementedException();
+        public bool CreateUniqueID(string Prefix, string NewName = "0") => throw new NotImplementedException();
     }
 }

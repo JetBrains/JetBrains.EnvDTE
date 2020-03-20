@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
@@ -14,8 +16,10 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
 
         private ProjectItemImplementation MyParent { get; }
 
-        public FileCodeModelImpl([NotNull] DteImplementation dteImplementation,
-            [NotNull] ProjectItemImplementation parent)
+        public FileCodeModelImpl(
+            [NotNull] DteImplementation dteImplementation,
+            [NotNull] ProjectItemImplementation parent
+        )
         {
             DteImplementation = dteImplementation;
             MyParent = parent;
@@ -40,7 +44,20 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
             };
 
         [NotNull]
-        public CodeElements CodeElements => new CodeElementsImplementation(DteImplementation, this);
+        public CodeElements CodeElements
+        {
+            get
+            {
+                var model = DteImplementation.DteProtocolModel;
+                IReadOnlyList<CodeElementModel> namespaces = model
+                    .FileCodeModel_get_Namespaces
+                    .Sync(MyParent.ProjectItemModel);
+                IReadOnlyList<CodeElementModel> types = model
+                    .FileCodeModel_get_Types
+                    .Sync(MyParent.ProjectItemModel);
+                return new CodeElementsImplementation(DteImplementation, this, namespaces.Concat(types).ToList());
+            }
+        }
 
         public vsCMParseStatus ParseStatus => throw new NotImplementedException();
         public bool IsBatchOpen => throw new NotImplementedException();

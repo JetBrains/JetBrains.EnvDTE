@@ -1,31 +1,29 @@
 using System;
 using EnvDTE;
 using EnvDTE80;
+using JetBrains.Annotations;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
-    public sealed class CodeClassImpl : CodeClass2
+    public sealed class CodeClassImpl : CodeTypeBase, CodeElement2, CodeClass2
     {
-        public DTE DTE => throw new NotImplementedException();
-        public CodeElements Collection => throw new NotImplementedException();
-
-        public string Name
+        public CodeClassImpl([NotNull] DteImplementation implementation, [NotNull] TypeModel model) : base(implementation, model)
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
         }
 
+        public CodeElements Collection => throw new NotImplementedException();
         public string FullName => throw new NotImplementedException();
         public ProjectItem ProjectItem => throw new NotImplementedException();
         public vsCMElement Kind => throw new NotImplementedException();
         public bool IsCodeType => throw new NotImplementedException();
         public vsCMInfoLocation InfoLocation => throw new NotImplementedException();
-        public CodeElements Children => throw new NotImplementedException();
         public string Language => throw new NotImplementedException();
         public TextPoint StartPoint => throw new NotImplementedException();
         public TextPoint EndPoint => throw new NotImplementedException();
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
+        public string ElementID => throw new NotImplementedException();
         public object Parent => throw new NotImplementedException();
         public CodeNamespace Namespace => throw new NotImplementedException();
         public CodeElements Bases => throw new NotImplementedException();
@@ -91,6 +89,18 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         }
 
         object CodeClass.get_Extender(string ExtenderName) => throw new NotImplementedException();
+        TextPoint CodeElement2.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
+        TextPoint CodeElement2.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
+
+        public void RenameSymbol(string NewName)
+        {
+            throw new NotImplementedException();
+        }
+
+        object CodeElement2.get_Extender(string ExtenderName) => throw new NotImplementedException();
+        TextPoint CodeElement.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
+        TextPoint CodeElement.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
+        object CodeElement.get_Extender(string ExtenderName) => throw new NotImplementedException();
         TextPoint CodeClass2.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
         TextPoint CodeClass2.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
         CodeElement CodeClass2.AddBase(object Base, object Position) => throw new NotImplementedException();

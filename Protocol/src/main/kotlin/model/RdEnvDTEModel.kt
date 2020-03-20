@@ -38,8 +38,14 @@ object DteProtocolModel : Ext(DteRoot) {
 
     // #region AST
 
-    val methodModel = structdef {
+    val codeElementModel = basestruct {
       field("Name", string)
+    }
+
+    val methodModel = structdef extends codeElementModel {
+    }
+
+    val propertyModel = structdef extends codeElementModel {
     }
 
     val typeKind = enum {
@@ -48,15 +54,15 @@ object DteProtocolModel : Ext(DteRoot) {
       +"Struct"
     }
 
-    val typeModel = structdef {
-      field("Name", string)
+    val typeModel = structdef extends codeElementModel {
       field("Kind", typeKind)
       field("Methods", immutableList(methodModel))
-      field("Types", immutableList(
+      field("Properties", immutableList(propertyModel))
+      field("NestedTypes", immutableList(this))
+      call("BaseTypes", void, immutableList(this))
     }
 
-    val namespaceModel = structdef {
-      field("Name", string)
+    val namespaceModel = structdef extends codeElementModel {
       field("Types", immutableList(typeModel))
     }
 

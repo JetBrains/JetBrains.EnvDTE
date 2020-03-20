@@ -1,12 +1,21 @@
 using System;
+using System.Collections.Generic;
 using EnvDTE;
 using EnvDTE80;
+using JetBrains.Annotations;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
-    public sealed class CodeFunctionImpl : CodeFunction2
+    public sealed class CodeFunctionImpl : CodeElementBase<MethodModel>, CodeElement2, CodeFunction2
     {
-        public DTE DTE => throw new NotImplementedException();
+        public CodeFunctionImpl(
+            [NotNull] DteImplementation implementation,
+            [NotNull] MethodModel model
+        ) : base(implementation, model)
+        {
+        }
+
         public CodeElements Collection => throw new NotImplementedException();
         public string FullName => throw new NotImplementedException();
         public ProjectItem ProjectItem => throw new NotImplementedException();
@@ -19,16 +28,11 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public TextPoint EndPoint => throw new NotImplementedException();
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
+        public string ElementID => throw new NotImplementedException();
         public object Parent => throw new NotImplementedException();
         public vsCMFunction FunctionKind => throw new NotImplementedException();
         public CodeElements Parameters => throw new NotImplementedException();
         public bool IsOverloaded => throw new NotImplementedException();
-
-        public string Name
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
 
         public CodeTypeRef Type
         {
@@ -83,6 +87,18 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
 
         public bool IsGeneric => throw new NotImplementedException();
         object CodeFunction.get_Extender(string ExtenderName) => throw new NotImplementedException();
+        TextPoint CodeElement2.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
+        TextPoint CodeElement2.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
+
+        public void RenameSymbol(string NewName)
+        {
+            throw new NotImplementedException();
+        }
+
+        object CodeElement2.get_Extender(string ExtenderName) => throw new NotImplementedException();
+        TextPoint CodeElement.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
+        TextPoint CodeElement.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
+        object CodeElement.get_Extender(string ExtenderName) => throw new NotImplementedException();
         TextPoint CodeFunction2.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
         TextPoint CodeFunction2.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
         string CodeFunction2.get_Prototype(int Flags) => throw new NotImplementedException();
@@ -106,5 +122,8 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
             throw new NotImplementedException();
 
         void CodeFunction.RemoveParameter(object Element) => throw new NotImplementedException();
+
+        protected override IReadOnlyList<CodeElementModel> GetChildren(MethodModel model) =>
+            throw new NotImplementedException();
     }
 }
