@@ -1,22 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using EnvDTE;
-using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Impl.Ast;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
-using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client
+namespace JetBrains.EnvDTE.Client.Converting
 {
-    // TODO: share this between client and host?
-    public static class ElementTypeConverter
+    public sealed class ElementTypeSubstitutor
     {
         public static Type GetEnvDTEType(int id) => Dictionary[id].EnvDTEType;
         public static Type GetPsiType(int id) => Dictionary[id].PsiType;
         public static int GetIdByEnvDTEType(Type envDTEType) => throw new NotImplementedException();
         public static int GetIdByPsiType(Type psiType) => throw new NotImplementedException();
 
-        static ElementTypeConverter()
+        static ElementTypeSubstitutor()
         {
             Register<CodeNamespaceImpl, ICSharpNamespaceDeclaration>();
 
@@ -37,10 +33,5 @@ namespace JetBrains.EnvDTE.Client
             Dictionary.Add(CurrentId, new ElementDescription(CurrentId, typeof(EnvDTEType), typeof(PsiType)));
             CurrentId += 1;
         }
-
-        [NotNull]
-        public static CodeElement ConvertNamespace([NotNull] this NamespaceModel model) =>
-
-        public
     }
 }
