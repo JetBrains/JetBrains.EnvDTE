@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
@@ -7,9 +6,9 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
-    public sealed class CodeNamespaceImpl : CodeElementBase<NamespaceModel>, CodeNamespace, CodeElement2
+    public sealed class CodeNamespaceImpl : CodeElementBase, CodeNamespace, CodeElement2
     {
-        public CodeNamespaceImpl([NotNull] DteImplementation implementation, [NotNull] NamespaceModel model) : base(implementation, model)
+        public CodeNamespaceImpl([NotNull] DteImplementation implementation, [NotNull] CodeElementModel model) : base(implementation, model)
         {
         }
 
@@ -78,7 +77,5 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         {
             throw new NotImplementedException();
         }
-
-        protected override IReadOnlyList<CodeElementModel> GetChildren(NamespaceModel model) => model.Types;
     }
 }

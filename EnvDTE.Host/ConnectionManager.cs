@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using JetBrains.Collections.Viewable;
 using JetBrains.EnvDTE.Host.Callback;
+using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.Rd;
@@ -16,9 +17,12 @@ namespace JetBrains.EnvDTE.Host
     {
         private const string Host = "T4 Communication Host";
         private const string Protocol = "T4 Communication Protocol";
-        public int Port { get; private set; }
         private IReadOnlyList<IEnvDteCallbackProvider> CallbackProviders { get; }
+        public int Port { get; private set; }
 
+        // ConnectionManager will be created per-execution.
+        // Therefore is safe to cache some state here.
+        public IDictionary<int, AbstractSyntaxTreeManager> Hosts { get; } = new Dictionary<int, AbstractSyntaxTreeManager>();
         public ConnectionManager(Lifetime lifetime, [NotNull] ISolution solution) => SetupModel(lifetime, solution);
 
         private void SetupModel(Lifetime lifetime, ISolution solution)
@@ -32,11 +36,12 @@ namespace JetBrains.EnvDTE.Host
             {
                 var protocol = new Protocol(Protocol, serializers, identities, scheduler, server, lifetime);
                 var model = new DteProtocolModel(lifetime, protocol);
-                RegisterCallbacks(model, solution);
+                RegisterCallbacks(lifetime, model, solution);
             });
         }
 
         private void RegisterCallbacks(
+            Lifetime lifetime,
             [NotNull] DteProtocolModel model,
             [NotNull] ISolution solution
         )
@@ -44,7 +49,7 @@ namespace JetBrains.EnvDTE.Host
             var host = solution.GetComponent<ProjectModelViewHost>();
             foreach (var provider in solution.GetComponents<IEnvDteCallbackProvider>())
             {
-                provider.RegisterCallbacks(solution, host, model);
+                provider.RegisterCallbacks(this, solution, host, model);
             }
         }
     }

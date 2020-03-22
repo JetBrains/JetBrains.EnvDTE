@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Converting;
 using JetBrains.Rider.Model;
+using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Client.Impl.Model
 {
@@ -38,9 +37,9 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
         public object Parent { get; }
         public int Count => CodeElementModels.Count;
 
-        public IEnumerator GetEnumerator() => CodeElementModels.Select(Converter.Convert).GetEnumerator();
+        public IEnumerator GetEnumerator() => CodeElementModels.SelectNotNull(Converter.Convert).GetEnumerator();
 
-        [NotNull]
+        [CanBeNull]
         public CodeElement Item([NotNull] object index)
         {
             if (!(index is int number)) throw new ArgumentException();

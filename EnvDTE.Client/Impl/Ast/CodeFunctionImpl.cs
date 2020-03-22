@@ -7,11 +7,11 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
-    public sealed class CodeFunctionImpl : CodeElementBase<MethodModel>, CodeElement2, CodeFunction2
+    public sealed class CodeFunctionImpl : CodeElementBase, CodeElement2, CodeFunction2
     {
         public CodeFunctionImpl(
             [NotNull] DteImplementation implementation,
-            [NotNull] MethodModel model
+            [NotNull] CodeElementModel model
         ) : base(implementation, model)
         {
         }
@@ -122,8 +122,5 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
             throw new NotImplementedException();
 
         void CodeFunction.RemoveParameter(object Element) => throw new NotImplementedException();
-
-        protected override IReadOnlyList<CodeElementModel> GetChildren(MethodModel model) =>
-            throw new NotImplementedException();
     }
 }

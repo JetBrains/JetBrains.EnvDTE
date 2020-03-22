@@ -6,9 +6,12 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
-    public sealed class CodeClassImpl : CodeTypeBase, CodeElement2, CodeClass2
+    public sealed class CodeClassImpl : CodeElementBase, CodeElement2, CodeClass2
     {
-        public CodeClassImpl([NotNull] DteImplementation implementation, [NotNull] TypeModel model) : base(implementation, model)
+        public CodeClassImpl(
+            [NotNull] DteImplementation implementation,
+            [NotNull] CodeElementModel model
+        ) : base(implementation, model)
         {
         }
 

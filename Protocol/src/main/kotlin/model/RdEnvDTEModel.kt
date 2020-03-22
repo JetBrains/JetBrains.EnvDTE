@@ -36,37 +36,17 @@ object DteProtocolModel : Ext(DteRoot) {
       +"VB"
     }
 
-    // #region AST
-
-    val codeElementModel = basestruct {
+    val codeElementModel = structdef {
       field("Name", string)
+      field("TypeId", int)
+      field("ContainingFile", projectItemModel)
+      field("Id", int)
     }
 
-    val methodModel = structdef extends codeElementModel {
+    val rdCodeElementItem = structdef {
+      field("parentId", int.nullable)
+      field("codeElementModel", codeElementModel)
     }
-
-    val propertyModel = structdef extends codeElementModel {
-    }
-
-    val typeKind = enum {
-      +"Interface"
-      +"Class"
-      +"Struct"
-    }
-
-    val typeModel = structdef extends codeElementModel {
-      field("Kind", typeKind)
-      field("Methods", immutableList(methodModel))
-      field("Properties", immutableList(propertyModel))
-      field("NestedTypes", immutableList(this))
-      call("BaseTypes", void, immutableList(this))
-    }
-
-    val namespaceModel = structdef extends codeElementModel {
-      field("Types", immutableList(typeModel))
-    }
-
-    // #endregion AST
 
     init {
         createDteCallbacks()
@@ -74,6 +54,7 @@ object DteProtocolModel : Ext(DteRoot) {
         createProjectCallbacks()
         createProjectItemCallbacks()
         createFileCodeModelCallbacks()
+        createCodeElementCallbacks()
     }
 
     private fun createDteCallbacks() {
@@ -116,7 +97,11 @@ object DteProtocolModel : Ext(DteRoot) {
     private fun createFileCodeModelCallbacks() {
       // see FileCodeModelCallbackProvider
       call("FileCodeModel_get_Language", projectItemModel, languageModel)
-      call("FileCodeModel_get_Namespaces", projectItemModel, immutableList(namespaceModel))
-      call("FileCodeModel_get_Types", projectItemModel, immutableList(typeModel))
+      call("FileCodeModel_get_CodeElements", projectItemModel, immutableList(codeElementModel))
+    }
+
+    private fun createCodeElementCallbacks() {
+      // see CodeElementCallbackProvider
+      call("CodeElement_get_Children", codeElementModel, immutableList(codeElementModel))
     }
 }

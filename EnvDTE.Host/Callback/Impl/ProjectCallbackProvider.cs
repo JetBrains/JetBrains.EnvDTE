@@ -11,7 +11,11 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
     [SolutionComponent]
     public sealed class ProjectCallbackProvider : IEnvDteCallbackProvider
     {
-        public void RegisterCallbacks(ISolution solution, ProjectModelViewHost host, DteProtocolModel model)
+        public void RegisterCallbacks(ConnectionManager manager,
+            ISolution solution,
+            ProjectModelViewHost host,
+            DteProtocolModel model
+        )
         {
             model.Project_get_Name.SetWithReadLock(projectModel => host.GetItemById<IProject>(projectModel.Id)?.Name ?? "");
             model.Project_set_Name.SetWithReadLock(request =>

@@ -9,7 +9,12 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
     [SolutionComponent]
     public sealed class SolutionCallbackProvider : IEnvDteCallbackProvider
     {
-        public void RegisterCallbacks(ISolution solution, ProjectModelViewHost host, DteProtocolModel model)
+        public void RegisterCallbacks(
+            ConnectionManager manager,
+            ISolution solution,
+            ProjectModelViewHost host,
+            DteProtocolModel model
+        )
         {
             model.Solution_FileName.SetWithReadLock(() => solution.SolutionFilePath.FullPath);
             model.Solution_Count.SetWithReadLock(() => solution.GetAllProjects().Count);

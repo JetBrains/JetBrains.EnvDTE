@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Impl.Model;
@@ -7,10 +6,10 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
-    public abstract class CodeElementBase<TModel> where TModel : CodeElementModel
+    public abstract class CodeElementBase
     {
         [NotNull]
-        protected TModel Model { get; }
+        protected CodeElementModel Model { get; }
 
         [NotNull]
         private DteImplementation Implementation { get; }
@@ -18,7 +17,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         [NotNull]
         public DTE DTE => Implementation;
 
-        protected CodeElementBase([NotNull] DteImplementation implementation, [NotNull] TModel model)
+        protected CodeElementBase([NotNull] DteImplementation implementation, [NotNull] CodeElementModel model)
         {
             Implementation = implementation;
             Model = model;
@@ -32,9 +31,10 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         }
 
         [NotNull]
-        public CodeElements Children => new CodeElementsImplementation(Implementation, this, GetChildren(Model));
-
-        [NotNull, ItemNotNull]
-        protected abstract IReadOnlyList<CodeElementModel> GetChildren([NotNull] TModel model);
+        public CodeElements Children => new CodeElementsImplementation(
+            Implementation,
+            this,
+            Implementation.DteProtocolModel.CodeElement_get_Children.Sync(Model)
+        );
     }
 }

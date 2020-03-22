@@ -8,6 +8,7 @@ namespace JetBrains.EnvDTE.Host.Callback
     public interface IEnvDteCallbackProvider
     {
         void RegisterCallbacks(
+            [NotNull] ConnectionManager manager,
             [NotNull] ISolution solution,
             [NotNull] ProjectModelViewHost host,
             [NotNull] DteProtocolModel model

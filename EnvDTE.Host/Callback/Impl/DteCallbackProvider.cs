@@ -9,7 +9,11 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
     [SolutionComponent]
     public sealed class DteCallbackProvider : IEnvDteCallbackProvider
     {
-        public void RegisterCallbacks(ISolution solution, ProjectModelViewHost host, DteProtocolModel model)
+        public void RegisterCallbacks(ConnectionManager manager,
+            ISolution solution,
+            ProjectModelViewHost host,
+            DteProtocolModel model
+        )
         {
             model.DTE_Name.SetWithReadLock(() => "JetBrains Rider");
             model.DTE_FileName.SetWithReadLock(() => FileSystemPath

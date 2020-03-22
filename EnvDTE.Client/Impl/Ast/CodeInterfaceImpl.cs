@@ -6,9 +6,9 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
-    public sealed class CodeInterfaceImpl : CodeTypeBase, CodeElement2, CodeInterface2
+    public sealed class CodeInterfaceImpl : CodeElementBase, CodeElement2, CodeInterface2
     {
-        public CodeInterfaceImpl([NotNull] DteImplementation implementation, [NotNull] TypeModel model) : base(implementation, model)
+        public CodeInterfaceImpl([NotNull] DteImplementation implementation, [NotNull] CodeElementModel model) : base(implementation, model)
         {
         }
 
@@ -18,7 +18,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public vsCMElement Kind => throw new NotImplementedException();
         public bool IsCodeType => throw new NotImplementedException();
         public vsCMInfoLocation InfoLocation => throw new NotImplementedException();
-        public CodeElements Children => throw new NotImplementedException();
         public string Language => throw new NotImplementedException();
         public TextPoint StartPoint => throw new NotImplementedException();
         public TextPoint EndPoint => throw new NotImplementedException();
