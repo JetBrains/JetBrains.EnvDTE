@@ -37,7 +37,7 @@ object DteProtocolModel : Ext(DteRoot) {
     }
 
     val codeElementModel = structdef {
-      field("Name", string)
+      field("Name", string.nullable)
       field("TypeId", int)
       field("ContainingFile", projectItemModel)
       field("Id", int)
@@ -81,7 +81,6 @@ object DteProtocolModel : Ext(DteRoot) {
         }, void)
         call("Project_get_FileName", projectModel, string)
         call("Project_Delete", projectModel, void)
-        call("Project_get_ProjectItems", projectModel, immutableList(projectItemModel))
     }
 
     private fun createProjectItemCallbacks() {
@@ -92,6 +91,7 @@ object DteProtocolModel : Ext(DteRoot) {
             field("newName", string)
         }, void)
         call("ProjectItem_get_Kind", projectItemModel, projectItemKindModel)
+        call("ProjectItem_get_ProjectItems", projectItemModel, immutableList(projectItemModel))
     }
 
     private fun createFileCodeModelCallbacks() {

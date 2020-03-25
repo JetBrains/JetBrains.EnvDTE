@@ -6,8 +6,12 @@ namespace JetBrains.EnvDTE.Host
 {
     public static class ElementConverter
     {
-        [NotNull]
-        public static string FindName(ITreeNode element) => "TODO";
+        [CanBeNull]
+        public static string FindName(ITreeNode element) => element switch
+        {
+            IDeclaration declaration => declaration.DeclaredName,
+            _ => null
+        };
 
         public static int GetTypeId([NotNull] ITreeNode node) => node switch
         {

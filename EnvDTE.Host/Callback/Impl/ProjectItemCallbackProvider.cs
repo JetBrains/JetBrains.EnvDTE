@@ -1,8 +1,11 @@
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Core;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Host.Features.ProjectModel;
 using JetBrains.ReSharper.Host.Features.ProjectModel.View;
 using JetBrains.Rider.Model;
+using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl
 {
@@ -33,6 +36,13 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                     ProjectItemKind.VIRTUAL_DIRECTORY => ProjectItemKindModel.VirtualDirectory,
                     _ => ProjectItemKindModel.Unknown,
                 });
+            model.ProjectItem_get_ProjectItems.SetWithReadLock(projectItemModel => host
+                .GetItemById<IProject>(projectItemModel.Id)
+                ?.GetSubItems()
+                .Select(host.GetIdByItem)
+                .Where(id => id != 0)
+                .Select(id => new ProjectItemModel(id))
+                .AsList() ?? new List<ProjectItemModel>());
         }
     }
 }

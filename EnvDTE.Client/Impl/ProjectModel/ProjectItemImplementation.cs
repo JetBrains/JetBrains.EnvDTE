@@ -58,6 +58,13 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             }
         }
 
+        [NotNull]
+        public ProjectItems ProjectItems => new ProjectItemsImplementation(
+            Implementation,
+            Implementation.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(ProjectItemModel),
+            this
+        );
+
         public bool IsDirty
         {
             get => throw new NotImplementedException();
@@ -66,7 +73,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 
         public ProjectItems Collection => throw new NotImplementedException();
         public Properties Properties => throw new NotImplementedException();
-        public ProjectItems ProjectItems => throw new NotImplementedException();
         public object Object => throw new NotImplementedException();
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();

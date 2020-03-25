@@ -35,12 +35,6 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                 solution.InvokeUnderTransaction(cookie => cookie.Remove(project));
                 return Unit.Instance;
             });
-            model.Project_get_ProjectItems.SetWithReadLock(projectModel => host
-                .GetItemById<IProject>(projectModel.Id)
-                ?.GetSubItems()
-                .Select(host.GetIdByItem)
-                .Select(id => new ProjectItemModel(id))
-                .AsList());
         }
     }
 }

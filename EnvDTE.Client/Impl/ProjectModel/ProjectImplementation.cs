@@ -16,7 +16,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 
         [NotNull, ItemNotNull]
         private List<ProjectItemModel> ProjectItemModels =>
-            Implementation.DteProtocolModel.Project_get_ProjectItems.Sync(ProjectModel);
+            Implementation.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(new ProjectItemModel(ProjectModel.Id));
 
         public ProjectImplementation(
             [NotNull] DteImplementation implementation,

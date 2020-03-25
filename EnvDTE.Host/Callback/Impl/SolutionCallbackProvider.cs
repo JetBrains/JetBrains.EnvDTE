@@ -29,6 +29,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
             model.Solution_get_Projects.SetWithReadLock(() => solution
                 .GetAllProjects()
                 .Select(host.GetIdByItem)
+                .Where(id => id != 0)
                 .Select(id => new Rider.Model.ProjectModel(id))
                 .AsList());
         }
