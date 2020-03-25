@@ -9,7 +9,7 @@ using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Manager
 {
-	public sealed class AbstractSyntaxTreeManager
+	public sealed class AstManager
 	{
 		private IdSource IdSource { get; } = new IdSource();
 		private IDictionary<int, ITreeNode> IdToNodeMap { get; } = new Dictionary<int, ITreeNode>();

@@ -17,7 +17,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
     public sealed class FileCodeModelCallbackProvider : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(
-            ConnectionManager manager,
+            ConnectionManager connectionManager,
             ISolution solution,
             ProjectModelViewHost host,
             DteProtocolModel model
@@ -41,9 +41,9 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                     ?.GetPrimaryPsiFile();
                 if (psiFile == null) return new List<CodeElementModel>();
 
-                var abstractSyntaxTreeHost = manager.Hosts.GetOrCreateValue(projectItemModel.Id, () =>
+                var abstractSyntaxTreeHost = connectionManager.AstManagers.GetOrCreateValue(projectItemModel.Id, () =>
                 {
-                    var astManager = new AbstractSyntaxTreeManager();
+                    var astManager = new AstManager();
                     // TODO: support other languages, too
                     if (!(psiFile is ICSharpFile csharpFile)) return null;
                     astManager.Initialize(csharpFile);

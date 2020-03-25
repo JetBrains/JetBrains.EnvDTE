@@ -9,7 +9,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
     [SolutionComponent]
     public sealed class DteCallbackProvider : IEnvDteCallbackProvider
     {
-        public void RegisterCallbacks(ConnectionManager manager,
+        public void RegisterCallbacks(ConnectionManager connectionManager,
             ISolution solution,
             ProjectModelViewHost host,
             DteProtocolModel model

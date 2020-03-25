@@ -22,7 +22,7 @@ namespace JetBrains.EnvDTE.Host
 
         // ConnectionManager will be created per-execution.
         // Therefore is safe to cache some state here.
-        public IDictionary<int, AbstractSyntaxTreeManager> Hosts { get; } = new Dictionary<int, AbstractSyntaxTreeManager>();
+        public IDictionary<int, AstManager> AstManagers { get; } = new Dictionary<int, AstManager>();
         public ConnectionManager(Lifetime lifetime, [NotNull] ISolution solution) => SetupModel(lifetime, solution);
 
         private void SetupModel(Lifetime lifetime, ISolution solution)

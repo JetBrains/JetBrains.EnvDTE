@@ -9,13 +9,13 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
     public sealed class CodeElementCallbackProvider : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(
-            ConnectionManager manager,
+            ConnectionManager connectionManager,
             ISolution solution,
             ProjectModelViewHost host,
             DteProtocolModel model
         ) => model.CodeElement_get_Children.SetWithReadLock(codeElementModel =>
         {
-            var astManager = manager.Hosts[codeElementModel.ContainingFile.Id];
+            var astManager = connectionManager.AstManagers[codeElementModel.ContainingFile.Id];
             var query =
                 from childId in astManager.GetChildren(codeElementModel.Id)
                 let child = astManager.GetElement(childId)
