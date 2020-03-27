@@ -29,7 +29,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public object Parent => throw new NotImplementedException();
         public CodeNamespace Namespace => throw new NotImplementedException();
         public CodeElements Bases => throw new NotImplementedException();
-        public CodeElements Members => throw new NotImplementedException();
 
         public vsCMAccess Access
         {
