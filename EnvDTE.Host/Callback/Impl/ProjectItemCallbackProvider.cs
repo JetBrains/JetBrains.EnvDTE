@@ -37,7 +37,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                     _ => ProjectItemKindModel.Unknown,
                 });
             model.ProjectItem_get_ProjectItems.SetWithReadLock(projectItemModel => host
-                .GetItemById<IProject>(projectItemModel.Id)
+                .GetItemById<IProjectFolder>(projectItemModel.Id)
                 ?.GetSubItems()
                 .Select(host.GetIdByItem)
                 .Where(id => id != 0)
