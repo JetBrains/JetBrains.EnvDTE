@@ -23,7 +23,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
             Model = model;
         }
 
-        [NotNull]
+        [CanBeNull]
         public string Name
         {
             get => Model.Name;
