@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Diagnostics;
+using JetBrains.EnvDTE.Host.Util;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
@@ -9,30 +9,48 @@ using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Manager
 {
-	public sealed class AstManager
-	{
-		private IdSource IdSource { get; } = new IdSource();
-		private IDictionary<int, ITreeNode> IdToNodeMap { get; } = new Dictionary<int, ITreeNode>();
+    /// <summary>
+    /// Maintains the ids to be used in protocol AST
+    /// </summary>
+    public sealed class AstManager
+    {
+        private IdSource IdSource { get; } = new IdSource();
+        private IDictionary<int, ITreeNode> IdToNodeMap { get; } = new Dictionary<int, ITreeNode>();
+        private OneToListMap<int, int> IdToChildrenMap { get; } = new OneToListMap<int, int>();
 
-		public void AddElement([NotNull] ITreeNode node)
-		{
-			int id = IdSource.GenerateNewId();
-			IdToNodeMap[id] = node;
-			node.UserData.PutData(EnvDTEId, new ConstIntReference(id));
-		}
+        public void AddElement([NotNull] ITreeNode node, [NotNull] ITreeNode parent)
+        {
+            RegisterElement(node);
+            int childId = GetId(node);
+            int parentId = GetId(parent);
+            IdToChildrenMap.Add(parentId, childId);
+        }
 
-		public void Initialize([NotNull] ICSharpFile file) =>
-			file.ProcessThisAndDescendants(new AstGeneratorProcessor(this));
+        private void RegisterElement([NotNull] ITreeNode node)
+        {
+            int id = IdSource.GenerateNewId();
+            IdToNodeMap[id] = node;
+            node.UserData.PutData(EnvDTEId, new ImmutableReference<int>(id));
+        }
 
-		public ITreeNode GetElement(int id) => IdToNodeMap[id];
+        public void Initialize([NotNull] ICSharpFile file)
+        {
+            RegisterElement(file);
+            file.ProcessDescendants(new AstGeneratorProcessor(this));
+        }
 
-		[NotNull]
-		public List<int> GetChildren(int id) =>
-			IdToNodeMap[id].Children().Where(AstNodeFilter.ShouldUse).Select(GetId).AsList();
+        public ITreeNode GetElement(int id) => IdToNodeMap[id];
 
-		public int GetId([NotNull] ITreeNode node) => node.UserData.GetData(EnvDTEId).NotNull().Value;
+        [NotNull]
+        public IEnumerable<int> GetChildren(int id) => IdToChildrenMap[id];
 
-		private static Key<ConstIntReference> EnvDTEId { get; } =
-			new Key<ConstIntReference>("JetBrains EnvDTE Host AST Element ID");
-	}
+        public int GetId([NotNull] ITreeNode node) => node
+            .UserData
+            .GetData(EnvDTEId)
+            .NotNull($"EnvDTE ID was requested for a nde that hasnt been registered. Node: {node}")
+            .Value;
+
+        private static Key<ImmutableReference<int>> EnvDTEId { get; } =
+            new Key<ImmutableReference<int>>("JetBrains EnvDTE Host AST Element ID");
+    }
 }
