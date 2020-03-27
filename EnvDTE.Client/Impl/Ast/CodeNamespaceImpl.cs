@@ -12,11 +12,12 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         {
         }
 
-        public CodeElements Collection => throw new NotImplementedException();
-        public string FullName => throw new NotImplementedException();
-        public ProjectItem ProjectItem => throw new NotImplementedException();
-        public vsCMElement Kind => throw new NotImplementedException();
-        public bool IsCodeType => throw new NotImplementedException();
+        [CanBeNull]
+        public string FullName => Name;
+
+        public vsCMElement Kind => vsCMElement.vsCMElementNamespace;
+        public bool IsCodeType => false;
+
         public vsCMInfoLocation InfoLocation => throw new NotImplementedException();
         public string Language => throw new NotImplementedException();
         public TextPoint StartPoint => throw new NotImplementedException();
@@ -25,7 +26,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public string ExtenderCATID => throw new NotImplementedException();
         public string ElementID => throw new NotImplementedException();
         public object Parent => throw new NotImplementedException();
-        public CodeElements Members => throw new NotImplementedException();
 
         public string DocComment
         {

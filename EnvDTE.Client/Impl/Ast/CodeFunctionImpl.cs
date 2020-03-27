@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
@@ -16,13 +15,11 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         {
         }
 
-        public CodeElements Collection => throw new NotImplementedException();
+        public vsCMElement Kind => vsCMElement.vsCMElementFunction;
+        public bool IsCodeType => false;
+
         public string FullName => throw new NotImplementedException();
-        public ProjectItem ProjectItem => throw new NotImplementedException();
-        public vsCMElement Kind => throw new NotImplementedException();
-        public bool IsCodeType => throw new NotImplementedException();
         public vsCMInfoLocation InfoLocation => throw new NotImplementedException();
-        public CodeElements Children => throw new NotImplementedException();
         public string Language => throw new NotImplementedException();
         public TextPoint StartPoint => throw new NotImplementedException();
         public TextPoint EndPoint => throw new NotImplementedException();
