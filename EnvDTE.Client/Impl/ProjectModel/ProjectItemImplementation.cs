@@ -101,5 +101,11 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         public object get_Extender(string ExtenderName) => throw new System.NotImplementedException();
         public void Save(string FileName = "") => throw new System.NotImplementedException();
         public void Delete() => throw new System.NotImplementedException();
+
+        public override bool Equals(object obj) =>
+            ReferenceEquals(this, obj) || obj is ProjectItemImplementation other &&
+            ProjectItemModel.Equals(other.ProjectItemModel);
+
+        public override int GetHashCode() => ProjectItemModel.GetHashCode();
     }
 }
