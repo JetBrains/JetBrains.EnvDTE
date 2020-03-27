@@ -37,12 +37,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
             set => throw new NotImplementedException();
         }
 
-        public vsCMAccess Access
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-
         public bool IsShared
         {
             get => throw new NotImplementedException();

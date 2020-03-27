@@ -48,6 +48,16 @@ object DteProtocolModel : Ext(DteRoot) {
       field("codeElementModel", codeElementModel)
     }
 
+    val access = enum {
+      +"Public"
+      +"Private"
+      +"Protected"
+      +"Internal"
+      +"ProtectedInternal"
+      +"PrivateProtected"
+      +"None"
+    }
+
     init {
         createDteCallbacks()
         createSolutionCallbacks()
@@ -103,5 +113,6 @@ object DteProtocolModel : Ext(DteRoot) {
     private fun createCodeElementCallbacks() {
       // see CodeElementCallbackProvider
       call("CodeElement_get_Children", codeElementModel, immutableList(codeElementModel))
+      call("CodeElement_get_Access", codeElementModel, access)
     }
 }

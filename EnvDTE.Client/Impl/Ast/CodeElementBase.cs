@@ -46,5 +46,21 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
 
         [NotNull]
         public ProjectItem ProjectItem => new ProjectItemImplementation(Implementation, Model.ContainingFile);
+
+        public vsCMAccess Access
+        {
+            get => Implementation.DteProtocolModel.CodeElement_get_Access.Sync(Model) switch
+            {
+                Rider.Model.Access.Public => vsCMAccess.vsCMAccessPublic,
+                Rider.Model.Access.Private => vsCMAccess.vsCMAccessPrivate,
+                Rider.Model.Access.Protected => vsCMAccess.vsCMAccessProtected,
+                Rider.Model.Access.Internal => vsCMAccess.vsCMAccessProject,
+                Rider.Model.Access.ProtectedInternal => vsCMAccess.vsCMAccessProjectOrProtected,
+                Rider.Model.Access.PrivateProtected => vsCMAccess.vsCMAccessProtected,
+                Rider.Model.Access.None => vsCMAccess.vsCMAccessDefault,
+                _ => vsCMAccess.vsCMAccessDefault
+            };
+            set => throw new NotImplementedException();
+        }
     }
 }

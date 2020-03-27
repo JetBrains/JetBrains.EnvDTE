@@ -27,12 +27,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public CodeNamespace Namespace => throw new NotImplementedException();
         public CodeElements Bases => throw new NotImplementedException();
 
-        public vsCMAccess Access
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-
         public string DocComment
         {
             get => throw new NotImplementedException();

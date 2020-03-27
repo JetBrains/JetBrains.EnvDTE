@@ -31,12 +31,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public bool IsGeneric => throw new NotImplementedException();
         public CodeElements Parts => throw new NotImplementedException();
 
-        public vsCMAccess Access
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-
         public string Comment
         {
             get => throw new NotImplementedException();
