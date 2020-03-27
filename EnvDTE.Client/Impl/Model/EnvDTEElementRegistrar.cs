@@ -5,10 +5,10 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Model
 {
-	public sealed class ModelElementConverter
+	public sealed class EnvDTEElementRegistrar
 	{
 		private DteImplementation Implementation { get; }
-		public ModelElementConverter(DteImplementation implementation) => Implementation = implementation;
+		public EnvDTEElementRegistrar(DteImplementation implementation) => Implementation = implementation;
 
 		[CanBeNull]
 		public CodeElement Convert([NotNull] CodeElementModel model) => model.TypeId switch

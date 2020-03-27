@@ -14,7 +14,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
         private DteImplementation Implementation { get; }
 
         [NotNull]
-        private ModelElementConverter Converter { get; }
+        private EnvDTEElementRegistrar Registrar { get; }
 
         [NotNull, ItemNotNull]
         private IReadOnlyList<CodeElementModel> CodeElementModels { get; }
@@ -27,7 +27,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
         {
             Implementation = implementation;
             Parent = parent;
-            Converter = new ModelElementConverter(Implementation);
+            Registrar = new EnvDTEElementRegistrar(Implementation);
             CodeElementModels = codeElementModels;
         }
 
@@ -37,13 +37,13 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
         public object Parent { get; }
         public int Count => CodeElementModels.Count;
 
-        public IEnumerator GetEnumerator() => CodeElementModels.SelectNotNull(Converter.Convert).GetEnumerator();
+        public IEnumerator GetEnumerator() => CodeElementModels.SelectNotNull(Registrar.Convert).GetEnumerator();
 
         [CanBeNull]
         public CodeElement Item([NotNull] object index)
         {
             if (!(index is int number)) throw new ArgumentException();
-            return Converter.Convert(CodeElementModels[number]);
+            return Registrar.Convert(CodeElementModels[number]);
         }
 
         public void Reserved1(object Element) => throw new NotImplementedException();
