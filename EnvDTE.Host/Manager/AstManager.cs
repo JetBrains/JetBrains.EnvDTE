@@ -47,7 +47,7 @@ namespace JetBrains.EnvDTE.Host.Manager
         public int GetId([NotNull] ITreeNode node) => node
             .UserData
             .GetData(EnvDTEId)
-            .NotNull($"EnvDTE ID was requested for a nde that hasnt been registered. Node: {node}")
+            .NotNull($"EnvDTE ID was requested for a node that hasnt been registered. Node: {node}")
             .Value;
 
         private static Key<ImmutableReference<int>> EnvDTEId { get; } =
