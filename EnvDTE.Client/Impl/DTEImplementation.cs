@@ -9,7 +9,7 @@ using Solution = EnvDTE.Solution;
 
 namespace JetBrains.EnvDTE.Client.Impl
 {
-    [UsedImplicitly]
+    [PublicAPI]
     public sealed class DteImplementation : DTE, DTE2
     {
         public DteImplementation([NotNull] DteProtocolModel dteProtocolModel)
