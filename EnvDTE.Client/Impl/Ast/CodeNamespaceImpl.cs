@@ -20,7 +20,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public bool IsCodeType => false;
 
         public vsCMInfoLocation InfoLocation => throw new NotImplementedException();
-        public string Language => throw new NotImplementedException();
         public TextPoint StartPoint => throw new NotImplementedException();
         public TextPoint EndPoint => throw new NotImplementedException();
         public object ExtenderNames => throw new NotImplementedException();

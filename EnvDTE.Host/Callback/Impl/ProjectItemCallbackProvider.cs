@@ -4,6 +4,9 @@ using JetBrains.Core;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Host.Features.ProjectModel;
 using JetBrains.ReSharper.Host.Features.ProjectModel.View;
+using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.CSharp;
+using JetBrains.ReSharper.Psi.VB;
 using JetBrains.Rider.Model;
 using JetBrains.Util;
 
@@ -43,6 +46,16 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                 .Where(id => id != 0)
                 .Select(id => new ProjectItemModel(id))
                 .AsList() ?? new List<ProjectItemModel>());
+            model.ProjectItem_get_Language.SetWithReadLock(projectItemModel => host
+                    .GetItemById<IProjectFile>(projectItemModel.Id)
+                    ?.ToSourceFile()
+                    ?.PrimaryPsiLanguage switch
+                {
+                    CSharpLanguage _ => LanguageModel.CSharp,
+                    VBLanguage _ => LanguageModel.VB,
+                    _ => LanguageModel.Unknown
+                }
+            );
         }
     }
 }

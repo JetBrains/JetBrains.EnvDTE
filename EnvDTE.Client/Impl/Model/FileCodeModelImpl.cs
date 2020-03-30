@@ -2,8 +2,8 @@ using System;
 using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
+using JetBrains.EnvDTE.Client.Common;
 using JetBrains.EnvDTE.Client.Impl.ProjectModel;
-using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Model
 {
@@ -31,15 +31,9 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
 
         [CanBeNull]
         public string Language => DteImplementation
-                .DteProtocolModel
-                .FileCodeModel_get_Language
-                .Sync(MyParent.ProjectItemModel)
-            switch
-            {
-                LanguageModel.CSharp => CodeModelLanguageConstants.vsCMLanguageCSharp,
-                LanguageModel.VB => CodeModelLanguageConstants.vsCMLanguageVB,
-                _ => null
-            };
+            .DteProtocolModel
+            .ProjectItem_get_Language
+            .Sync(MyParent.ProjectItemModel).ToEnvDTELanguage();
 
         [NotNull]
         public CodeElements CodeElements => new CodeElementsImplementation(

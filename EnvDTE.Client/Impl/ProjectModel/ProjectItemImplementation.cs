@@ -55,7 +55,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             get
             {
                 if (Kind != Constants.vsProjectItemKindPhysicalFile) return null;
-                var language = Implementation.DteProtocolModel.FileCodeModel_get_Language.Sync(ProjectItemModel);
+                var language = Implementation.DteProtocolModel.ProjectItem_get_Language.Sync(ProjectItemModel);
                 if (!SupportedLanguageUtils.IsSupported(language.ToEnvDTELanguage())) return null;
                 return new FileCodeModelImpl(Implementation, this);
             }

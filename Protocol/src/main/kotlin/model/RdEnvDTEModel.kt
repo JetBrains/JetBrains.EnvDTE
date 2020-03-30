@@ -101,11 +101,11 @@ object DteProtocolModel : Ext(DteRoot) {
         }, void)
         call("ProjectItem_get_Kind", projectItemModel, projectItemKindModel)
         call("ProjectItem_get_ProjectItems", projectItemModel, immutableList(projectItemModel))
+        call("ProjectItem_get_Language", projectItemModel, languageModel)
     }
 
     private fun createFileCodeModelCallbacks() {
       // see FileCodeModelCallbackProvider
-      call("FileCodeModel_get_Language", projectItemModel, languageModel)
       call("FileCodeModel_get_CodeElements", projectItemModel, immutableList(codeElementModel))
     }
 

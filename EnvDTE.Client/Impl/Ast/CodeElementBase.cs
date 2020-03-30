@@ -1,6 +1,7 @@
 using System;
 using EnvDTE;
 using JetBrains.Annotations;
+using JetBrains.EnvDTE.Client.Common;
 using JetBrains.EnvDTE.Client.Impl.Model;
 using JetBrains.EnvDTE.Client.Impl.ProjectModel;
 using JetBrains.Rider.Model;
@@ -39,7 +40,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
             set => throw new NotImplementedException();
         }
 
-
         [CanBeNull]
         public string FullName => Implementation.DteProtocolModel.CodeElement_get_FullName.Sync(Model);
 
@@ -74,5 +74,12 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
             };
             set => throw new NotImplementedException();
         }
+
+        [CanBeNull]
+        public string Language => Implementation
+            .DteProtocolModel
+            .ProjectItem_get_Language
+            .Sync(Model.ContainingFile)
+            .ToEnvDTELanguage();
     }
 }
