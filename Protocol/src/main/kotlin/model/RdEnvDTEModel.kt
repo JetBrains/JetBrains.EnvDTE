@@ -37,7 +37,6 @@ object DteProtocolModel : Ext(DteRoot) {
     }
 
     val codeElementModel = structdef {
-      field("Name", string.nullable)
       field("TypeId", int)
       field("ContainingFile", projectItemModel)
       field("Id", int)
@@ -114,5 +113,7 @@ object DteProtocolModel : Ext(DteRoot) {
       // see CodeElementCallbackProvider
       call("CodeElement_get_Children", codeElementModel, immutableList(codeElementModel))
       call("CodeElement_get_Access", codeElementModel, access)
+      call("CodeElement_get_Name", codeElementModel, string.nullable)
+      call("CodeElement_get_FullName", codeElementModel, string.nullable)
     }
 }

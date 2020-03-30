@@ -19,7 +19,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public vsCMElement Kind => vsCMElement.vsCMElementClass;
         public bool IsCodeType => true;
 
-        public string FullName => throw new NotImplementedException();
         public vsCMInfoLocation InfoLocation => throw new NotImplementedException();
         public string Language => throw new NotImplementedException();
         public TextPoint StartPoint => throw new NotImplementedException();

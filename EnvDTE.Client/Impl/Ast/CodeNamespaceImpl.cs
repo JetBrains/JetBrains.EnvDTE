@@ -16,9 +16,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         {
         }
 
-        [CanBeNull]
-        public string FullName => Name;
-
         public vsCMElement Kind => vsCMElement.vsCMElementNamespace;
         public bool IsCodeType => false;
 

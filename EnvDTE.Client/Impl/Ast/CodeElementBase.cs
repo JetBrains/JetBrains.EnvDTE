@@ -35,9 +35,13 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         [CanBeNull]
         public string Name
         {
-            get => Model.Name;
+            get => Implementation.DteProtocolModel.CodeElement_get_Name.Sync(Model);
             set => throw new NotImplementedException();
         }
+
+
+        [CanBeNull]
+        public string FullName => Implementation.DteProtocolModel.CodeElement_get_FullName.Sync(Model);
 
         [NotNull]
         public CodeElements Children => new CodeElementsImplementation(

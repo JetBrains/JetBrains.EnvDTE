@@ -3,7 +3,7 @@ using JetBrains.ReSharper.Psi.Tree;
 
 namespace JetBrains.EnvDTE.Host
 {
-    public class ElementNameProvider
+    public static class ElementNameProvider
     {
         [CanBeNull]
         public static string FindName(ITreeNode element) => element switch

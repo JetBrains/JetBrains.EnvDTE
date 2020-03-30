@@ -2,6 +2,8 @@ using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Host.Features.ProjectModel.View;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.CSharp.Impl;
+using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl
@@ -23,8 +25,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                     from childId in astManager.GetChildren(codeElementModel.Id)
                     let child = astManager.GetElement(childId)
                     let childTypeId = PsiElementRegistrar.GetTypeId(child)
-                    let childName = ElementNameProvider.FindName(child)
-                    select new CodeElementModel(childName, childTypeId, codeElementModel.ContainingFile, childId);
+                    select new CodeElementModel(childTypeId, codeElementModel.ContainingFile, childId);
                 return query.ToList();
             });
             model.CodeElement_get_Access.SetWithReadLock(codeElementModel =>
@@ -41,6 +42,19 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                     AccessRights.PRIVATE => Access.Private,
                     _ => Access.None
                 };
+            });
+            model.CodeElement_get_Name.SetWithReadLock(codeElementModel =>
+            {
+                var astManager = connectionManager.AstManagers[codeElementModel.ContainingFile.Id];
+                var element = astManager.GetElement(codeElementModel.Id);
+                return ElementNameProvider.FindName(element);
+            });
+            model.CodeElement_get_FullName.SetWithReadLock(codeElementModel =>
+            {
+                var astManager = connectionManager.AstManagers[codeElementModel.ContainingFile.Id];
+                var element = astManager.GetElement(codeElementModel.Id);
+                if (!(element is ICSharpDeclaration node)) return null;
+                return CSharpSharedImplUtil.GetQualifiedName(node);
             });
         }
     }
