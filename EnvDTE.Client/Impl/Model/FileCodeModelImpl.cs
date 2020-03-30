@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
@@ -43,29 +42,14 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
             };
 
         [NotNull]
-        public CodeElements CodeElements
-        {
-            get
-            {
-                if (Language != CodeModelLanguageConstants.vsCMLanguageCSharp)
-                {
-                    return new CodeElementsImplementation(
-                        DteImplementation,
-                        new List<CodeElementModel>(),
-                        this
-                    );
-                }
-
-                return new CodeElementsImplementation(
-                    DteImplementation,
-                    DteImplementation
-                        .DteProtocolModel
-                        .FileCodeModel_get_CodeElements
-                        .Sync(MyParent.ProjectItemModel),
-                    this
-                );
-            }
-        }
+        public CodeElements CodeElements => new CodeElementsImplementation(
+            DteImplementation,
+            DteImplementation
+                .DteProtocolModel
+                .FileCodeModel_get_CodeElements
+                .Sync(MyParent.ProjectItemModel),
+            this
+        );
 
         public vsCMParseStatus ParseStatus => throw new NotImplementedException();
         public bool IsBatchOpen => throw new NotImplementedException();
