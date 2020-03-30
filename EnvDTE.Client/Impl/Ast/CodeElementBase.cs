@@ -18,10 +18,18 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         [NotNull]
         public DTE DTE => Implementation;
 
-        protected CodeElementBase([NotNull] DteImplementation implementation, [NotNull] CodeElementModel model)
+        [CanBeNull]
+        public object Parent { get; }
+
+        protected CodeElementBase(
+            [NotNull] DteImplementation implementation,
+            [NotNull] CodeElementModel model,
+            [CanBeNull] object parent
+        )
         {
             Implementation = implementation;
             Model = model;
+            Parent = parent;
         }
 
         [CanBeNull]
@@ -34,8 +42,9 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         [NotNull]
         public CodeElements Children => new CodeElementsImplementation(
             Implementation,
+            Implementation.DteProtocolModel.CodeElement_get_Children.Sync(Model),
             this,
-            Implementation.DteProtocolModel.CodeElement_get_Children.Sync(Model)
+            this
         );
 
         [NotNull]

@@ -49,16 +49,22 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
             {
                 if (Language != CodeModelLanguageConstants.vsCMLanguageCSharp)
                 {
-                    return new CodeElementsImplementation(DteImplementation, this, new List<CodeElementModel>());
+                    return new CodeElementsImplementation(
+                        DteImplementation,
+                        new List<CodeElementModel>(),
+                        this,
+                        MyParent
+                    );
                 }
 
                 return new CodeElementsImplementation(
                     DteImplementation,
-                    this,
                     DteImplementation
                         .DteProtocolModel
                         .FileCodeModel_get_CodeElements
-                        .Sync(MyParent.ProjectItemModel)
+                        .Sync(MyParent.ProjectItemModel),
+                    this,
+                    MyParent
                 );
             }
         }

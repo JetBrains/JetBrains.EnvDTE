@@ -8,7 +8,11 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
     public sealed class CodeNamespaceImpl : CodeElementBase, CodeNamespace, CodeElement2
     {
-        public CodeNamespaceImpl([NotNull] DteImplementation implementation, [NotNull] CodeElementModel model) : base(implementation, model)
+        public CodeNamespaceImpl(
+            [NotNull] DteImplementation implementation,
+            [NotNull] CodeElementModel model,
+            [CanBeNull] object parent
+        ) : base(implementation, model, parent)
         {
         }
 
@@ -25,7 +29,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
         public string ElementID => throw new NotImplementedException();
-        public object Parent => throw new NotImplementedException();
 
         public string DocComment
         {

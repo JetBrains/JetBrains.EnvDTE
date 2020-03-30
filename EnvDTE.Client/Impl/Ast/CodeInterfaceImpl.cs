@@ -8,7 +8,11 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
     public sealed class CodeInterfaceImpl : CodeElementBase, CodeElement2, CodeInterface2
     {
-        public CodeInterfaceImpl([NotNull] DteImplementation implementation, [NotNull] CodeElementModel model) : base(implementation, model)
+        public CodeInterfaceImpl(
+            [NotNull] DteImplementation implementation,
+            [NotNull] CodeElementModel model,
+            [CanBeNull] object parent
+        ) : base(implementation, model, parent)
         {
         }
 
@@ -23,7 +27,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
         public string ElementID => throw new NotImplementedException();
-        public object Parent => throw new NotImplementedException();
         public CodeNamespace Namespace => throw new NotImplementedException();
         public CodeElements Bases => throw new NotImplementedException();
         public CodeElements Attributes => throw new NotImplementedException();

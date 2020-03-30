@@ -10,8 +10,9 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
     {
         public CodeFunctionImpl(
             [NotNull] DteImplementation implementation,
-            [NotNull] CodeElementModel model
-        ) : base(implementation, model)
+            [NotNull] CodeElementModel model,
+            [CanBeNull] object parent
+        ) : base(implementation, model, parent)
         {
         }
 
@@ -26,7 +27,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
         public string ElementID => throw new NotImplementedException();
-        public object Parent => throw new NotImplementedException();
         public vsCMFunction FunctionKind => throw new NotImplementedException();
         public CodeElements Parameters => throw new NotImplementedException();
         public bool IsOverloaded => throw new NotImplementedException();
