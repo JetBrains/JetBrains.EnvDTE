@@ -52,8 +52,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
                     return new CodeElementsImplementation(
                         DteImplementation,
                         new List<CodeElementModel>(),
-                        this,
-                        MyParent
+                        this
                     );
                 }
 
@@ -63,8 +62,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
                         .DteProtocolModel
                         .FileCodeModel_get_CodeElements
                         .Sync(MyParent.ProjectItemModel),
-                    this,
-                    MyParent
+                    this
                 );
             }
         }

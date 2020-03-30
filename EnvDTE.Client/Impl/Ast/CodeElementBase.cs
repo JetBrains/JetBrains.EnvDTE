@@ -47,7 +47,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public CodeElements Children => new CodeElementsImplementation(
             Implementation,
             Implementation.DteProtocolModel.CodeElement_get_Children.Sync(Model),
-            this,
             this
         );
 
