@@ -15,7 +15,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
     [SolutionComponent]
     public sealed class ProjectItemCallbackProvider : IEnvDteCallbackProvider
     {
-        public void RegisterCallbacks(ConnectionManager connectionManager,
+        public void RegisterCallbacks(
+            GlobalAstManager globalAstManager,
             ISolution solution,
             ProjectModelViewHost host,
             DteProtocolModel model

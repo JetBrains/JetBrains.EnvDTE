@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using JetBrains.Collections.Viewable;
 using JetBrains.EnvDTE.Host.Callback;
-using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.Rd;
@@ -20,9 +19,6 @@ namespace JetBrains.EnvDTE.Host
         private IReadOnlyList<IEnvDteCallbackProvider> CallbackProviders { get; }
         public int Port { get; private set; }
 
-        // ConnectionManager will be created per-execution.
-        // Therefore is safe to cache some state here.
-        public IDictionary<int, AstManager> AstManagers { get; } = new Dictionary<int, AstManager>();
         public ConnectionManager(Lifetime lifetime, [NotNull] ISolution solution) => SetupModel(lifetime, solution);
 
         private void SetupModel(Lifetime lifetime, ISolution solution)
@@ -47,9 +43,13 @@ namespace JetBrains.EnvDTE.Host
         )
         {
             var host = solution.GetComponent<ProjectModelViewHost>();
+            // This manager will be stored in closures of callbacks.
+            // Since the entire protocol will be deleted on file execution end,
+            // this shouldn't cause memory leaks
+            var globalAstManager = new GlobalAstManager(solution.GetComponent<ProjectModelViewHost>());
             foreach (var provider in solution.GetComponents<IEnvDteCallbackProvider>())
             {
-                provider.RegisterCallbacks(this, solution, host, model);
+                provider.RegisterCallbacks(globalAstManager, solution, host, model);
             }
         }
     }

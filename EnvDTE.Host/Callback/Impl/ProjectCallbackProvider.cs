@@ -1,17 +1,16 @@
-using System.Linq;
 using JetBrains.Core;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Host.Features.ProjectModel;
 using JetBrains.ReSharper.Host.Features.ProjectModel.View;
 using JetBrains.Rider.Model;
-using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl
 {
     [SolutionComponent]
     public sealed class ProjectCallbackProvider : IEnvDteCallbackProvider
     {
-        public void RegisterCallbacks(ConnectionManager connectionManager,
+        public void RegisterCallbacks(
+            GlobalAstManager globalAstManager,
             ISolution solution,
             ProjectModelViewHost host,
             DteProtocolModel model
