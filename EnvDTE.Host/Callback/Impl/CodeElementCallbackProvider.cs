@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
+using JetBrains.ReSharper.Feature.Services.Util;
 using JetBrains.ReSharper.Host.Features.ProjectModel.View;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Impl;
@@ -13,10 +15,12 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
     [SolutionComponent]
     public sealed class CodeElementCallbackProvider : IEnvDteCallbackProvider
     {
-        public void RegisterCallbacks(GlobalAstManager globalAstManager,
+        public void RegisterCallbacks(
+            GlobalAstManager globalAstManager,
             ISolution solution,
             ProjectModelViewHost host,
-            DteProtocolModel model)
+            DteProtocolModel model
+        )
         {
             AstManager GetManager(CodeElementModel codeElementModel) => globalAstManager
                 .GetOrCreate(host.GetItemById<IProjectFile>(codeElementModel.ContainingFile.Id).NotNull());
@@ -58,6 +62,26 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                 var element = astManager.GetElement(codeElementModel.Id);
                 if (!(element is ICSharpDeclaration node)) return null;
                 return CSharpSharedImplUtil.GetQualifiedName(node);
+            });
+            model.CodeElement_get_Bases.SetWithReadLock(codeElementModel =>
+            {
+                var astManager = GetManager(codeElementModel);
+                var element = astManager.GetElement(codeElementModel.Id);
+                // Todo: use more general type
+                if (!(element is IClassDeclaration declaration))
+                {
+                    throw new InvalidOperationException("Tried to find base for non-class element");
+                }
+
+
+                var bases = declaration.DeclaredElement.NotNull().GetSuperTypes();
+                var @base = bases.SingleOrDefault();
+
+                declaration.DeclaredElement.GetSuperTypeElements()
+                var superTypes = declaration.SuperTypes;
+
+                var references = declaration.GetBaseDeclarationsReferences().Select(reference => reference.Resolve());
+                throw new NotImplementedException();
             });
         }
     }

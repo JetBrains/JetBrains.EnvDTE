@@ -14,9 +14,16 @@ namespace JetBrains.EnvDTE.Host.Manager
     /// </summary>
     public sealed class AstManager
     {
-        private IdSource IdSource { get; } = new IdSource();
+        [NotNull]
+        private IdSource IdSource { get; }
+
+        [NotNull]
         private IDictionary<int, ITreeNode> IdToNodeMap { get; } = new Dictionary<int, ITreeNode>();
+
+        [NotNull]
         private OneToListMap<int, int> IdToChildrenMap { get; } = new OneToListMap<int, int>();
+
+        public AstManager([NotNull] IdSource idSource) => IdSource = idSource;
 
         public void AddElement([NotNull] ITreeNode node, [NotNull] ITreeNode parent)
         {

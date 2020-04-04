@@ -16,9 +16,21 @@ namespace JetBrains.EnvDTE.Host
         private ProjectModelViewHost Host { get; }
 
         [NotNull]
-        private IDictionary<int, AstManager> AstManagers { get; } = new Dictionary<int, AstManager>();
+        private IdSource Source { get; }
 
-        public GlobalAstManager([NotNull] ProjectModelViewHost host) => Host = host;
+        [NotNull]
+        private IDictionary<int, AstManager> AstManagers { get; }
+
+        [NotNull]
+        private DetachedAstManager DetachedAstManager { get; }
+
+        public GlobalAstManager([NotNull] ProjectModelViewHost host)
+        {
+            Host = host;
+            Source = new IdSource();
+            AstManagers = new Dictionary<int, AstManager>();
+            DetachedAstManager = new DetachedAstManager(Source);
+        }
 
         public AstManager GetOrCreate([NotNull] IProjectFile projectFile)
         {
@@ -26,7 +38,7 @@ namespace JetBrains.EnvDTE.Host
             if (AstManagers.TryGetValue(id, out var existing)) return existing;
             return AstManagers.GetOrCreateValue(id, () =>
             {
-                var astManager = new AstManager();
+                var astManager = new AstManager(Source);
                 var psiFile = Host
                     .GetItemById<IProjectFile>(id)
                     ?.ToSourceFile()

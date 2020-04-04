@@ -6,7 +6,7 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
-    public sealed class CodeStructImpl : CodeElementBase, CodeElement2, CodeStruct2
+    public sealed class CodeStructImpl : CodeTypeBase, CodeElement2, CodeStruct2
     {
         public CodeStructImpl(
             [NotNull] DteImplementation implementation,
@@ -17,7 +17,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         }
 
         public vsCMElement Kind => vsCMElement.vsCMElementStruct;
-        public bool IsCodeType => true;
 
         public vsCMInfoLocation InfoLocation => throw new NotImplementedException();
         public TextPoint StartPoint => throw new NotImplementedException();
@@ -25,8 +24,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
         public string ElementID => throw new NotImplementedException();
-        public CodeNamespace Namespace => throw new NotImplementedException();
-        public CodeElements Bases => throw new NotImplementedException();
 
         public string DocComment
         {

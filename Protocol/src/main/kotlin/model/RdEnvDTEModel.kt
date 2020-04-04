@@ -115,5 +115,6 @@ object DteProtocolModel : Ext(DteRoot) {
       call("CodeElement_get_Access", codeElementModel, access)
       call("CodeElement_get_Name", codeElementModel, string.nullable)
       call("CodeElement_get_FullName", codeElementModel, string.nullable)
+      call("CodeElement_get_Bases", codeElementModel, immutableList(codeElementModel))
     }
 }
