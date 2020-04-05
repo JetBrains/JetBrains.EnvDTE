@@ -36,7 +36,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             return new ProjectItemImplementation(Implementation, itemModel);
         }
 
-        IEnumerator ProjectItems.GetEnumerator() =>
+        public IEnumerator GetEnumerator() =>
             ProjectItemModels.Select(model => new ProjectItemImplementation(Implementation, model)).GetEnumerator();
 
         public string Kind => throw new NotImplementedException();
@@ -49,6 +49,5 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             throw new NotImplementedException();
 
         public ProjectItem AddFromFileCopy(string FilePath) => throw new NotImplementedException();
-        IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
     }
 }

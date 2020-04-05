@@ -40,11 +40,7 @@ object DteProtocolModel : Ext(DteRoot) {
       field("TypeId", int)
       field("ContainingFile", projectItemModel)
       field("Id", int)
-    }
-
-    val rdCodeElementItem = structdef {
-      field("parentId", int.nullable)
-      field("codeElementModel", codeElementModel)
+      field("IsPhysical", bool)
     }
 
     val access = enum {

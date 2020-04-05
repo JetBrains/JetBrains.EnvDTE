@@ -1,14 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
-using JetBrains.ReSharper.Feature.Services.Util;
 using JetBrains.ReSharper.Host.Features.ProjectModel.View;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Impl;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
+using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Rider.Model;
+using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl
 {
@@ -68,19 +70,40 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
             {
                 var astManager = GetManager(codeElementModel);
                 var element = astManager.GetElement(codeElementModel.Id);
-                if (!(element is IClassDeclaration declaration))
+                if (!(element is IClassDeclaration classDeclaration))
                 {
                     throw new InvalidOperationException("Tried to find base for non-class element");
                 }
 
-                var bases = declaration.DeclaredElement.NotNull().GetSuperTypes();
-                var @base = bases.SingleOrDefault();
+                CodeElementModel ToModel(IList<IDeclaration> declarations)
+                {
+                    if (declarations.IsEmpty())
+                    {
+                        // TODO: return detached model
+                        return null;
+                    }
 
-                declaration.DeclaredElement.GetSuperTypeElements();
-                var superTypes = declaration.SuperTypes;
+                    if (declarations.IsSingle())
+                    {
+                        var declaration = declarations.Single();
+                        var projectFile = declaration.GetSourceFile().ToProjectFile().NotNull();
+                        int id = astManager.GetOrCreateId(declaration);
+                        int typeId = PsiElementRegistrar.GetTypeId(declaration);
+                        return new CodeElementModel(typeId, new ProjectItemModel(host.GetIdByItem(projectFile)), id, true);
+                    }
 
-                var references = declaration.GetBaseDeclarationsReferences().Select(reference => reference.Resolve());
-                throw new NotImplementedException();
+                    return null;
+                }
+
+                var query = from type in classDeclaration.DeclaredElement.NotNull().GetSuperTypes()
+                    let typeElement = type.GetTypeElement()
+                    where typeElement != null
+                    let declarations = typeElement.GetDeclarations()
+                    let child = ToModel(declarations)
+                    where child != null
+                    select child;
+
+                return query.AsList();
             });
         }
     }

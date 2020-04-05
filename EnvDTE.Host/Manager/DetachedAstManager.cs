@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using JetBrains.ReSharper.Psi;
@@ -26,6 +27,7 @@ namespace JetBrains.EnvDTE.Host.Manager
         private int GetOrCreateId([NotNull] object node, object parent)
         {
             if (NodeToIdMap.TryGetValue(node, out int result)) return result;
+            throw new NotImplementedException();
         }
 
         private void Initialize([NotNull] ITypeElement node)
