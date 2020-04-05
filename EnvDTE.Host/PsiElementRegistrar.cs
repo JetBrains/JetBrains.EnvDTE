@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
 
@@ -9,7 +10,8 @@ namespace JetBrains.EnvDTE.Host
 {
     public static class PsiElementRegistrar
     {
-        private static IList<(Type, int)> KnownTypes { get; } = new List<(Type, int)>();
+        private static IList<(Type, int)> KnownPsiTypes { get; } = new List<(Type, int)>();
+        private static IList<(Type, int)> KnownDeclaredTypes { get; } = new List<(Type, int)>();
         private static ISet<Type> TypesToReplaceWithChildren { get; } = new HashSet<Type>();
 
         /// <summary>
@@ -17,7 +19,13 @@ namespace JetBrains.EnvDTE.Host
         /// The same id can later be used by the client
         /// to deduce the type of EnvDTE AST node to create.
         /// </summary>
-        private static void RegisterType<TType>(int id) => KnownTypes.Add((typeof(TType), id));
+        private static void RegisterType<TPsi, TDeclared>(int id)
+            where TPsi : ITreeNode
+            where TDeclared: IDeclaredElement
+        {
+            KnownPsiTypes.Add((typeof(TPsi), id));
+            KnownDeclaredTypes.Add((typeof(TDeclared), id));
+        }
 
         /// <summary>
         /// Elements that have not been registered are ignored by default.
@@ -36,11 +44,11 @@ namespace JetBrains.EnvDTE.Host
 
         static PsiElementRegistrar()
         {
-            RegisterType<ICSharpNamespaceDeclaration>(1);
-            RegisterType<IClassDeclaration>(2);
-            RegisterType<IStructDeclaration>(3);
-            RegisterType<IInterfaceDeclaration>(4);
-            RegisterType<IFunctionDeclaration>(5);
+            RegisterType<ICSharpNamespaceDeclaration, INamespace>(1);
+            RegisterType<IClassDeclaration, IClass>(2);
+            RegisterType<IStructDeclaration, IStruct>(3);
+            RegisterType<IInterfaceDeclaration, IInterface>(4);
+            RegisterType<IFunctionDeclaration, IFunction>(5);
 
             ReplaceWithChildren<INamespaceBody>();
             ReplaceWithChildren<IClassBody>();
@@ -48,9 +56,22 @@ namespace JetBrains.EnvDTE.Host
 
         public static int GetTypeId([NotNull] ITreeNode node)
         {
-            foreach (var (type, id) in KnownTypes)
+            foreach (var (type, id) in KnownPsiTypes)
             {
                 if (type.IsInstanceOfType(node))
+                {
+                    return id;
+                }
+            }
+
+            return 0;
+        }
+
+        public static int GetTypeId(IDeclaredElement element)
+        {
+            foreach (var (type, id) in KnownDeclaredTypes)
+            {
+                if (type.IsInstanceOfType(element))
                 {
                     return id;
                 }

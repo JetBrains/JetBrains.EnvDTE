@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Host.Features.ProjectModel.View;
 using JetBrains.ReSharper.Psi;
@@ -12,7 +13,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
     public sealed class FileCodeModelCallbackProvider : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(
-            GlobalAstManager globalAstManager,
+            AstManager astManager,
             ISolution solution,
             ProjectModelViewHost host,
             DteProtocolModel model
@@ -26,12 +27,11 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                     ?.GetPrimaryPsiFile();
                 if (psiFile == null) return new List<CodeElementModel>();
 
-                var astManager = globalAstManager.GetOrCreate(projectFile);
                 var query =
                     from child in psiFile.GetEnvDTEModelChildren()
                     let childId = astManager.GetOrCreateId(child)
                     let childTypeId = PsiElementRegistrar.GetTypeId(child)
-                    select new CodeElementModel(childTypeId, projectItemModel, childId, true);
+                    select new CodeElementModel(childTypeId, childId, true);
                 return query.ToList();
             });
         }

@@ -1,4 +1,5 @@
 using JetBrains.Core;
+using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Host.Features.ProjectModel;
 using JetBrains.ReSharper.Host.Features.ProjectModel.View;
@@ -10,7 +11,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
     public sealed class ProjectCallbackProvider : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(
-            GlobalAstManager globalAstManager,
+            AstManager astManager,
             ISolution solution,
             ProjectModelViewHost host,
             DteProtocolModel model

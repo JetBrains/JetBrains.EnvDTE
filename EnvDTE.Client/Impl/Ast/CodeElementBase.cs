@@ -57,7 +57,10 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public CodeElements Members => Children;
 
         [NotNull]
-        public ProjectItem ProjectItem => new ProjectItemImplementation(Implementation, Model.ContainingFile);
+        public ProjectItem ProjectItem => new ProjectItemImplementation(
+            Implementation,
+            Implementation.DteProtocolModel.CodeElement_get_ProjectItem.Sync(Model)
+        );
 
         public vsCMAccess Access
         {
@@ -79,7 +82,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public string Language => Implementation
             .DteProtocolModel
             .ProjectItem_get_Language
-            .Sync(Model.ContainingFile)
+            .Sync(Implementation.DteProtocolModel.CodeElement_get_ProjectItem.Sync(Model))
             .ToEnvDTELanguage();
     }
 }

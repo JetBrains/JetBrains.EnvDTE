@@ -38,7 +38,6 @@ object DteProtocolModel : Ext(DteRoot) {
 
     val codeElementModel = structdef {
       field("TypeId", int)
-      field("ContainingFile", projectItemModel)
       field("Id", int)
       field("IsPhysical", bool)
     }
@@ -112,5 +111,6 @@ object DteProtocolModel : Ext(DteRoot) {
       call("CodeElement_get_Name", codeElementModel, string.nullable)
       call("CodeElement_get_FullName", codeElementModel, string.nullable)
       call("CodeElement_get_Bases", codeElementModel, immutableList(codeElementModel))
+      call("CodeElement_get_ProjectItem", codeElementModel, projectItemModel.nullable)
     }
 }

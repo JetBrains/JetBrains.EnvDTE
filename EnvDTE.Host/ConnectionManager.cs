@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using JetBrains.Collections.Viewable;
 using JetBrains.EnvDTE.Host.Callback;
+using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.Rd;
@@ -46,10 +47,10 @@ namespace JetBrains.EnvDTE.Host
             // This manager will be stored in closures of callbacks.
             // Since the entire protocol will be deleted on file execution end,
             // this shouldn't cause memory leaks
-            var globalAstManager = new GlobalAstManager(solution.GetComponent<ProjectModelViewHost>());
+            var astManager = new AstManager();
             foreach (var provider in solution.GetComponents<IEnvDteCallbackProvider>())
             {
-                provider.RegisterCallbacks(globalAstManager, solution, host, model);
+                provider.RegisterCallbacks(astManager, solution, host, model);
             }
         }
     }

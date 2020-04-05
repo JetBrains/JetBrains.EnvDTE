@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Util;
+using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
 
@@ -18,7 +20,14 @@ namespace JetBrains.EnvDTE.Host.Manager
         [NotNull]
         private IDictionary<int, ITreeNode> IdToNodeMap { get; } = new Dictionary<int, ITreeNode>();
 
-        public AstManager([NotNull] IdSource idSource) => IdSource = idSource;
+        [NotNull]
+        private DetachedAstManager DetachedAstManager { get; }
+
+        public AstManager()
+        {
+            IdSource = new IdSource();
+            DetachedAstManager = new DetachedAstManager(IdSource);
+        }
 
         private void RegisterElement([NotNull] ITreeNode node)
         {
@@ -27,7 +36,15 @@ namespace JetBrains.EnvDTE.Host.Manager
             node.UserData.PutData(EnvDTEId, new ImmutableReference<int>(id));
         }
 
-        public ITreeNode GetElement(int id) => IdToNodeMap[id];
+        public TResult MapElement<TResult>(
+            int id,
+            [NotNull] Func<ITreeNode, TResult> psiMapper,
+            [NotNull] Func<IDeclaredElement, TResult> declaredElementMapper
+        )
+        {
+            if (IdToNodeMap.TryGetValue(id, out var psi)) return psiMapper(psi);
+            return declaredElementMapper(DetachedAstManager.GetElement(id));
+        }
 
         public int GetOrCreateId([NotNull] ITreeNode node)
         {
@@ -36,6 +53,8 @@ namespace JetBrains.EnvDTE.Host.Manager
             RegisterElement(node);
             return GetId(node).NotNull("Could not register a node");
         }
+
+        public int GetOrCreateId([NotNull] IDeclaredElement element) => DetachedAstManager.GetOrCreateId(element);
 
         private static int? GetId([NotNull] ITreeNode node) => node
             .UserData
