@@ -26,13 +26,12 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                     ?.GetPrimaryPsiFile();
                 if (psiFile == null) return new List<CodeElementModel>();
 
-                var abstractSyntaxTreeHost = globalAstManager.GetOrCreate(projectFile);
-                int psiFileId = abstractSyntaxTreeHost.GetId(psiFile);
+                var astManager = globalAstManager.GetOrCreate(projectFile);
                 var query =
-                    from childId in abstractSyntaxTreeHost.GetChildren(psiFileId)
-                    let child = abstractSyntaxTreeHost.GetElement(childId)
+                    from child in psiFile.GetEnvDTEModelChildren()
+                    let childId = astManager.GetOrCreateId(child)
                     let childTypeId = PsiElementRegistrar.GetTypeId(child)
-                    select new CodeElementModel(childTypeId, projectItemModel, childId);
+                    select new CodeElementModel(childTypeId, projectItemModel, childId, true);
                 return query.ToList();
             });
         }

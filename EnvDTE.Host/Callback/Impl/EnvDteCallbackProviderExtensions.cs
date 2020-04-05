@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using JetBrains.Annotations;
 using JetBrains.Core;
 using JetBrains.Rd.Tasks;
+using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Resources.Shell;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl
@@ -28,5 +31,24 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                     }
                 }
             );
+
+        [NotNull, ItemNotNull]
+        public static IEnumerable<ITreeNode> GetEnvDTEModelChildren([NotNull] this ITreeNode node)
+        {
+            foreach (var directChild in node.Children())
+            {
+                if (PsiElementRegistrar.ShouldAddToModel(directChild))
+                {
+                    yield return directChild;
+                }
+                else if (PsiElementRegistrar.ShouldVisitChildren(directChild))
+                {
+                    foreach (var modelChild in GetEnvDTEModelChildren(directChild))
+                    {
+                        yield return modelChild;
+                    }
+                }
+            }
+        }
     }
 }

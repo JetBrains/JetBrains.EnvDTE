@@ -28,11 +28,12 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
             model.CodeElement_get_Children.SetWithReadLock(codeElementModel =>
             {
                 var astManager = GetManager(codeElementModel);
+                var node = astManager.GetElement(codeElementModel.Id);
                 var query =
-                    from childId in astManager.GetChildren(codeElementModel.Id)
-                    let child = astManager.GetElement(childId)
+                    from child in node.GetEnvDTEModelChildren()
+                    let childId = astManager.GetOrCreateId(child)
                     let childTypeId = PsiElementRegistrar.GetTypeId(child)
-                    select new CodeElementModel(childTypeId, codeElementModel.ContainingFile, childId);
+                    select new CodeElementModel(childTypeId, codeElementModel.ContainingFile, childId, true);
                 return query.ToList();
             });
             model.CodeElement_get_Access.SetWithReadLock(codeElementModel =>
@@ -67,17 +68,15 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
             {
                 var astManager = GetManager(codeElementModel);
                 var element = astManager.GetElement(codeElementModel.Id);
-                // Todo: use more general type
                 if (!(element is IClassDeclaration declaration))
                 {
                     throw new InvalidOperationException("Tried to find base for non-class element");
                 }
 
-
                 var bases = declaration.DeclaredElement.NotNull().GetSuperTypes();
                 var @base = bases.SingleOrDefault();
 
-                declaration.DeclaredElement.GetSuperTypeElements()
+                declaration.DeclaredElement.GetSuperTypeElements();
                 var superTypes = declaration.SuperTypes;
 
                 var references = declaration.GetBaseDeclarationsReferences().Select(reference => reference.Resolve());

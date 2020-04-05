@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Util;
-using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
 
@@ -20,18 +18,7 @@ namespace JetBrains.EnvDTE.Host.Manager
         [NotNull]
         private IDictionary<int, ITreeNode> IdToNodeMap { get; } = new Dictionary<int, ITreeNode>();
 
-        [NotNull]
-        private OneToListMap<int, int> IdToChildrenMap { get; } = new OneToListMap<int, int>();
-
         public AstManager([NotNull] IdSource idSource) => IdSource = idSource;
-
-        public void AddElement([NotNull] ITreeNode node, [NotNull] ITreeNode parent)
-        {
-            RegisterElement(node);
-            int childId = GetId(node);
-            int parentId = GetId(parent);
-            IdToChildrenMap.Add(parentId, childId);
-        }
 
         private void RegisterElement([NotNull] ITreeNode node)
         {
@@ -40,21 +27,19 @@ namespace JetBrains.EnvDTE.Host.Manager
             node.UserData.PutData(EnvDTEId, new ImmutableReference<int>(id));
         }
 
-        public void Initialize([NotNull] ICSharpFile file)
-        {
-            RegisterElement(file);
-            file.ProcessDescendants(new AstGeneratorProcessor(this));
-        }
-
         public ITreeNode GetElement(int id) => IdToNodeMap[id];
 
-        [NotNull]
-        public IEnumerable<int> GetChildren(int id) => IdToChildrenMap[id];
+        public int GetOrCreateId([NotNull] ITreeNode node)
+        {
+            int? id = GetId(node);
+            if (id != null) return id.Value;
+            RegisterElement(node);
+            return GetId(node).NotNull("Could not register a node");
+        }
 
-        public int GetId([NotNull] ITreeNode node) => node
+        private static int? GetId([NotNull] ITreeNode node) => node
             .UserData
-            .GetData(EnvDTEId)
-            .NotNull($"EnvDTE ID was requested for a node that hasnt been registered. Node: {node}")
+            .GetData(EnvDTEId)?
             .Value;
 
         private static Key<ImmutableReference<int>> EnvDTEId { get; } =
