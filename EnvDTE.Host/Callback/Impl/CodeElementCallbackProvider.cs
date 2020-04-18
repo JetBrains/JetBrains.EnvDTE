@@ -45,7 +45,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                     from child in node.GetEnvDTEModelChildren()
                     let childId = astManager.GetOrCreateId(child)
                     let childTypeId = PsiElementRegistrar.GetTypeId(child)
-                    select new CodeElementModel(childTypeId, childId, true)
+                    select new CodeElementModel(childTypeId, childId)
                 ).ToList()
             );
             MapWithAstManager(model.CodeElement_get_Access, GetAccessRights, GetAccessRights);
@@ -77,7 +77,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                         {
                             int id = astManager.GetOrCreateId(typeElement);
                             int typeId = PsiElementRegistrar.GetTypeId(typeElement);
-                            return new CodeElementModel(typeId, id, false);
+                            return new CodeElementModel(typeId, id);
                         }
 
                         if (declarations.IsSingle())
@@ -85,7 +85,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                             var declaration = declarations.Single();
                             int id = astManager.GetOrCreateId(declaration);
                             int typeId = PsiElementRegistrar.GetTypeId(declaration);
-                            return new CodeElementModel(typeId, id, true);
+                            return new CodeElementModel(typeId, id);
                         }
 
                         Logger.Warn("Failed to create a model for base class because it resides in multiple locations");

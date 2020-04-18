@@ -31,7 +31,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                     from child in psiFile.GetEnvDTEModelChildren()
                     let childId = astManager.GetOrCreateId(child)
                     let childTypeId = PsiElementRegistrar.GetTypeId(child)
-                    select new CodeElementModel(childTypeId, childId, true);
+                    select new CodeElementModel(childTypeId, childId);
                 return query.ToList();
             });
         }
