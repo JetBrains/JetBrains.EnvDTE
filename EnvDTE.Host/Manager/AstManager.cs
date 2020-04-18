@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Util;
+using JetBrains.Lifetimes;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
@@ -23,10 +24,17 @@ namespace JetBrains.EnvDTE.Host.Manager
         [NotNull]
         private DetachedAstManager DetachedAstManager { get; }
 
-        public AstManager()
+        public AstManager(Lifetime lifetime)
         {
             IdSource = new IdSource();
             DetachedAstManager = new DetachedAstManager(IdSource);
+            lifetime.OnTermination(() =>
+            {
+                foreach (var node in IdToNodeMap.Values)
+                {
+                    node.UserData.PutData(EnvDTEId, null);
+                }
+            });
         }
 
         private void RegisterElement([NotNull] ITreeNode node)

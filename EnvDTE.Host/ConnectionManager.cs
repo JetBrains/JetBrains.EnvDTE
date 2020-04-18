@@ -47,7 +47,7 @@ namespace JetBrains.EnvDTE.Host
             // This manager will be stored in closures of callbacks.
             // Since the entire protocol will be deleted on file execution end,
             // this shouldn't cause memory leaks
-            var astManager = new AstManager();
+            var astManager = new AstManager(lifetime);
             foreach (var provider in solution.GetComponents<IEnvDteCallbackProvider>())
             {
                 provider.RegisterCallbacks(astManager, solution, host, model);
