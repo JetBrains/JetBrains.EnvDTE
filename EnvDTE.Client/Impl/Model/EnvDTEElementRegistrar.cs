@@ -8,8 +8,10 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
 {
 	public sealed class EnvDTEElementRegistrar
 	{
-		private DteImplementation Implementation { get; }
-		public EnvDTEElementRegistrar(DteImplementation implementation) => Implementation = implementation;
+		[NotNull]
+        public DteImplementation Implementation { get; }
+
+		public EnvDTEElementRegistrar([NotNull] DteImplementation implementation) => Implementation = implementation;
 
 		[NotNull]
         public CodeElement Convert([NotNull] CodeElementModel model, object parent) => model.TypeId switch

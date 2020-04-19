@@ -11,6 +11,9 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
     public abstract class CodeElementBase
     {
         [NotNull]
+        protected EnvDTEElementRegistrar EnvDTEElementRegistrar { get; }
+
+        [NotNull]
         protected CodeElementModel Model { get; }
 
         [NotNull]
@@ -20,7 +23,18 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public DTE DTE => Implementation;
 
         [CanBeNull]
-        public object Parent { get; }
+        private object CachedParent { get; set; }
+
+        [CanBeNull]
+        public object Parent => CachedParent ??= CreateParent();
+
+        [CanBeNull]
+        private object CreateParent()
+        {
+            var parentModel = Implementation.DteProtocolModel.CodeElement_get_Parent.Sync(Model);
+            if (parentModel == null) return null;
+            return EnvDTEElementRegistrar.Convert(parentModel, null);
+        }
 
         protected CodeElementBase(
             [NotNull] DteImplementation implementation,
@@ -30,7 +44,8 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         {
             Implementation = implementation;
             Model = model;
-            Parent = parent;
+            CachedParent = parent;
+            EnvDTEElementRegistrar = new EnvDTEElementRegistrar(Implementation);
         }
 
         [CanBeNull]
@@ -45,7 +60,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
 
         [NotNull]
         public CodeElements Children => new CodeElementsImplementation(
-            Implementation,
+            EnvDTEElementRegistrar,
             Implementation.DteProtocolModel.CodeElement_get_Children.Sync(Model),
             this
         );

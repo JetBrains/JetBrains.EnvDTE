@@ -50,5 +50,19 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                 }
             }
         }
+
+        [CanBeNull]
+        public static ITreeNode GetEnvDTEModelParent([NotNull] this ITreeNode node)
+        {
+            var current = node;
+            do
+            {
+                if (PsiElementRegistrar.ShouldAddToModel(current)) return current;
+                current = current.Parent;
+            }
+            while (current != null);
+
+            return null;
+        }
     }
 }

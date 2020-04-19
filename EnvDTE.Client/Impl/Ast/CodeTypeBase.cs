@@ -1,4 +1,3 @@
-using System;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Impl.Model;
@@ -20,11 +19,15 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
 
         [NotNull]
         public CodeElements Bases => new CodeElementsImplementation(
-            Implementation,
+            EnvDTEElementRegistrar,
             Implementation.DteProtocolModel.CodeElement_get_Bases.Sync(Model),
             this
         );
 
-        public CodeNamespace Namespace => throw new NotImplementedException();
+        [NotNull]
+        public CodeNamespace Namespace => (CodeNamespace) EnvDTEElementRegistrar.Convert(
+            Implementation.DteProtocolModel.CodeElement_get_Namespace.Sync(Model),
+            null
+        );
     }
 }

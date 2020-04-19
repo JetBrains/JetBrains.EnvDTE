@@ -20,14 +20,14 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
         private IReadOnlyList<CodeElementModel> CodeElementModels { get; }
 
         public CodeElementsImplementation(
-            [NotNull] DteImplementation implementation,
+            [NotNull] EnvDTEElementRegistrar registrar,
             [NotNull, ItemNotNull] IReadOnlyList<CodeElementModel> codeElementModels,
             [CanBeNull] object parent
         )
         {
-            Implementation = implementation;
+            Implementation = registrar.Implementation;
             Parent = parent;
-            Registrar = new EnvDTEElementRegistrar(Implementation);
+            Registrar = registrar;
             CodeElementModels = codeElementModels;
         }
 

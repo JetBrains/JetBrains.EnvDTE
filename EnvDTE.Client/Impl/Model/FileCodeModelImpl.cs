@@ -37,7 +37,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
 
         [NotNull]
         public CodeElements CodeElements => new CodeElementsImplementation(
-            DteImplementation,
+            new EnvDTEElementRegistrar(DteImplementation),
             DteImplementation
                 .DteProtocolModel
                 .FileCodeModel_get_CodeElements
