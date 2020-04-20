@@ -19,21 +19,46 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public vsCMElement Kind => vsCMElement.vsCMElementFunction;
         public bool IsCodeType => false;
 
+        [NotNull]
+        public CodeElements Parameters => throw new NotImplementedException();
+            // new CodeElementsImplementation(
+            // EnvDTEElementRegistrar,
+            // Children.OfType<CodeElementModel>().ToList(),
+            // this
+        // );
+
+        public bool IsGeneric => throw new NotImplementedException();
+        public CodeElements Attributes => throw new NotImplementedException();
+
+        [NotNull]
+        public CodeTypeRef Type
+        {
+            get => new CodeTypeRefImpl(
+                (CodeType) EnvDTEElementRegistrar.Convert(
+                    Implementation.DteProtocolModel.CodeFunction_get_Type.Sync(Model),
+                    null
+                ),
+                this
+            );
+            set => throw new NotImplementedException();
+        }
+
+        public bool CanOverride
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+
+        public vsCMFunction FunctionKind => throw new NotImplementedException();
+
+        #region NotImplemented
         public vsCMInfoLocation InfoLocation => throw new NotImplementedException();
         public TextPoint StartPoint => throw new NotImplementedException();
         public TextPoint EndPoint => throw new NotImplementedException();
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
         public string ElementID => throw new NotImplementedException();
-        public vsCMFunction FunctionKind => throw new NotImplementedException();
-        public CodeElements Parameters => throw new NotImplementedException();
         public bool IsOverloaded => throw new NotImplementedException();
-
-        public CodeTypeRef Type
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
 
         public bool IsShared
         {
@@ -60,13 +85,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         }
 
         public CodeElements Overloads => throw new NotImplementedException();
-        public CodeElements Attributes => throw new NotImplementedException();
-
-        public bool CanOverride
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
 
         public vsCMOverrideKind OverrideKind
         {
@@ -74,7 +92,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
             set => throw new NotImplementedException();
         }
 
-        public bool IsGeneric => throw new NotImplementedException();
         object CodeFunction.get_Extender(string ExtenderName) => throw new NotImplementedException();
         TextPoint CodeElement2.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
         TextPoint CodeElement2.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
@@ -111,5 +128,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
             throw new NotImplementedException();
 
         void CodeFunction.RemoveParameter(object Element) => throw new NotImplementedException();
+        #endregion
     }
 }

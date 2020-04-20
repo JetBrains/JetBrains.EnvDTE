@@ -16,30 +16,11 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         {
         }
 
-        public vsCMElement Kind => vsCMElement.vsCMElementInterface;
+        public override vsCMElement Kind => vsCMElement.vsCMElementInterface;
 
-        public vsCMInfoLocation InfoLocation => throw new NotImplementedException();
-        public TextPoint StartPoint => throw new NotImplementedException();
-        public TextPoint EndPoint => throw new NotImplementedException();
-        public object ExtenderNames => throw new NotImplementedException();
-        public string ExtenderCATID => throw new NotImplementedException();
         public string ElementID => throw new NotImplementedException();
-        public CodeElements Attributes => throw new NotImplementedException();
-        public CodeElements DerivedTypes => throw new NotImplementedException();
         public bool IsGeneric => throw new NotImplementedException();
         public CodeElements Parts => throw new NotImplementedException();
-
-        public string Comment
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-
-        public string DocComment
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
 
         public vsCMDataTypeKind DataTypeKind
         {

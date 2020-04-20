@@ -112,11 +112,17 @@ object DteProtocolModel : Ext(DteRoot) {
       call("CodeElement_get_ProjectItem", codeElementModel, projectItemModel.nullable)
       call("CodeElement_get_Parent", codeElementModel, codeElementModel.nullable)
       createCodeTypeCallbacks()
+      createCodeFunctionCallbacks()
     }
 
     private fun createCodeTypeCallbacks() {
       // see CodeTypeCallbackProvider
       call("CodeElement_get_Bases", codeElementModel, immutableList(codeElementModel))
       call("CodeElement_get_Namespace", codeElementModel, codeElementModel.nullable)
+    }
+
+    private fun createCodeFunctionCallbacks() {
+      // see CodeFunctionCallbackProvider
+      call("CodeFunction_get_Type", codeElementModel, codeElementModel.nullable)
     }
 }

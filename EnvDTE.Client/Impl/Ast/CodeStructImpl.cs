@@ -16,27 +16,9 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         {
         }
 
-        public vsCMElement Kind => vsCMElement.vsCMElementStruct;
+        public override vsCMElement Kind => vsCMElement.vsCMElementStruct;
 
-        public vsCMInfoLocation InfoLocation => throw new NotImplementedException();
-        public TextPoint StartPoint => throw new NotImplementedException();
-        public TextPoint EndPoint => throw new NotImplementedException();
-        public object ExtenderNames => throw new NotImplementedException();
-        public string ExtenderCATID => throw new NotImplementedException();
         public string ElementID => throw new NotImplementedException();
-
-        public string DocComment
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-
-        public string Comment
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-
         public bool IsAbstract
         {
             get => throw new NotImplementedException();
@@ -49,9 +31,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
             set => throw new NotImplementedException();
         }
 
-        public CodeElements Members => throw new NotImplementedException();
-        public CodeElements Attributes => throw new NotImplementedException();
-        public CodeElements DerivedTypes => throw new NotImplementedException();
         public CodeElements ImplementedInterfaces => throw new NotImplementedException();
         public bool IsGeneric => throw new NotImplementedException();
         public CodeElements Parts => throw new NotImplementedException();
@@ -181,9 +160,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
             vsCMAccess Access) =>
             throw new NotImplementedException();
 
-        void CodeStruct.RemoveInterface(object Element)
-        {
-            throw new NotImplementedException();
-        }
+        void CodeStruct.RemoveInterface(object Element) => throw new NotImplementedException();
     }
 }
