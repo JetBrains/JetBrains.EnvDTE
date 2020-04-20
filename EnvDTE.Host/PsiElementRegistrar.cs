@@ -49,9 +49,11 @@ namespace JetBrains.EnvDTE.Host
             RegisterType<IStructDeclaration, IStruct>(3);
             RegisterType<IInterfaceDeclaration, IInterface>(4);
             RegisterType<IFunctionDeclaration, IFunction>(5);
+            RegisterType<IParameterDeclaration, IParameter>(6);
 
             ReplaceWithChildren<INamespaceBody>();
             ReplaceWithChildren<IClassBody>();
+            ReplaceWithChildren<IFormalParameterList>();
         }
 
         public static int GetTypeId([NotNull] ITreeNode node)

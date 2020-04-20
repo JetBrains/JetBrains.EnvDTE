@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
+using JetBrains.EnvDTE.Client.Impl.Model;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Ast
@@ -20,12 +23,11 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public bool IsCodeType => false;
 
         [NotNull]
-        public CodeElements Parameters => throw new NotImplementedException();
-            // new CodeElementsImplementation(
-            // EnvDTEElementRegistrar,
-            // Children.OfType<CodeElementModel>().ToList(),
-            // this
-        // );
+        public CodeElements Parameters => new CodeElementsOverList(
+            Implementation,
+            Children.OfType<CodeParameterImpl>().ToList(),
+            this
+        );
 
         public bool IsGeneric => throw new NotImplementedException();
         public CodeElements Attributes => throw new NotImplementedException();

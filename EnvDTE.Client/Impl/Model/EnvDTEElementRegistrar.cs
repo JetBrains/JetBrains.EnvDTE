@@ -21,6 +21,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
 			3 => new CodeStructImpl(Implementation, model, parent),
 			4 => new CodeInterfaceImpl(Implementation, model, parent),
 			5 => new CodeFunctionImpl(Implementation, model, parent),
+            6 => new CodeParameterImpl(Implementation, model, parent),
 			_ => throw new InvalidOperationException($"Attempting to create EnvDTE AST node for unknown type ID: {model.TypeId}")
 		};
 	}

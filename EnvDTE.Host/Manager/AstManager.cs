@@ -44,14 +44,32 @@ namespace JetBrains.EnvDTE.Host.Manager
             node.UserData.PutData(EnvDTEId, new ImmutableReference<int>(id));
         }
 
-        public TResult MapElement<TResult>(
+        public TResult MapElement<TNode, TElement, TResult>(
             int id,
-            [NotNull] Func<ITreeNode, TResult> psiMapper,
-            [NotNull] Func<IDeclaredElement, TResult> declaredElementMapper
+            [NotNull] Func<TNode, TResult> psiMapper,
+            [NotNull] Func<TElement, TResult> declaredElementMapper
         )
+            where TNode : ITreeNode
+            where TElement : IDeclaredElement
         {
-            if (IdToNodeMap.TryGetValue(id, out var psi)) return psiMapper(psi);
-            return declaredElementMapper(DetachedAstManager.GetElement(id));
+            if (IdToNodeMap.TryGetValue(id, out var psi))
+            {
+                if (!(psi is TNode node))
+                {
+                    throw new InvalidOperationException(
+                        $"Wrong node type. Expected {typeof(TNode)}, actual {psi.GetType()}");
+                }
+                return psiMapper(node);
+            }
+
+            var declared = DetachedAstManager.GetElement(id);
+            if (!(declared is TElement element))
+            {
+                throw new InvalidOperationException(
+                    $"Wrong node type. Expected {typeof(TNode)}, actual {declared.GetType()}");
+            }
+
+            return declaredElementMapper(element);
         }
 
         public int GetOrCreateId([NotNull] ITreeNode node)

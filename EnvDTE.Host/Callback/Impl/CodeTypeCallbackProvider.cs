@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Diagnostics;
@@ -20,49 +19,15 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
             DteProtocolModel model
         )
         {
-            MapWithAstManager(
+            MapWithAstManager<ITypeDeclaration, ITypeElement, List<CodeElementModel>>(
                 model.CodeElement_get_Bases,
-                node =>
-                {
-                    if (!(node is ITypeDeclaration typeDeclaration))
-                    {
-                        throw new InvalidOperationException("Tried to find base for non-class element");
-                    }
+                node => GetSuperTypes(node.DeclaredElement).AsList(),
+                element => GetSuperTypes(element).AsList());
 
-                    return GetSuperTypes(typeDeclaration.DeclaredElement).AsList();
-                },
-                element =>
-                {
-                    if (!(element is ITypeElement type))
-                    {
-                        throw new InvalidOperationException("Tried to find base for non-class element");
-                    }
-
-                    return GetSuperTypes(type).AsList();
-                }
-            );
-
-            MapWithAstManager(
+            MapWithAstManager<ICSharpTypeDeclaration, ITypeElement, CodeElementModel>(
                 model.CodeElement_get_Namespace,
-                node =>
-                {
-                    if (!(node is ICSharpTypeDeclaration typeDeclaration))
-                    {
-                        throw new InvalidOperationException("Tried to find namespace for non-class element");
-                    }
-
-                    return CreateNamespaceModel(typeDeclaration);
-                },
-                element =>
-                {
-                    if (!(element is ITypeElement type))
-                    {
-                        throw new InvalidOperationException("Tried to find namespace for non-class element");
-                    }
-
-                    return ToModel(type.GetContainingNamespace());
-                }
-            );
+                CreateNamespaceModel,
+                element => ToModel(element.GetContainingNamespace()));
 
             IEnumerable<CodeElementModel> GetSuperTypes(ITypeElement declaredType) =>
                 from type in declaredType.NotNull().GetSuperTypes()

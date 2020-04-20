@@ -113,6 +113,7 @@ object DteProtocolModel : Ext(DteRoot) {
       call("CodeElement_get_Parent", codeElementModel, codeElementModel.nullable)
       createCodeTypeCallbacks()
       createCodeFunctionCallbacks()
+      createCodeParameterCallbacks()
     }
 
     private fun createCodeTypeCallbacks() {
@@ -124,5 +125,10 @@ object DteProtocolModel : Ext(DteRoot) {
     private fun createCodeFunctionCallbacks() {
       // see CodeFunctionCallbackProvider
       call("CodeFunction_get_Type", codeElementModel, codeElementModel.nullable)
+    }
+
+    private fun createCodeParameterCallbacks() {
+      // see CodeParameterCallbackProvider
+      call("CodeParameter_get_Type", codeElementModel, codeElementModel.nullable)
     }
 }

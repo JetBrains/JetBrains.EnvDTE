@@ -49,11 +49,20 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
             [NotNull] IRdEndpoint<CodeElementModel, TRes> ep,
             [NotNull] Func<ITreeNode, TRes> psiMapper,
             [NotNull] Func<IDeclaredElement, TRes> declaredElementMapper
-        ) => ep.SetWithReadLock(codeElementModel => AstManager.MapElement(
-            codeElementModel.Id,
-            psiMapper,
-            declaredElementMapper
-        ));
+        ) => MapWithAstManager<ITreeNode, IDeclaredElement, TRes>(ep, psiMapper, declaredElementMapper);
+
+        protected void MapWithAstManager<TNode, TElement, TRes>(
+            [NotNull] IRdEndpoint<CodeElementModel, TRes> ep,
+            [NotNull] Func<TNode, TRes> psiMapper,
+            [NotNull] Func<TElement, TRes> declaredElementMapper
+        )
+            where TNode : ITreeNode
+            where TElement : IDeclaredElement =>
+            ep.SetWithReadLock(codeElementModel => AstManager.MapElement(
+                codeElementModel.Id,
+                psiMapper,
+                declaredElementMapper
+            ));
 
         // More type-safe and change-resistant and less error-prone than the usual switch
         [CanBeNull]

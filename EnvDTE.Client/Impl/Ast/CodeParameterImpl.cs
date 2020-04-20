@@ -22,6 +22,19 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public vsCMElement Kind => vsCMElement.vsCMElementParameter;
         public bool IsCodeType => false;
 
+        [NotNull]
+        public CodeTypeRef Type
+        {
+            get => new CodeTypeRefImpl(
+                (CodeType) EnvDTEElementRegistrar.Convert(
+                    Implementation.DteProtocolModel.CodeParameter_get_Type.Sync(Model),
+                    null
+                ),
+                this
+            );
+            set => throw new NotImplementedException();
+        }
+
         #region NotImplemented
         public vsCMInfoLocation InfoLocation => throw new NotImplementedException();
         public TextPoint StartPoint => throw new NotImplementedException();
@@ -29,12 +42,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
         public CodeElements Attributes => throw new NotImplementedException();
-
-        public CodeTypeRef Type
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
 
         public string DocComment
         {
