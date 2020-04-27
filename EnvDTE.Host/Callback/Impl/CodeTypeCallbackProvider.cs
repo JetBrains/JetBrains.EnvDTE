@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Diagnostics;
@@ -22,16 +23,22 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
             MapWithAstManager<ITypeDeclaration, ITypeElement, List<CodeElementModel>>(
                 model.CodeElement_get_Bases,
                 node => GetSuperTypes(node.DeclaredElement).AsList(),
-                element => GetSuperTypes(element).AsList());
+                element => GetSuperTypes(element).AsList(),
+                type => new List<CodeElementModel>
+                {
+                    ToModel(TypeFactory.CreateTypeByCLRName("System.Array", type.Module))
+                }
+            );
 
             MapWithAstManager<ICSharpTypeDeclaration, ITypeElement, CodeElementModel>(
                 model.CodeElement_get_Namespace,
                 CreateNamespaceModel,
-                element => ToModel(element.GetContainingNamespace()));
+                element => ToModel(element.GetContainingNamespace()),
+                type => throw new NotImplementedException()
+            );
 
             IEnumerable<CodeElementModel> GetSuperTypes(ITypeElement declaredType) =>
-                from type in declaredType.NotNull().GetSuperTypes()
-                let typeElement = type.GetTypeElement()
+                from typeElement in declaredType.NotNull().GetSuperTypeElements()
                 where typeElement != null
                 let child = ToModel(typeElement)
                 where child != null

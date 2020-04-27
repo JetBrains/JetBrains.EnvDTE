@@ -33,12 +33,11 @@ namespace JetBrains.EnvDTE.Host
             {
                 var protocol = new Protocol(Protocol, serializers, identities, scheduler, server, lifetime);
                 var model = new DteProtocolModel(lifetime, protocol);
-                RegisterCallbacks(lifetime, model, solution);
+                RegisterCallbacks(model, solution);
             });
         }
 
         private void RegisterCallbacks(
-            Lifetime lifetime,
             [NotNull] DteProtocolModel model,
             [NotNull] ISolution solution
         )
@@ -47,7 +46,7 @@ namespace JetBrains.EnvDTE.Host
             // This manager will be stored in closures of callbacks.
             // Since the entire protocol will be deleted on file execution end,
             // this shouldn't cause memory leaks
-            var astManager = new AstManager(lifetime);
+            var astManager = new AstManager();
             foreach (var provider in solution.GetComponents<IEnvDteCallbackProvider>())
             {
                 provider.RegisterCallbacks(astManager, solution, host, model);

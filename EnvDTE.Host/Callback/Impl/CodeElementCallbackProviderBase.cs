@@ -8,6 +8,7 @@ using JetBrains.ReSharper.Host.Features.ProjectModel.View;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
+using JetBrains.ReSharper.Psi.Util;
 using JetBrains.Rider.Model;
 using JetBrains.Util;
 
@@ -48,20 +49,23 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
         protected void MapWithAstManager<TRes>(
             [NotNull] IRdEndpoint<CodeElementModel, TRes> ep,
             [NotNull] Func<ITreeNode, TRes> psiMapper,
-            [NotNull] Func<IDeclaredElement, TRes> declaredElementMapper
-        ) => MapWithAstManager<ITreeNode, IDeclaredElement, TRes>(ep, psiMapper, declaredElementMapper);
+            [NotNull] Func<IDeclaredElement, TRes> declaredElementMapper,
+            [NotNull] Func<IType, TRes> typeMapper
+        ) => MapWithAstManager<ITreeNode, IDeclaredElement, TRes>(ep, psiMapper, declaredElementMapper, typeMapper);
 
         protected void MapWithAstManager<TNode, TElement, TRes>(
             [NotNull] IRdEndpoint<CodeElementModel, TRes> ep,
             [NotNull] Func<TNode, TRes> psiMapper,
-            [NotNull] Func<TElement, TRes> declaredElementMapper
+            [NotNull] Func<TElement, TRes> declaredElementMapper,
+            [NotNull] Func<IArrayType, TRes> typeMapper
         )
             where TNode : ITreeNode
             where TElement : IDeclaredElement =>
             ep.SetWithReadLock(codeElementModel => AstManager.MapElement(
                 codeElementModel.Id,
                 psiMapper,
-                declaredElementMapper
+                declaredElementMapper,
+                typeMapper
             ));
 
         // More type-safe and change-resistant and less error-prone than the usual switch
@@ -108,6 +112,15 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
 
             Logger.Warn("Failed to create a model for base class because it resides in multiple locations");
             return null;
+        }
+
+        [CanBeNull]
+        protected CodeElementModel ToModel([NotNull] IType type)
+        {
+            var element = type.GetTypeElement();
+            if (element != null) return ToModel(element);
+            int id = AstManager.GetOrCreateId((IArrayType) type);
+            return new CodeElementModel(PsiElementRegistrar.CLASS_DECLARATION_ID, id);
         }
     }
 }

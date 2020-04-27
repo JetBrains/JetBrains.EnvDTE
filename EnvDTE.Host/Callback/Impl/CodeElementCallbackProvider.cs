@@ -4,6 +4,7 @@ using JetBrains.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Host.Features.ProjectModel.View;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Impl;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.Rider.Model;
@@ -21,13 +22,19 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
             MapWithAstManager(
                 model.CodeElement_get_Children,
                 node => node.GetEnvDTEModelChildren().Select(CreateCodeElementModel).ToList(),
-                element => throw new NotImplementedException()
+                element => throw new NotImplementedException(),
+                type => throw new InvalidOperationException()
             );
-            MapWithAstManager(model.CodeElement_get_Access, GetAccessRights, GetAccessRights);
+            MapWithAstManager(
+                model.CodeElement_get_Access,
+                GetAccessRights,
+                GetAccessRights,
+                type => throw new NotImplementedException());
             MapWithAstManager(
                 model.CodeElement_get_Name,
                 ElementNameProvider.FindName,
-                element => element.ShortName
+                element => element.ShortName,
+                type => type.GetPresentableName(CSharpLanguage.Instance.NotNull())
             );
             MapWithAstManager(
                 model.CodeElement_get_FullName,
@@ -41,7 +48,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                     ns => ns.QualifiedName,
                     type => type.GetClrName().FullName,
                     function => $"{function.GetContainingType().NotNull().GetClrName().FullName}.{function.ShortName}"
-                )
+                ),
+                type => type.GetLongPresentableName(CSharpLanguage.Instance.NotNull())
             );
             MapWithAstManager(
                 model.CodeElement_get_ProjectItem,
@@ -51,7 +59,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                     var projectFile = sourceFile.ToProjectFile().NotNull();
                     return new ProjectItemModel(host.GetIdByItem(projectFile));
                 },
-                element => throw new NotImplementedException()
+                element => throw new NotImplementedException(),
+                type => throw new InvalidOperationException()
             );
             MapWithAstManager(
                 model.CodeElement_get_Parent,
@@ -63,10 +72,12 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                 },
                 element => Switch(
                     element,
-                     _ => null,
+                    _ => null,
                     type => ToModel(type.GetContainingNamespace()),
                     _ => null
-                ));
+                ),
+                type => throw new InvalidOperationException()
+            );
         }
 
         private static Access GetAccessRights(object node)
