@@ -32,6 +32,7 @@ The `EnvDTE.Client.dll` is the library that is supposed to be loaded into the us
 The `EnvDTE.Host.dll` is the library that has an architecture of a Rider plugin backend;
 when loaded into Rider backend runtime and initialized, it handles the the requests from the user code process
 and delegates them to the platform infrastructure.
+![](documentation/architecture.png)
 
 Build instructions:
 ----
