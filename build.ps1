@@ -1,4 +1,4 @@
-$packageVersion="0.1.1.2"
+$packageVersion="0.1.1.54"
 
 Push-Location -Path Protocol
 Try {
@@ -11,7 +11,7 @@ Finally {
     Pop-Location
 }
 
-dotnet build
+dotnet build -c Release
 $code = $LastExitCode
 if ($code -ne 0) { throw "Could not build solution" }
 $packages = @(
