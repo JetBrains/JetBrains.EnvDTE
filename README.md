@@ -4,10 +4,6 @@
 JetBrains.EnvDTE
 ====
 
-Note
-----
-This is still a work-in-progress project in its early stage.
-
 Why mock EnvDTE?
 ----
 *The problem*:  
@@ -18,6 +14,11 @@ Many projects use `EnvDTE` interfaces, which currently can only be accessed from
 This project creates an assembly that looks exactly like Visual Studio EnvDTE, but can be obtained inside JetBrains Rider.
 
 Instead of accessing COM, this DTE mock uses RD protocol to access project model info built by Rider
+
+Limitations
+----
+This is still a work-in-progress project in its early stage.
+Currently only read-only operations related to project model and abstract syntax trees are supported.
 
 Architecture
 ----
