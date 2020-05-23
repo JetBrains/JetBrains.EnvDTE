@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Common;
@@ -69,7 +70,18 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public CodeElements Collection => Children;
 
         [NotNull]
-        public CodeElements Members => Children;
+        public CodeElements Members => new CodeElementsOverList(
+            Implementation,
+            Children.Cast<CodeElement>().Where(it => !(it is CodeAttribute)).ToList(),
+            this
+        );
+
+        [NotNull]
+        public CodeElements Attributes => new CodeElementsOverList(
+            Implementation,
+            Children.Cast<CodeElement>().Where(it => it is CodeAttribute).ToList(),
+            this
+        );
 
         [NotNull]
         public ProjectItem ProjectItem => new ProjectItemImplementation(

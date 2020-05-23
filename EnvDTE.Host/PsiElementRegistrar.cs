@@ -29,6 +29,15 @@ namespace JetBrains.EnvDTE.Host
         }
 
         /// <summary>
+        /// Same as <see cref="RegisterType{TPsi,TDeclared}(int)"/>,
+        /// but for PSI nodes that have no corresponding declared elements.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <typeparam name="TPsi"></typeparam>
+        private static void RegisterType<TPsi>(int id) where TPsi : ITreeNode =>
+            KnownPsiTypes.Add((typeof(TPsi), id));
+
+        /// <summary>
         /// Elements that have not been registered are ignored by default.
         /// However, it is sometimes interesting to replace the entire element with its children.
         /// That is the case, for example, for namespaces and classes. The PSI structure of them is the following:
@@ -51,10 +60,14 @@ namespace JetBrains.EnvDTE.Host
             RegisterType<IInterfaceDeclaration, IInterface>(4);
             RegisterType<IFunctionDeclaration, IFunction>(5);
             RegisterType<IParameterDeclaration, IParameter>(6);
+            RegisterType<IAttribute>(7);
 
             ReplaceWithChildren<INamespaceBody>();
             ReplaceWithChildren<IClassBody>();
             ReplaceWithChildren<IFormalParameterList>();
+            ReplaceWithChildren<IAttributeSection>();
+            ReplaceWithChildren<IAttributeSectionList>();
+            ReplaceWithChildren<IAttributeList>();
         }
 
         public static int GetTypeId([NotNull] ITreeNode node)

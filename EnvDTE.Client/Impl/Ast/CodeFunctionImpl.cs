@@ -30,7 +30,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         );
 
         public bool IsGeneric => throw new NotImplementedException();
-        public CodeElements Attributes => throw new NotImplementedException();
 
         [NotNull]
         public CodeTypeRef Type

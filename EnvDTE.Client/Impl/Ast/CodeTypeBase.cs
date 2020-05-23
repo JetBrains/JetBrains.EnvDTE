@@ -31,7 +31,6 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
         public TextPoint EndPoint => throw new System.NotImplementedException();
         public object ExtenderNames => throw new System.NotImplementedException();
         public string ExtenderCATID => throw new System.NotImplementedException();
-        public CodeElements Attributes => throw new System.NotImplementedException();
 
         public string DocComment
         {
