@@ -27,7 +27,8 @@ which makes it possible to write a kind of adapter between EnvDTE API and ReShar
 
 Since EnvDTE in Rider has to conform to the original EnvDTE interfaces and is primarily required to be loaded into a process with user code,
 it has to be separated into three main parts: the `EnvDTE.Interfaces.dll` (the library that imitates the API of the original library),
-the `EnvDTE.Client.dll` (the library that contains implementation of those interfaces), and `EnvDTE.Host.dll` (the library )
+the `EnvDTE.Client.dll` (the library that contains implementation of those interfaces),
+and `EnvDTE.Host.dll` (the library that can retrieve necessary information from Rider backend)
 
 The `EnvDTE.Client.dll` is the library that is supposed to be loaded into the user code; it translates any call to EnvDTE API to synchronous RD calls.  
 The `EnvDTE.Host.dll` is the library that has an architecture of a Rider plugin backend;
