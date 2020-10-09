@@ -15,6 +15,9 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>
+    <PublicSign>true</PublicSign>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="_DTE.cs" />
@@ -403,6 +406,12 @@
     <Compile Include="_dispDocumentEvents_EventProvider.cs" />
     <Compile Include="_dispFindEvents_SinkHelper.cs" />
     <Compile Include="_dispFindEvents_EventProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\MSFT.snk">
+      <Link>MSFT.snk</Link>
+    </None>
+    <None Include="MSFT.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

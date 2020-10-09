@@ -15,6 +15,9 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>
+    <PublicSign>true</PublicSign>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands2.cs" />
@@ -159,6 +162,12 @@
       <Project>{949a7537-794b-47db-bf00-61a48a96003e}</Project>
       <Name>EnvDTE.Interfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\MSFT.snk">
+      <Link>MSFT.snk</Link>
+    </None>
+    <None Include="MSFT.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

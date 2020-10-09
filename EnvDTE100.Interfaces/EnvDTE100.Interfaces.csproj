@@ -15,6 +15,9 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>
+    <PublicSign>true</PublicSign>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="vsAddFromTemplateOptions.cs" />
@@ -42,6 +45,12 @@
       <Project>{79d375ec-ccca-4c47-b5e3-6a7d3d7cfb6b}</Project>
       <Name>EnvDTE90a.Interfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\MSFT.snk">
+      <Link>MSFT.snk</Link>
+    </None>
+    <None Include="MSFT.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
