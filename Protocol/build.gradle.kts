@@ -10,7 +10,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath("com.jetbrains.rd:rd-gen:0.201.57")
+    classpath("com.jetbrains.rd:rd-gen:0.203.148")
     classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.50")
     classpath("org.jetbrains.kotlin:kotlin-reflect:1.3")
   }
@@ -40,7 +40,7 @@ java {
   targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-val baseVersion = "2020.1"
+val baseVersion = "2020.3"
 version = baseVersion
 
 intellij {
