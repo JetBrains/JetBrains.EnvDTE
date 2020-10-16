@@ -1,4 +1,18 @@
-$packageVersion="0.1.1.54"
+$dotNetSdkUrl = "https://download.visualstudio.microsoft.com/download/pr/f090672d-ffb0-4126-8154-68649cc55ad4/a09964d24b1bf583ad2f283f84c0a89c/dotnet-sdk-3.1.109-win-x64.zip"
+
+$dotNetSdkPath = Join-Path $PSScriptRoot ".dotnet"
+$progressPreference = 'SilentlyContinue'
+
+if (!(Test-Path $dotNetSdkPath))
+{
+    $archivePath = Join-Path $Env:Temp "$(New-Guid).zip"
+    $tempFolderPath = Join-Path $Env:Temp $(New-Guid)
+    (New-Object System.Net.WebClient).DownloadFile($dotNetSdkUrl, $archivePath)
+    New-Item $tempFolderPath -ItemType Directory
+    Expand-Archive -Path $archivePath -DestinationPath $tempFolderPath
+    Move-Item $tempFolderPath $dotNetSdkPath
+    Remove-Item $archivePath
+}
 
 Push-Location -Path Protocol
 Try {
@@ -10,21 +24,11 @@ Try {
 Finally {
     Pop-Location
 }
+$packageVersion = "1.0.0-preview1"
+if ($Env:PackageVersion -ne "") {
+    $packageVersion = $Env:PackageVersion
+}
 
-dotnet build -c Release
+&"$dotNetSdkPath\dotnet.exe" pack -c Release
 $code = $LastExitCode
 if ($code -ne 0) { throw "Could not build solution" }
-$packages = @(
-  "JetBrains.EnvDTE.Client.nuspec",
-  "JetBrains.EnvDTE.Host.nuspec",
-  "JetBrains.EnvDTE.nuspec",
-  "JetBrains.EnvDTE80.nuspec",
-  "JetBrains.EnvDTE90.nuspec",
-  "JetBrains.EnvDTE90a.nuspec",
-  "JetBrains.EnvDTE100.nuspec")
-
-foreach ($package in $packages) {
-    nuget pack ".\NuGet\$package" -BasePath . -OutputDirectory .\artifacts -Properties packageVersion=$packageVersion
-    $code = $LastExitCode
-    if ($code -ne 0) { throw "Could not pack $package" }
-}
