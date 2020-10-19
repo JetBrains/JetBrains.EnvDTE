@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package>
+    <metadata>
+        <id>JetBrains.EnvDTE</id>
+        <version>$version$</version>
+        <title>JetBrains.EnvDTE</title>
+        <authors>JetBrains</authors>
+        <owners>JetBrains</owners>
+        <license type="expression">Apache-2.0</license>
+        <projectUrl>https://github.com/kirillgla/JetBrains.EnvDTE</projectUrl>
+        <icon>JetBrains.EnvDTE.png</icon>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>JetBrains implementation of EnvDTE</description>
+        <releaseNotes>Initial release</releaseNotes>
+        <copyright>Copyright © JetBrains 2020</copyright>
+        <tags>JetBrains Rider EnvDTE</tags>
+        <summary>JetBrains implementation of EnvDTE</summary>
+    </metadata>
+    <files>
+        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE.dll" target="lib\net461"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE.pdb" target="lib\net461"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE80.dll" target="lib\net461"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE80.pdb" target="lib\net461"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE90.dll" target="lib\net461"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE90.pdb" target="lib\net461"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE90a.dll" target="lib\net461"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE90a.pdb" target="lib\net461"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE100.dll" target="lib\net461"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE100.pdb" target="lib\net461"/>
+        <file src="Icons\JetBrains.EnvDTE.png" target=""/>
+    </files>
+</package>

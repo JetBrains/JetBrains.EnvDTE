@@ -4,7 +4,6 @@
         <AssemblyName>EnvDTE</AssemblyName>
         <ApplicationVersion>8.0.0.0</ApplicationVersion>
         <RootNamespace>EnvDTE</RootNamespace>
-        <OutputPath>..\output\</OutputPath>
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>
         <PublicSign>true</PublicSign>
