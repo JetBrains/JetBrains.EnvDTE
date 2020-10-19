@@ -29,6 +29,6 @@ if ($Env:PackageVersion -ne "") {
     $packageVersion = $Env:PackageVersion
 }
 
-&"$dotNetSdkPath\dotnet.exe" pack -c Release
+&"$dotNetSdkPath\dotnet.exe" pack /p:Configuration=Release "$PSScriptRoot\EnvDTE100.Interfaces\EnvDTE100.Interfaces.csproj"
 $code = $LastExitCode
 if ($code -ne 0) { throw "Could not build solution" }
