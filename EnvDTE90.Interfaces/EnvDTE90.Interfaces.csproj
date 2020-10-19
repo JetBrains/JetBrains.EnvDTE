@@ -1,59 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="Current">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A33A50A9-7E04-410F-B749-3958FF46AC5A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <LangVersion>latest</LangVersion>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net461</TargetFramework>
     <AssemblyName>EnvDTE90</AssemblyName>
     <ApplicationVersion>9.0.0.0</ApplicationVersion>
     <RootNamespace>EnvDTE90</RootNamespace>
     <OutputPath>..\output\</OutputPath>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>2.0</OldToolsVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>
     <PublicSign>true</PublicSign>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ToolBoxTab3.cs" />
-    <Compile Include="vsHTMLViews.cs" />
-    <Compile Include="vsHTMLPanes.cs" />
-    <Compile Include="vsHTMLBackgroundTasks.cs" />
-    <Compile Include="HTMLWindow3.cs" />
-    <Compile Include="Debugger3.cs" />
-    <Compile Include="ExceptionGroups.cs" />
-    <Compile Include="ExceptionSettings.cs" />
-    <Compile Include="ExceptionSetting.cs" />
-    <Compile Include="Thread2.cs" />
-    <Compile Include="enum_THREADCATEGORY.cs" />
-    <Compile Include="Process3.cs" />
-    <Compile Include="Modules.cs" />
-    <Compile Include="Module.cs" />
-    <Compile Include="Template.cs" />
-    <Compile Include="Templates.cs" />
-    <Compile Include="Solution3.cs" />
-    <Compile Include="AssemblyInfo.cs" />
+    <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj" />
+    <ProjectReference Include="..\EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj">
-      <Project>{949a7537-794b-47db-bf00-61a48a96003e}</Project>
-      <Name>EnvDTE.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj">
-      <Project>{65da4be3-6a1e-4c57-8942-6a2b70bf4bc6}</Project>
-      <Name>EnvDTE80.Interfaces</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\MSFT.snk">
-      <Link>MSFT.snk</Link>
-    </None>
-    <None Include="MSFT.snk" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

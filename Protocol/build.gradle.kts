@@ -1,4 +1,4 @@
-import com.jetbrains.rd.generator.gradle.RdgenParams
+import com.jetbrains.rd.generator.gradle.RdGenExtension
 import org.jetbrains.kotlin.daemon.common.toHexString
 
 // Some build script code borrowed from F# and T4 plugins
@@ -6,18 +6,17 @@ import org.jetbrains.kotlin.daemon.common.toHexString
 buildscript {
   repositories {
     maven { setUrl("https://cache-redirector.jetbrains.com/www.myget.org/F/rd-snapshots/maven") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/dl.bintray.com/kotlin/kotlin-eap") }
     mavenCentral()
   }
   dependencies {
-    classpath("com.jetbrains.rd:rd-gen:0.203.148")
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.50")
-    classpath("org.jetbrains.kotlin:kotlin-reflect:1.3")
+    classpath("com.jetbrains.rd:rd-gen:0.203.161")
   }
 }
 
 plugins {
-  id("org.jetbrains.intellij") version "0.4.9"
+  id("org.jetbrains.intellij") version "0.4.26"
+  kotlin("jvm") version "1.4.10"
+  id("me.filippov.gradle.jvm.wrapper") version "0.9.3"
 }
 
 apply {
@@ -27,7 +26,6 @@ apply {
 
 repositories {
   mavenCentral()
-  maven { setUrl("https://cache-redirector.jetbrains.com/dl.bintray.com/kotlin/kotlin-eap") }
 }
 
 dependencies {
@@ -55,7 +53,7 @@ intellij {
 
 val repoRoot = projectDir.parentFile!!
 
-configure<RdgenParams> {
+configure<RdGenExtension> {
   val hostOutput = File(repoRoot, "EnvDTE.Host/Protocol")
   val clientOutput = File(repoRoot, "EnvDTE.Client/Protocol")
 
