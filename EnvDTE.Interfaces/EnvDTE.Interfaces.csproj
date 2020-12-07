@@ -10,6 +10,6 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="$(SolutionDir)EnvDtePostProcessor.exe $(TargetPath)" />
+      <Exec Command="$(MSBuildThisFileDirectory)../EnvDtePostProcessor.exe $(TargetPath)" />
     </Target>
 </Project>
