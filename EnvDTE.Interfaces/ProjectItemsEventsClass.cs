@@ -2,9 +2,9 @@
 {
     public class ProjectItemsEventsClass : _ProjectItemsEvents, ProjectItemsEvents, _dispProjectItemsEvents_Event
     {
-        public extern ProjectItemsEventsClass();
-        public virtual extern event _dispProjectItemsEvents_ItemAddedEventHandler ItemAdded;
-        public virtual extern event _dispProjectItemsEvents_ItemRemovedEventHandler ItemRemoved;
-        public virtual extern event _dispProjectItemsEvents_ItemRenamedEventHandler ItemRenamed;
+        public ProjectItemsEventsClass(){ }
+        public virtual event _dispProjectItemsEvents_ItemAddedEventHandler ItemAdded;
+        public virtual event _dispProjectItemsEvents_ItemRemovedEventHandler ItemRemoved;
+        public virtual event _dispProjectItemsEvents_ItemRenamedEventHandler ItemRenamed;
     }
 }
