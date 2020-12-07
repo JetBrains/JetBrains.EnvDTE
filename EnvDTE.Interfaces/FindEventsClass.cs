@@ -2,7 +2,7 @@
 {
     public class FindEventsClass : _FindEvents, FindEvents, _dispFindEvents_Event
     {
-        public extern FindEventsClass();
-        public virtual extern event _dispFindEvents_FindDoneEventHandler FindDone;
+        public FindEventsClass(){ }
+        public virtual event _dispFindEvents_FindDoneEventHandler FindDone;
     }
 }

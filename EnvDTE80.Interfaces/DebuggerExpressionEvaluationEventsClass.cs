@@ -3,9 +3,9 @@
     public class DebuggerExpressionEvaluationEventsClass : _DebuggerExpressionEvaluationEvents,
         DebuggerExpressionEvaluationEvents, _dispDebuggerExpressionEvaluationEvents_Event
     {
-        public extern DebuggerExpressionEvaluationEventsClass();
+        public DebuggerExpressionEvaluationEventsClass(){ }
 
-        public virtual extern event _dispDebuggerExpressionEvaluationEvents_OnExpressionEvaluationEventHandler
+        public virtual event _dispDebuggerExpressionEvaluationEvents_OnExpressionEvaluationEventHandler
             OnExpressionEvaluation;
     }
 }
