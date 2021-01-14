@@ -1,0 +1,10 @@
+﻿namespace Microsoft.VisualStudio.Shell.Interop
+{
+    public enum VSErrorCodes80
+    {
+        VS_E_MIGRATIONREQUIRESRELOAD = -2147213338,
+        VS_E_SYNCHRONOUSOPENREQUIRED = -2147213337,
+        VS_E_VSSETTINGS_INVALIDVERSION = -2147213336,
+        VS_E_DOCUMENTOPENNOTTRUSTED = -2147213335
+    }
+}

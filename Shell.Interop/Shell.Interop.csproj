@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net461</TargetFramework>
+        <AssemblyName>Microsoft.VisualStudio.Shell.Interop.8.0</AssemblyName>
+        <ApplicationVersion>8.0.0.0</ApplicationVersion>
+        <RootNamespace>Microsoft.VisualStudio</RootNamespace>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>
+        <PublicSign>true</PublicSign>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+</Project>
