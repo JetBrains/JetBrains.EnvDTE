@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<package>
+    <metadata>
+        <id>JetBrains.DesignerInterop</id>
+        <version>$version$</version>
+        <title>JetBrains.DesignerInterop</title>
+        <authors>JetBrains</authors>
+        <owners>JetBrains</owners>
+        <license type="expression">Apache-2.0</license>
+        <projectUrl>https://github.com/kirillgla/JetBrains.EnvDTE</projectUrl>
+        <icon>JetBrains.EnvDTE.png</icon>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>JetBrains interop for designer</description>
+        <releaseNotes>Initial release</releaseNotes>
+        <copyright>Copyright © JetBrains 2021</copyright>
+        <tags>JetBrains Rider DesignerInterop</tags>
+        <summary>JetBrains interop for designer</summary>
+    </metadata>
+    <files>
+        <file src="Shell.Interop\bin\Release\net461\Microsoft.VisualStudio.Shell.Interop.8.0.dll" target="lib\net461"/>
+        <file src="Designer.Interfaces\bin\Release\net461\Microsoft.VisualStudio.Designer.Interfaces.dll" target="lib\net461"/>
+        <file src="Icons\JetBrains.EnvDTE.png" target=""/>
+    </files>
+</package>

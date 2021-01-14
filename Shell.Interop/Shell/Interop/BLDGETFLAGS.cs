@@ -1,0 +1,11 @@
+﻿namespace Microsoft.VisualStudio.Shell.Interop
+{
+    public enum BLDGETFLAGS
+    {
+        BLDGETOPT_FAUTOMAPGUID = 1,
+        BLDGETOPT_FAUTOMAPENABLEPROMPT = 2,
+        BLDGETOPT_FAUTOMAPPROMPTALWAYS = 4,
+        BLDGETOPT_FOBJECTBUILDER = 8,
+        BLDGETOPT_FNOINTRINSICS = -2147483648
+    }
+}
