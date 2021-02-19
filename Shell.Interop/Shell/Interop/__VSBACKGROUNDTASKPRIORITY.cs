@@ -1,0 +1,12 @@
+﻿namespace Microsoft.VisualStudio.Shell.Interop
+{
+    public enum __VSBACKGROUNDTASKPRIORITY
+    {
+
+        VSBACKGROUNDTASKPRIORITY_STANDARD,
+
+        VSBACKGROUNDTASKPRIORITY_IMMEDIATE,
+
+        VSBACKGROUNDTASKPRIORITY_OTHER,
+    }
+}

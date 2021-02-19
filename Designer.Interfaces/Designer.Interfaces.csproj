@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net461</TargetFramework>
+        <AssemblyName>Microsoft.VisualStudio.Designer.Interfaces</AssemblyName>
+        <ApplicationVersion>1.0.5000.0</ApplicationVersion>
+        <RootNamespace>Microsoft.VisualStudio.Designer.Interfaces</RootNamespace>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>
+        <PublicSign>true</PublicSign>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+    <PropertyGroup Label="NuGet">
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageId>JetBrains.DesignerInterop</PackageId>
+        <PackageProjectUrl>https://github.com/JetBrains/JetBrains.EnvDTE</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/JetBrains/JetBrains.EnvDTE</RepositoryUrl>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <RepositoryType>git</RepositoryType>
+        <Authors>JetBrains</Authors>
+        <Copyright>Copyright © JetBrains 2020</Copyright>
+        <PackageTags>JetBrains Rider EnvDTE</PackageTags>
+        <Description>JetBrains interop for designer</Description>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <PackageIcon>JetBrains.EnvDTE.png</PackageIcon>
+        <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    </PropertyGroup>
+</Project>
