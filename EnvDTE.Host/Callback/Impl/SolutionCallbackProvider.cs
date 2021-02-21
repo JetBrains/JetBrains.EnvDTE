@@ -22,8 +22,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
             model.Solution_Item.SetWithReadLock(index =>
             {
                 var projects = solution.GetAllProjects();
-                if (projects.Count >= index) return new Rider.Model.ProjectModel(-1);
-                var project = projects.ElementAt(index + 1);
+                if (projects.Count < index) return new Rider.Model.ProjectModel(-1);
+                var project = projects.ElementAt(index - 1);
                 int id = host.GetIdByItem(project);
                 return new Rider.Model.ProjectModel(id);
             });
