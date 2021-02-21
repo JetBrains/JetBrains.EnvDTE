@@ -17,9 +17,10 @@ bin
 # Ignore generated protocol files
 **.Generated.cs
 
-# Ignore path to Rider SDK
+# Ignore path to Rider SDK and dotnet SDK
 /NuGet.Config
 /RiderSdkPackageVersion.props
+/.dotnet
 
 # Ignore NuGet packages
 *.nupkg
