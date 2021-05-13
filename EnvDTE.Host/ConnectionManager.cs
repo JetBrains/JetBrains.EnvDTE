@@ -7,12 +7,13 @@ using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.Rd;
 using JetBrains.Rd.Impl;
-using JetBrains.ReSharper.Host.Features.ProjectModel.View;
+using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Host
 {
     [PublicAPI]
+
     public sealed class ConnectionManager
     {
         private const string Host = "T4 Communication Host";
