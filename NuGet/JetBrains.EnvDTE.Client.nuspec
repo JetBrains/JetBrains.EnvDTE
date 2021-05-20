@@ -23,8 +23,8 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="output\net461\JetBrains.EnvDTE.Client.dll" target="lib\net461"/>
-        <file src="output\net461\JetBrains.EnvDTE.Client.pdb" target="lib\net461"/>
+        <file src="output\net472\JetBrains.EnvDTE.Client.dll" target="lib\net472"/>
+        <file src="output\net472\JetBrains.EnvDTE.Client.pdb" target="lib\net472"/>
         <file src="Icons\JetBrains.EnvDTE.png" target=""/>
     </files>
 </package>

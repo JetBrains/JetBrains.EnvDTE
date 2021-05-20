@@ -1,5 +1,5 @@
     <files>
-        <file src="output<#= "\\" #><#= NamePrefix #>EnvDTE<#= NameSuffix #>.dll" target="lib\net461"/>
-        <file src="output<#= "\\" #><#= NamePrefix #>EnvDTE<#= NameSuffix #>.pdb" target="lib\net461"/>
+        <file src="output<#= "\\" #><#= NamePrefix #>EnvDTE<#= NameSuffix #>.dll" target="lib\net472"/>
+        <file src="output<#= "\\" #><#= NamePrefix #>EnvDTE<#= NameSuffix #>.pdb" target="lib\net472"/>
         <file src="Icons\JetBrains.EnvDTE.png" target=""/>
     </files>
