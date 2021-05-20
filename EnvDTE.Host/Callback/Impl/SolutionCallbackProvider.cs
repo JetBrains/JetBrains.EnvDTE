@@ -1,7 +1,7 @@
 using System.Linq;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
-using JetBrains.ReSharper.Host.Features.ProjectModel.View;
+using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.Rider.Model;
 using JetBrains.Util;
 
