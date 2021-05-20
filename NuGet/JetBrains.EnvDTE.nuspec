@@ -17,8 +17,8 @@
         <summary>JetBrains implementation of EnvDTE</summary>
     </metadata>
     <files>
-        <file src="output\EnvDTE.dll" target="lib\net461"/>
-        <file src="output\EnvDTE.pdb" target="lib\net461"/>
+        <file src="output\EnvDTE.dll" target="lib\net472"/>
+        <file src="output\EnvDTE.pdb" target="lib\net472"/>
         <file src="Icons\JetBrains.EnvDTE.png" target=""/>
     </files>
 </package>

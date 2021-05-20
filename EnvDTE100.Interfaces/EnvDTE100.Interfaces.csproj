@@ -33,10 +33,10 @@
         <ProjectReference Include="..\EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj"/>
         <ProjectReference Include="..\EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj"/>
         <None Include="..\Icons\JetBrains.EnvDTE.png" Pack="true" PackagePath=""/>
-        <None Include="$(OutputPath)\EnvDTE.dll" Pack="true" PackagePath="lib\net461" />
-        <None Include="$(OutputPath)\EnvDTE80.dll" Pack="true" PackagePath="lib\net461" />
-        <None Include="$(OutputPath)\EnvDTE90.dll" Pack="true" PackagePath="lib\net461" />
-        <None Include="$(OutputPath)\EnvDTE90a.dll" Pack="true" PackagePath="lib\net461" />
+        <None Include="$(OutputPath)\EnvDTE.dll" Pack="true" PackagePath="lib\net472" />
+        <None Include="$(OutputPath)\EnvDTE80.dll" Pack="true" PackagePath="lib\net472" />
+        <None Include="$(OutputPath)\EnvDTE90.dll" Pack="true" PackagePath="lib\net472" />
+        <None Include="$(OutputPath)\EnvDTE90a.dll" Pack="true" PackagePath="lib\net472" />
     </ItemGroup>
     <Target Name="AddMorePdbs" AfterTargets="_WalkEachTargetPerFramework">
         <PropertyGroup>

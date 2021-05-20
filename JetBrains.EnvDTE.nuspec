@@ -17,16 +17,16 @@
         <summary>JetBrains implementation of EnvDTE</summary>
     </metadata>
     <files>
-        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE.dll" target="lib\net461"/>
-        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE.pdb" target="lib\net461"/>
-        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE80.dll" target="lib\net461"/>
-        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE80.pdb" target="lib\net461"/>
-        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE90.dll" target="lib\net461"/>
-        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE90.pdb" target="lib\net461"/>
-        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE90a.dll" target="lib\net461"/>
-        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE90a.pdb" target="lib\net461"/>
-        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE100.dll" target="lib\net461"/>
-        <file src="EnvDTE100.Interfaces\bin\Release\net461\EnvDTE100.pdb" target="lib\net461"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net472\EnvDTE.dll" target="lib\net472"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net472\EnvDTE.pdb" target="lib\net472"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net472\EnvDTE80.dll" target="lib\net472"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net472\EnvDTE80.pdb" target="lib\net472"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net472\EnvDTE90.dll" target="lib\net472"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net472\EnvDTE90.pdb" target="lib\net472"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net472\EnvDTE90a.dll" target="lib\net472"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net472\EnvDTE90a.pdb" target="lib\net472"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net472\EnvDTE100.dll" target="lib\net472"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\net472\EnvDTE100.pdb" target="lib\net472"/>
         <file src="Icons\JetBrains.EnvDTE.png" target=""/>
     </files>
 </package>
