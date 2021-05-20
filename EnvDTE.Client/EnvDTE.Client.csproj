@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net461</TargetFramework>
+        <TargetFramework>net472</TargetFramework>
         <LangVersion>latest</LangVersion>
         <AssemblyName>JetBrains.EnvDTE.Client</AssemblyName>
         <RootNamespace>JetBrains.EnvDTE.Client</RootNamespace>
@@ -14,5 +14,5 @@
         <ProjectReference Include="..\EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj" />
         <ProjectReference Include="..\EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj" />
     </ItemGroup>
-    <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props')" />
+    <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Rider_Rider.Backend.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Rider_Rider.Backend.Props')" />
 </Project>

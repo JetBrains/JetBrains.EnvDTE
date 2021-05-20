@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net461</TargetFramework>
+        <TargetFramework>net472</TargetFramework>
         <AssemblyName>EnvDTE</AssemblyName>
         <ApplicationVersion>8.0.0.0</ApplicationVersion>
         <AssemblyVersion>8.0.0.0</AssemblyVersion>

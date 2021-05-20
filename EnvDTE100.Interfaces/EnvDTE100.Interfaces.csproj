@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net461</TargetFramework>
+        <TargetFramework>net472</TargetFramework>
         <AssemblyName>EnvDTE100</AssemblyName>
         <ApplicationVersion>10.0.0.0</ApplicationVersion>
         <RootNamespace>EnvDTE100</RootNamespace>
@@ -48,7 +48,7 @@
                 <MSBuildSourceProjectFile>$(BaseDir)EnvDTE.Interfaces\EnvDTE.Interfaces.csproj</MSBuildSourceProjectFile>
                 <MSBuildSourceTargetName>AddMorePdbs</MSBuildSourceTargetName>
                 <OriginalItemSpec>$(BaseDir)EnvDTE.Interfaces\EnvDTE.Interfaces.csproj</OriginalItemSpec>
-                <TargetFramework>net461</TargetFramework>
+                <TargetFramework>net472</TargetFramework>
                 <TargetPath>EnvDTE.pdb</TargetPath>
             </_TargetPathsToSymbols>
             <_TargetPathsToSymbols Include="$(MSBuildThisFileDirectory)$(OutputPath)EnvDTE80.pdb">
@@ -56,7 +56,7 @@
                 <MSBuildSourceProjectFile>$(BaseDir)EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj</MSBuildSourceProjectFile>
                 <MSBuildSourceTargetName>AddMorePdbs</MSBuildSourceTargetName>
                 <OriginalItemSpec>$(BaseDir)EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj</OriginalItemSpec>
-                <TargetFramework>net461</TargetFramework>
+                <TargetFramework>net472</TargetFramework>
                 <TargetPath>EnvDTE80.pdb</TargetPath>
             </_TargetPathsToSymbols>
             <_TargetPathsToSymbols Include="$(MSBuildThisFileDirectory)$(OutputPath)EnvDTE90.pdb">
@@ -64,7 +64,7 @@
                 <MSBuildSourceProjectFile>$(BaseDir)EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj</MSBuildSourceProjectFile>
                 <MSBuildSourceTargetName>AddMorePdbs</MSBuildSourceTargetName>
                 <OriginalItemSpec>$(BaseDir)EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj</OriginalItemSpec>
-                <TargetFramework>net461</TargetFramework>
+                <TargetFramework>net472</TargetFramework>
                 <TargetPath>EnvDTE90.pdb</TargetPath>
             </_TargetPathsToSymbols>
             <_TargetPathsToSymbols Include="$(MSBuildThisFileDirectory)$(OutputPath)EnvDTE90a.pdb">
@@ -72,7 +72,7 @@
                 <MSBuildSourceProjectFile>$(BaseDir)EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj</MSBuildSourceProjectFile>
                 <MSBuildSourceTargetName>AddMorePdbs</MSBuildSourceTargetName>
                 <OriginalItemSpec>$(BaseDir)EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj</OriginalItemSpec>
-                <TargetFramework>net461</TargetFramework>
+                <TargetFramework>net472</TargetFramework>
                 <TargetPath>EnvDTE90a.pdb</TargetPath>
             </_TargetPathsToSymbols>
         </ItemGroup>
