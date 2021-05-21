@@ -4,7 +4,6 @@
         <LangVersion>latest</LangVersion>
         <AssemblyName>JetBrains.EnvDTE.Host</AssemblyName>
         <RootNamespace>JetBrains.EnvDTE.Host</RootNamespace>
-        <OutputPath>..\output\</OutputPath>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
     <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props')" />
