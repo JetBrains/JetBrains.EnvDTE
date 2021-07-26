@@ -38,7 +38,7 @@ java {
   targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-val baseVersion = "2021.2"
+val baseVersion = "2021.3"
 version = baseVersion
 
 intellij {
