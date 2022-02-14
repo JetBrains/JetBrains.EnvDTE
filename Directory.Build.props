@@ -1,6 +1,6 @@
 ﻿<Project>
     <ItemGroup>
-        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net472" Version="1.0.0"/>
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net472" Version="1.0.2"/>
     </ItemGroup>
     <Import Project="$(MSBuildThisFileDirectory)Protocol\build\DotNetSdkPath.generated.props"/>
 </Project>
