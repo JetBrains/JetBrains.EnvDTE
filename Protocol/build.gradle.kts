@@ -5,11 +5,11 @@ import org.jetbrains.kotlin.daemon.common.toHexString
 
 buildscript {
   repositories {
-    maven { setUrl("https://cache-redirector.jetbrains.com/www.myget.org/F/rd-snapshots/maven") }
-    mavenCentral()
+    maven { setUrl("https://cache-redirector.jetbrains.com/maven-central") }
   }
   dependencies {
-    classpath("com.jetbrains.rd:rd-gen:0.203.161")
+    // https://search.maven.org/artifact/com.jetbrains.rd/rd-gen
+    classpath("com.jetbrains.rd:rd-gen:2022.1.3")
   }
 }
 
@@ -38,7 +38,7 @@ java {
   targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-val baseVersion = "2021.3"
+val baseVersion = "2022.1"
 version = baseVersion
 
 intellij {
