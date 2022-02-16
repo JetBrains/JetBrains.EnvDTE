@@ -5,6 +5,8 @@
         <AssemblyName>JetBrains.EnvDTE.Host</AssemblyName>
         <RootNamespace>JetBrains.EnvDTE.Host</RootNamespace>
         <IsPackable>false</IsPackable>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\Subplatform.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
     <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props')" />
     <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Rider_Rider.Backend.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Rider_Rider.Backend.Props')" />
