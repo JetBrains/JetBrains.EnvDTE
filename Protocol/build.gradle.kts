@@ -14,7 +14,7 @@ buildscript {
 }
 
 plugins {
-  id("org.jetbrains.intellij") version "0.4.26"
+  id("org.jetbrains.intellij") version "1.4.0"
   kotlin("jvm") version "1.4.10"
   id("me.filippov.gradle.jvm.wrapper") version "0.9.3"
 }
@@ -42,13 +42,13 @@ val baseVersion = "2022.1"
 version = baseVersion
 
 intellij {
-  type = "RD"
-  version = "$baseVersion-SNAPSHOT"
-  instrumentCode = false
-  downloadSources = false
-  updateSinceUntilBuild = false
+  type.set("RD")
+  version.set("$baseVersion-SNAPSHOT")
+  instrumentCode.set(false)
+  downloadSources.set(false)
+  updateSinceUntilBuild.set(false)
   // Workaround for https://youtrack.jetbrains.com/issue/IDEA-179607
-  setPlugins("rider-plugins-appender")
+  plugins.set(listOf("rider-plugins-appender"))
 }
 
 val repoRoot = projectDir.parentFile!!
@@ -60,7 +60,7 @@ configure<RdGenExtension> {
   verbose = true
   hashFolder = "build/rdgen"
   classpath({
-    val sdkPath = intellij.ideaDependency.classes
+    val sdkPath = tasks.setupDependencies.get().idea.get().classes
     val rdLibDirectory = File(sdkPath, "lib/rd").canonicalFile
     "$rdLibDirectory/rider-model.jar"
   })
@@ -85,7 +85,7 @@ configure<RdGenExtension> {
 }
 
 val dotNetSdkPath by lazy {
-  val sdkPath = intellij.ideaDependency.classes.resolve("lib").resolve("DotNetSdkForRdPlugins")
+  val sdkPath = tasks.setupDependencies.get().idea.get().classes.resolve("lib").resolve("DotNetSdkForRdPlugins")
   if (sdkPath.isDirectory.not()) error("$sdkPath does not exist or not a directory")
 
   println("SDK path: $sdkPath")
