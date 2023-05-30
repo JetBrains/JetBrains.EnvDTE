@@ -5,22 +5,22 @@ import org.jetbrains.kotlin.daemon.common.toHexString
 
 buildscript {
   repositories {
+    maven { setUrl("https://packages.jetbrains.team/maven/p/ij/intellij-dependencies") }
     maven { setUrl("https://cache-redirector.jetbrains.com/maven-central") }
   }
   dependencies {
     // https://search.maven.org/artifact/com.jetbrains.rd/rd-gen
-    classpath("com.jetbrains.rd:rd-gen:2022.1.3")
+    classpath("com.jetbrains.rd:rd-gen:2023.2.2-preview1")
   }
 }
 
 plugins {
-  id("org.jetbrains.intellij") version "1.4.0"
-  kotlin("jvm") version "1.4.10"
+  id("org.jetbrains.intellij") version "1.13.3"
+  id("org.jetbrains.kotlin.jvm") version "1.8.10"
   id("me.filippov.gradle.jvm.wrapper") version "0.14.0"
 }
 
 apply {
-  plugin("kotlin")
   plugin("com.jetbrains.rdgen")
 }
 
@@ -38,7 +38,7 @@ java {
   targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-val baseVersion = "2022.1"
+val baseVersion = "2023.2"
 version = baseVersion
 
 intellij {
