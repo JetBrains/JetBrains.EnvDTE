@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net472</TargetFramework>
+        <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
         <AssemblyName>EnvDTE</AssemblyName>
         <ApplicationVersion>8.0.0.0</ApplicationVersion>
         <AssemblyVersion>8.0.0.0</AssemblyVersion>

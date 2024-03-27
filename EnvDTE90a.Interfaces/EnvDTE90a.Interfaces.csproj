@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net472</TargetFramework>
-    <AssemblyName>EnvDTE90a</AssemblyName>
-    <ApplicationVersion>9.0.0.0</ApplicationVersion>
-    <RootNamespace>EnvDTE90a</RootNamespace>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>
-    <PublicSign>true</PublicSign>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj" />
-    <ProjectReference Include="..\EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj" />
-    <ProjectReference Include="..\EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj" />
-  </ItemGroup>
+        <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
+        <AssemblyName>EnvDTE90a</AssemblyName>
+        <ApplicationVersion>9.0.0.0</ApplicationVersion>
+        <RootNamespace>EnvDTE90a</RootNamespace>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>
+        <PublicSign>true</PublicSign>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj"/>
+        <ProjectReference Include="..\EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj"/>
+        <ProjectReference Include="..\EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj"/>
+    </ItemGroup>
 </Project>

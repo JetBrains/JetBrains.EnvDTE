@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net472</TargetFramework>
+        <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
         <AssemblyName>EnvDTE100</AssemblyName>
         <ApplicationVersion>10.0.0.0</ApplicationVersion>
         <RootNamespace>EnvDTE100</RootNamespace>
@@ -33,48 +33,22 @@
         <ProjectReference Include="..\EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj"/>
         <ProjectReference Include="..\EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj"/>
         <None Include="..\Icons\JetBrains.EnvDTE.png" Pack="true" PackagePath=""/>
-        <None Include="$(OutputPath)\EnvDTE.dll" Pack="true" PackagePath="lib\net472" />
-        <None Include="$(OutputPath)\EnvDTE80.dll" Pack="true" PackagePath="lib\net472" />
-        <None Include="$(OutputPath)\EnvDTE90.dll" Pack="true" PackagePath="lib\net472" />
-        <None Include="$(OutputPath)\EnvDTE90a.dll" Pack="true" PackagePath="lib\net472" />
+        <TfmSpecificPackageFile Include="$(OutputPath)\EnvDTE.dll" Pack="true" PackagePath="lib\$(TargetFramework)" />
+        <TfmSpecificPackageFile Include="$(OutputPath)\EnvDTE80.dll" Pack="true" PackagePath="lib\$(TargetFramework)" />
+        <TfmSpecificPackageFile Include="$(OutputPath)\EnvDTE90.dll" Pack="true" PackagePath="lib\$(TargetFramework)" />
+        <TfmSpecificPackageFile Include="$(OutputPath)\EnvDTE90a.dll" Pack="true" PackagePath="lib\$(TargetFramework)" />
     </ItemGroup>
+
+    <PropertyGroup>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);AddMorePdbs</TargetsForTfmSpecificBuildOutput>
+    </PropertyGroup>
+
     <Target Name="AddMorePdbs" AfterTargets="_WalkEachTargetPerFramework">
-        <PropertyGroup>
-            <BaseDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</BaseDir>
-        </PropertyGroup>
         <ItemGroup>
-            <_TargetPathsToSymbols Include="$(MSBuildThisFileDirectory)$(OutputPath)EnvDTE.pdb">
-                <FinalOutputPath>$(MSBuildThisFileDirectory)$(OutputPath)EnvDTE.pdb</FinalOutputPath>
-                <MSBuildSourceProjectFile>$(BaseDir)EnvDTE.Interfaces\EnvDTE.Interfaces.csproj</MSBuildSourceProjectFile>
-                <MSBuildSourceTargetName>AddMorePdbs</MSBuildSourceTargetName>
-                <OriginalItemSpec>$(BaseDir)EnvDTE.Interfaces\EnvDTE.Interfaces.csproj</OriginalItemSpec>
-                <TargetFramework>net472</TargetFramework>
-                <TargetPath>EnvDTE.pdb</TargetPath>
-            </_TargetPathsToSymbols>
-            <_TargetPathsToSymbols Include="$(MSBuildThisFileDirectory)$(OutputPath)EnvDTE80.pdb">
-                <FinalOutputPath>$(MSBuildThisFileDirectory)$(OutputPath)EnvDTE80.pdb</FinalOutputPath>
-                <MSBuildSourceProjectFile>$(BaseDir)EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj</MSBuildSourceProjectFile>
-                <MSBuildSourceTargetName>AddMorePdbs</MSBuildSourceTargetName>
-                <OriginalItemSpec>$(BaseDir)EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj</OriginalItemSpec>
-                <TargetFramework>net472</TargetFramework>
-                <TargetPath>EnvDTE80.pdb</TargetPath>
-            </_TargetPathsToSymbols>
-            <_TargetPathsToSymbols Include="$(MSBuildThisFileDirectory)$(OutputPath)EnvDTE90.pdb">
-                <FinalOutputPath>$(MSBuildThisFileDirectory)$(OutputPath)EnvDTE90.pdb</FinalOutputPath>
-                <MSBuildSourceProjectFile>$(BaseDir)EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj</MSBuildSourceProjectFile>
-                <MSBuildSourceTargetName>AddMorePdbs</MSBuildSourceTargetName>
-                <OriginalItemSpec>$(BaseDir)EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj</OriginalItemSpec>
-                <TargetFramework>net472</TargetFramework>
-                <TargetPath>EnvDTE90.pdb</TargetPath>
-            </_TargetPathsToSymbols>
-            <_TargetPathsToSymbols Include="$(MSBuildThisFileDirectory)$(OutputPath)EnvDTE90a.pdb">
-                <FinalOutputPath>$(MSBuildThisFileDirectory)$(OutputPath)EnvDTE90a.pdb</FinalOutputPath>
-                <MSBuildSourceProjectFile>$(BaseDir)EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj</MSBuildSourceProjectFile>
-                <MSBuildSourceTargetName>AddMorePdbs</MSBuildSourceTargetName>
-                <OriginalItemSpec>$(BaseDir)EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj</OriginalItemSpec>
-                <TargetFramework>net472</TargetFramework>
-                <TargetPath>EnvDTE90a.pdb</TargetPath>
-            </_TargetPathsToSymbols>
+            <BuildOutputInPackage Include="$(OutputPath)EnvDTE.pdb"/>
+            <BuildOutputInPackage Include="$(OutputPath)EnvDTE80.pdb"/>
+            <BuildOutputInPackage Include="$(OutputPath)EnvDTE90.pdb"/>
+            <BuildOutputInPackage Include="$(OutputPath)EnvDTE90a.pdb"/>
         </ItemGroup>
     </Target>
 </Project>
