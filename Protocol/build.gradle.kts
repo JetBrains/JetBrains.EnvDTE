@@ -10,7 +10,7 @@ buildscript {
   }
   dependencies {
     // https://search.maven.org/artifact/com.jetbrains.rd/rd-gen
-    classpath("com.jetbrains.rd:rd-gen:2023.2.2-preview1")
+    classpath("com.jetbrains.rd:rd-gen:2025.2.2")
   }
 }
 
@@ -38,12 +38,12 @@ java {
   targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-val baseVersion = "2023.2"
+val baseVersion = "2025.1.4"
 version = baseVersion
 
 intellij {
   type.set("RD")
-  version.set("$baseVersion-SNAPSHOT")
+  version.set("$baseVersion")
   instrumentCode.set(false)
   downloadSources.set(false)
   updateSinceUntilBuild.set(false)
