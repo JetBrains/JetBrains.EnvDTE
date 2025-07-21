@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net472</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <AssemblyName>Microsoft.VisualStudio.Designer.Interfaces</AssemblyName>
         <ApplicationVersion>1.0.5000.0</ApplicationVersion>
         <RootNamespace>Microsoft.VisualStudio.Designer.Interfaces</RootNamespace>

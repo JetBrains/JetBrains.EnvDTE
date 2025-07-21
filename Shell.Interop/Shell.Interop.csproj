@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net472</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <AssemblyName>Microsoft.VisualStudio.Shell.Interop.8.0</AssemblyName>
         <ApplicationVersion>8.0.0.0</ApplicationVersion>
         <RootNamespace>Microsoft.VisualStudio</RootNamespace>
