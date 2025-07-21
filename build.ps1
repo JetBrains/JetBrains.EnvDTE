@@ -1,3 +1,8 @@
+param(
+    [switch]$EnableBinLog,
+    [ValidateSet('Debug','Release')][string]$Configuration = 'Debug'
+)
+
 $progressPreference = 'SilentlyContinue'
 
 ./dotnet.cmd --version
@@ -12,19 +17,58 @@ Try {
 Finally {
     Pop-Location
 }
-$packageVersion = "1.0.0-preview1"
-if ($Env:PackageVersion -ne "") {
-    $packageVersion = $Env:PackageVersion
+
+function Build-Project {
+    param(
+        [Parameter(Mandatory)][string]$Project
+    )
+
+    if ($EnableBinLog) {
+        $binLogArg = "/bl:$($Project)_log.binlog"
+    }
+    else {
+        $binLogArg = $null
+    }
+
+    & .\dotnet.cmd build $binLogArg "/p:Configuration=$Configuration" $Project
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Could not build $Project (exit code $LASTEXITCODE)"
+    }
+}
+
+
+function Pack-Project {
+    param(
+        [Parameter(Mandatory)][string]$Project
+    )
+
+    if ($EnableBinLog) {
+        $binLogArg = "/bl:$($Project)_log.binlog"
+    }
+    else {
+        $binLogArg = $null
+    }
+
+    & .\dotnet.cmd pack $binLogArg "/p:Configuration=$Configuration" $Project
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Could not pack $Project (exit code $LASTEXITCODE)"
+    }
 }
 
 Write-Host "Building EnvDTE.Processor"
 
-./dotnet.cmd build EnvDTE.Processor
-$code = $LastExitCode
-if ($code -ne 0) { throw "Could not build EnvDTE.Processor" }
+Build-Project -Project 'EnvDTE.Processor'
+
+Write-Host "Building projects (Configuration=$Configuration, BinLog=$($EnableBinLog.IsPresent))"
+
+Build-Project -Project 'EnvDTE100.Interfaces'
+Build-Project -Project 'Shell.Interop'
+Build-Project -Project 'Designer.Interfaces'
+Build-Project -Project 'EnvDTE.Host'
+Build-Project -Project 'EnvDTE.Client'
 
 Write-Host "Packing interfaces"
 
-./dotnet.cmd pack /p:Configuration=Release "$PSScriptRoot\EnvDTE100.Interfaces\EnvDTE100.Interfaces.csproj"
-$code = $LastExitCode
-if ($code -ne 0) { throw "Could not pack interfaces" }
+Pack-Project -Project 'EnvDTE100.Interfaces'
