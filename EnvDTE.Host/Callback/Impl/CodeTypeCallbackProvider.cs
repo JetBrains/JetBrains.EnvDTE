@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Application.Parts;
 using JetBrains.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
@@ -12,7 +13,7 @@ using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl
 {
-    [SolutionComponent]
+    [SolutionComponent(InstantiationEx.LegacyDefault)]
     public sealed class CodeTypeCallbackProvider : CodeElementCallbackProviderBase
     {
         protected override void DoRegisterCallbacks(

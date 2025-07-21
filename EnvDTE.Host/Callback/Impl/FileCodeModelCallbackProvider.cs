@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Application.Parts;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
@@ -9,7 +10,7 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl
 {
-    [SolutionComponent]
+    [SolutionComponent(InstantiationEx.LegacyDefault)]
     public sealed class FileCodeModelCallbackProvider : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(

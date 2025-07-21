@@ -1,4 +1,5 @@
 using System.Linq;
+using JetBrains.Application.Parts;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
@@ -7,7 +8,7 @@ using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl
 {
-    [SolutionComponent]
+    [SolutionComponent(InstantiationEx.LegacyDefault)]
     public sealed class SolutionCallbackProvider : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(

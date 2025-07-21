@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Application.Parts;
 using JetBrains.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
@@ -8,7 +9,7 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl
 {
-    [SolutionComponent]
+    [SolutionComponent(InstantiationEx.LegacyDefault)]
     public sealed class CodeFunctionCallbackProvider : CodeElementCallbackProviderBase
     {
         protected override void DoRegisterCallbacks(ProjectModelViewHost host, DteProtocolModel model)
