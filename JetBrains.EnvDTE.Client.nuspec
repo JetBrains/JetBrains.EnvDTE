@@ -7,12 +7,12 @@
         <authors>JetBrains</authors>
         <owners>JetBrains</owners>
         <license type="expression">Apache-2.0</license>
-        <projectUrl>https://github.com/kirillgla/JetBrains.EnvDTE</projectUrl>
+        <projectUrl>https://github.com/JetBrains/JetBrains.EnvDTE</projectUrl>
         <icon>JetBrains.EnvDTE.png</icon>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>JetBrains client for EnvDTE</description>
         <releaseNotes>Initial release</releaseNotes>
-        <copyright>Copyright © JetBrains 2021</copyright>
+        <copyright>Copyright © JetBrains 2025</copyright>
         <tags>JetBrains client for EnvDTE</tags>
         <summary>JetBrains client for EnvDTE</summary>
     </metadata>

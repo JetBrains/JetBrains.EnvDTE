@@ -6,13 +6,13 @@
         <title>JetBrains.EnvDTE</title>
         <authors>JetBrains</authors>
         <owners>JetBrains</owners>
-        <licenseUrl>https://github.com/kirillgla/JetBrains.EnvDTE/blob/master/LICENSE</licenseUrl>
-        <projectUrl>https://github.com/kirillgla/JetBrains.EnvDTE</projectUrl>
+        <licenseUrl>https://github.com/JetBrains/JetBrains.EnvDTE/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/JetBrains/JetBrains.EnvDTE</projectUrl>
         <icon>JetBrains.EnvDTE.png</icon>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>JetBrains implementation of EnvDTE</description>
         <releaseNotes>Test release</releaseNotes>
-        <copyright>Copyright 2019 JetBrains</copyright>
+        <copyright>Copyright © JetBrains 2025</copyright>
         <tags>JetBrains Rider EnvDTE</tags>
         <summary>JetBrains implementation of EnvDTE</summary>
     </metadata>
