@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.Rider.Model;
-using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Client.Impl.Model
 {
@@ -38,7 +38,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Model
         public int Count => CodeElementModels.Count;
 
         public IEnumerator GetEnumerator() => CodeElementModels
-            .SelectNotNull(model => Registrar.Convert(model, Parent))
+            .Select(model => Registrar.Convert(model, Parent))
             .GetEnumerator();
 
         [CanBeNull]

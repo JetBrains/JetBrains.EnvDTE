@@ -13,5 +13,9 @@
         <ProjectReference Include="..\EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj" />
         <ProjectReference Include="..\EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj" />
     </ItemGroup>
-    <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Rider_Rider.Backend.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Rider_Rider.Backend.Props')" />
+    <ItemGroup>
+      <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
+      <PackageReference Include="JetBrains.Lifetimes" Version="2024.3.0" />
+      <PackageReference Include="JetBrains.RdFramework" Version="2024.3.0" />
+    </ItemGroup>
 </Project>

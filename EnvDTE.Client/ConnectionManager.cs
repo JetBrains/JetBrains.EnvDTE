@@ -1,11 +1,10 @@
 using JetBrains.Annotations;
 using JetBrains.Collections.Viewable;
+using JetBrains.Diagnostics;
 using JetBrains.Lifetimes;
-using JetBrains.Platform.RdFramework.Impl;
 using JetBrains.Rd;
 using JetBrains.Rd.Impl;
 using JetBrains.Rider.Model;
-using JetBrains.Util.Logging;
 
 namespace JetBrains.EnvDTE.Client
 {
@@ -22,7 +21,7 @@ namespace JetBrains.EnvDTE.Client
         [NotNull]
         private static DteProtocolModel SetupModel(Lifetime lifetime, int port)
         {
-            IScheduler scheduler = new SimpleInpaceExecutingScheduler(Logger.GetLogger<ConnectionManager>());
+            IScheduler scheduler = new SimpleInpaceExecutingScheduler(Log.GetLog<ConnectionManager>());
             var server = new SocketWire.Client(lifetime, scheduler, port);
             var serializers = new Serializers();
             var identities = new Identities(IdKind.Client);
