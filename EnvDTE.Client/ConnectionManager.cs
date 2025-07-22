@@ -21,11 +21,10 @@ namespace JetBrains.EnvDTE.Client
         [NotNull]
         private static DteProtocolModel SetupModel(Lifetime lifetime, int port)
         {
-            IScheduler scheduler = new SimpleInpaceExecutingScheduler(Log.GetLog<ConnectionManager>());
-            var server = new SocketWire.Client(lifetime, scheduler, port);
+            var server = new SocketWire.Client(lifetime, SynchronousScheduler.Instance, port);
             var serializers = new Serializers();
             var identities = new Identities(IdKind.Client);
-            var protocol = new Protocol(Protocol, serializers, identities, scheduler, server, lifetime);
+            var protocol = new Protocol(Protocol, serializers, identities, SynchronousScheduler.Instance, server, lifetime);
             return new DteProtocolModel(lifetime, protocol);
         }
     }

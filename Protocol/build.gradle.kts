@@ -10,7 +10,7 @@ buildscript {
   }
   dependencies {
     // https://search.maven.org/artifact/com.jetbrains.rd/rd-gen
-    classpath("com.jetbrains.rd:rd-gen:2025.2.2")
+    classpath("com.jetbrains.rd:rd-gen:2025.1.1")
   }
 }
 

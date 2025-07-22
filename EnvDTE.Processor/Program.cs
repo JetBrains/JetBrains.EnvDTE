@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using Mono.Cecil;
+﻿using Mono.Cecil;
 using Mono.Cecil.Rocks;
 
 var path = args.Length == 1 ? args[0] : throw new ArgumentException($"There is {args.Length} args ({string.Join(", ", args)}) instead of 1: path");
