@@ -120,7 +120,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
             var element = type.GetTypeElement();
             if (element != null) return ToModel(element);
             int id = AstManager.GetOrCreateId((IArrayType) type);
-            return new CodeElementModel(PsiElementRegistrar.CLASS_DECLARATION_ID, id);
+            return new CodeElementModel(PsiElementRegistrar.ClassDeclarationId, id);
         }
     }
 }

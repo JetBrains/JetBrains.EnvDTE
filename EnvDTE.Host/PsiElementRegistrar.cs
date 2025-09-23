@@ -10,7 +10,7 @@ namespace JetBrains.EnvDTE.Host
 {
     public static class PsiElementRegistrar
     {
-        public const int CLASS_DECLARATION_ID = 2;
+        public const int ClassDeclarationId = 2;
         private static IList<(Type, int)> KnownPsiTypes { get; } = new List<(Type, int)>();
         private static IList<(Type, int)> KnownDeclaredTypes { get; } = new List<(Type, int)>();
         private static ISet<Type> TypesToReplaceWithChildren { get; } = new HashSet<Type>();
@@ -55,7 +55,7 @@ namespace JetBrains.EnvDTE.Host
         static PsiElementRegistrar()
         {
             RegisterType<ICSharpNamespaceDeclaration, INamespace>(1);
-            RegisterType<IClassDeclaration, IClass>(CLASS_DECLARATION_ID);
+            RegisterType<IClassDeclaration, IClass>(ClassDeclarationId);
             RegisterType<IStructDeclaration, IStruct>(3);
             RegisterType<IInterfaceDeclaration, IInterface>(4);
             RegisterType<IFunctionDeclaration, IFunction>(5);

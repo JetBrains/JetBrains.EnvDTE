@@ -16,8 +16,8 @@ namespace JetBrains.EnvDTE.Host
 
     public sealed class ConnectionManager
     {
-        private const string Host = "T4 Communication Host";
-        private const string Protocol = "T4 Communication Protocol";
+        private const string Host = "EnvDTE Communication Host";
+        private const string Protocol = "EnvDTE Communication Protocol";
         private IReadOnlyList<IEnvDteCallbackProvider> CallbackProviders { get; }
         public int Port { get; private set; }
 
@@ -48,7 +48,7 @@ namespace JetBrains.EnvDTE.Host
             // Since the entire protocol will be deleted on file execution end,
             // this shouldn't cause memory leaks
             var astManager = new AstManager();
-            foreach (var provider in solution.GetComponents<IEnvDteCallbackProvider>())
+            foreach (var provider in solution.GetComponents2<IEnvDteCallbackProvider>())
             {
                 provider.RegisterCallbacks(astManager, solution, host, model);
             }
