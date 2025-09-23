@@ -1,6 +1,5 @@
 using EnvDTE;
 using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Impl.Model;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Ast

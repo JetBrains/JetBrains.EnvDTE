@@ -2,9 +2,8 @@ using System;
 using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Common;
-using JetBrains.EnvDTE.Client.Impl.Model;
 using JetBrains.EnvDTE.Client.Impl.ProjectModel;
+using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Ast

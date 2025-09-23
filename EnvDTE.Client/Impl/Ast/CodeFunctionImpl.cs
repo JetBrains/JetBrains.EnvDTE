@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Impl.Model;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Ast

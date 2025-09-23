@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using JetBrains.Application.Parts;
 using JetBrains.Diagnostics;
+using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.ReSharper.Psi;
@@ -10,7 +11,7 @@ using JetBrains.ReSharper.Psi.CSharp.Impl;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Host.Callback.Impl
+namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
 {
     [SolutionComponent(InstantiationEx.LegacyDefault)]
     public sealed class CodeElementCallbackProvider : CodeElementCallbackProviderBase
@@ -33,7 +34,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
                 type => throw new NotImplementedException());
             MapWithAstManager(
                 model.CodeElement_get_Name,
-                ElementNameProvider.FindName,
+                TreeNodeExtensions.FindName,
                 element => element.ShortName,
                 type => type.GetPresentableName(CSharpLanguage.Instance.NotNull())
             );

@@ -11,7 +11,7 @@ using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Rider.Model;
 using JetBrains.Util;
 
-namespace JetBrains.EnvDTE.Host.Callback.Impl
+namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
 {
     [SolutionComponent(InstantiationEx.LegacyDefault)]
     public sealed class CodeTypeCallbackProvider : CodeElementCallbackProviderBase

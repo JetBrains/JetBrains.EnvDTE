@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Application.Parts;
 using JetBrains.Core;
+using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel;
@@ -12,7 +13,7 @@ using JetBrains.ReSharper.Psi.VB;
 using JetBrains.Rider.Model;
 using JetBrains.Util;
 
-namespace JetBrains.EnvDTE.Host.Callback.Impl
+namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
 {
     [SolutionComponent(InstantiationEx.LegacyDefault)]
     public sealed class ProjectItemCallbackProvider : IEnvDteCallbackProvider

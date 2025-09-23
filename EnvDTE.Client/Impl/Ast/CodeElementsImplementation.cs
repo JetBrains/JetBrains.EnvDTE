@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
+using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Impl.Model
+namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
     public sealed class CodeElementsImplementation : CodeElements
     {

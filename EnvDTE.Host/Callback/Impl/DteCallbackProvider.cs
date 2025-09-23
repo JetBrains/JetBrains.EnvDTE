@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Application.Parts;
+using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;

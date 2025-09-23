@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using EnvDTE;
 using JetBrains.Annotations;
 
-namespace JetBrains.EnvDTE.Client.Impl.Model
+namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
     public sealed class CodeElementsOverList : CodeElements
     {

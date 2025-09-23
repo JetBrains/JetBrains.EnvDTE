@@ -7,17 +7,17 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Host.Callback.Impl
+namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
 {
     [SolutionComponent(InstantiationEx.LegacyDefault)]
-    public sealed class CodeFunctionCallbackProvider : CodeElementCallbackProviderBase
+    public sealed class CodeParameterCallbackProvider : CodeElementCallbackProviderBase
     {
         protected override void DoRegisterCallbacks(ProjectModelViewHost host, DteProtocolModel model)
         {
-            MapWithAstManager<IFunctionDeclaration, IFunction, CodeElementModel>(
-                model.CodeFunction_get_Type,
-                node => ToModel(node.DeclaredElement.NotNull().ReturnType),
-                function => ToModel(function.ReturnType),
+            MapWithAstManager<IParameterDeclaration, IParameter, CodeElementModel>(
+                model.CodeParameter_get_Type,
+                node => ToModel(node.DeclaredElement.NotNull().Type),
+                parameter => ToModel(parameter.Type),
                 type => throw new InvalidOperationException()
             );
         }

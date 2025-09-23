@@ -2,10 +2,10 @@ using System;
 using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Common;
 using JetBrains.EnvDTE.Client.Impl.ProjectModel;
+using JetBrains.EnvDTE.Client.Util;
 
-namespace JetBrains.EnvDTE.Client.Impl.Model
+namespace JetBrains.EnvDTE.Client.Impl.Ast
 {
     public sealed class FileCodeModelImpl : FileCodeModel2
     {

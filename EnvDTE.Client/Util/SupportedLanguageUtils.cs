@@ -2,7 +2,7 @@ using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Common
+namespace JetBrains.EnvDTE.Client.Util
 {
     public static class SupportedLanguageUtils
     {

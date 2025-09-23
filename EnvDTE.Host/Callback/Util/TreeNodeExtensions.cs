@@ -1,36 +1,19 @@
-using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using JetBrains.Core;
-using JetBrains.Rd.Tasks;
+using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
-using JetBrains.ReSharper.Resources.Shell;
 
-namespace JetBrains.EnvDTE.Host.Callback.Impl
+namespace JetBrains.EnvDTE.Host.Callback.Util
 {
-    public static class EnvDteCallbackProviderExtensions
+    public static class TreeNodeExtensions
     {
-        public static void SetWithReadLock<TRes>(this IRdEndpoint<Unit, TRes> endpoint, Func<TRes> func) =>
-            endpoint.Set(
-                _ =>
-                {
-                    using (ReadLockCookie.Create())
-                    {
-                        return func();
-                    }
-                }
-            );
-
-        public static void SetWithReadLock<TReq, TRes>(this IRdEndpoint<TReq, TRes> endpoint, Func<TReq, TRes> func) =>
-            endpoint.Set(
-                argument =>
-                {
-                    using (ReadLockCookie.Create())
-                    {
-                        return func(argument);
-                    }
-                }
-            );
+        [CanBeNull]
+        public static string FindName(this ITreeNode element) => element switch
+        {
+            IDeclaration declaration => declaration.DeclaredName,
+            IAttribute attribute => attribute.Name.ShortName,
+            _ => null
+        };
 
         [NotNull, ItemNotNull]
         public static IEnumerable<ITreeNode> GetEnvDTEModelChildren([NotNull] this ITreeNode node)

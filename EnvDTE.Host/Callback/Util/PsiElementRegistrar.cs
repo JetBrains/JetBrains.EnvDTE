@@ -6,7 +6,7 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
 
-namespace JetBrains.EnvDTE.Host
+namespace JetBrains.EnvDTE.Host.Callback.Util
 {
     public static class PsiElementRegistrar
     {
