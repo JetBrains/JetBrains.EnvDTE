@@ -4,7 +4,6 @@ import com.jetbrains.rd.generator.nova.csharp.CSharp50Generator
 import com.jetbrains.rd.generator.nova.setting
 import com.jetbrains.rd.generator.nova.*
 import com.jetbrains.rd.generator.nova.PredefinedType.*
-import com.jetbrains.rider.model.nova.ide.*
 
 object DteRoot : Root() {
     override val isLibrary = false
@@ -13,6 +12,7 @@ object DteRoot : Root() {
     }
 }
 
+@Suppress("unused")
 object DteProtocolModel : Ext(DteRoot) {
     val projectItemModel = structdef {
         field("id", int)
@@ -111,6 +111,7 @@ object DteProtocolModel : Ext(DteRoot) {
       call("CodeElement_get_FullName", codeElementModel, string.nullable)
       call("CodeElement_get_ProjectItem", codeElementModel, projectItemModel.nullable)
       call("CodeElement_get_Parent", codeElementModel, codeElementModel.nullable)
+
       createCodeTypeCallbacks()
       createCodeFunctionCallbacks()
       createCodeParameterCallbacks()
