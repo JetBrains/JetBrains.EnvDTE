@@ -88,6 +88,7 @@ object DteProtocolModel : Ext(DteRoot) {
             field("newName", string)
         }, void)
         call("Project_get_FileName", projectModel, string)
+        call("Project_get_Kind", projectModel, string)
 
         call("Project_get_Property", Project_get_PropertyRequest, string.nullable)
         call("Project_isValid_Property", Project_get_PropertyRequest, bool)

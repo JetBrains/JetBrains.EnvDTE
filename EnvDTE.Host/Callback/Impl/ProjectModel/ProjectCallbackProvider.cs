@@ -35,7 +35,13 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
             });
 
             model.Project_get_FileName.SetWithReadLock(solution.Locks, projectModel =>
-                GetProject(projectModel)?.ProjectFile?.Name ?? string.Empty);
+                GetProject(projectModel)?.ProjectFileLocation.FullPath ?? string.Empty);
+
+            model.Project_get_Kind.SetSync(projectModel =>
+            {
+                var guid = GetProject(projectModel)?.ProjectProperties.ProjectTypeGuids.FirstOrDefault();
+                return guid is null ? string.Empty : guid.Value.ToString("B").ToUpperInvariant();
+            });
 
             model.Project_get_Property.SetAsync((lifetime, args) =>
             {

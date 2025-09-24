@@ -50,6 +50,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         public ProjectItem ParentProjectItem { get; }
 
         public Properties Properties => _properties;
+        public string Kind => Implementation.DteProtocolModel.Project_get_Kind.Sync(ProjectModel);
 
         public ProjectImplementation(
             [NotNull] DteImplementation dte,
@@ -83,7 +84,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             set => throw new NotImplementedException();
         }
 
-        public string Kind => throw new NotImplementedException();
         public string UniqueName => throw new NotImplementedException();
         public object Object => throw new NotImplementedException();
         public object ExtenderNames => throw new NotImplementedException();
