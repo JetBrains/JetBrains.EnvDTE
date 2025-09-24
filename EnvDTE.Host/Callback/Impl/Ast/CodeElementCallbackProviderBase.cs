@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using JetBrains.Annotations;
+using JetBrains.Application.Threading;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
@@ -30,11 +31,12 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
         )
         {
             AstManager = astManager;
-            DoRegisterCallbacks(host, model);
+            DoRegisterCallbacks(host, solution.Locks, model);
         }
 
         protected abstract void DoRegisterCallbacks(
             [NotNull] ProjectModelViewHost host,
+            [NotNull] IShellLocks locks,
             [NotNull] DteProtocolModel model
         );
 
@@ -49,20 +51,22 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
 
         protected void MapWithAstManager<TRes>(
             [NotNull] IRdEndpoint<CodeElementModel, TRes> ep,
+            [NotNull] IShellLocks locks,
             [NotNull] Func<ITreeNode, TRes> psiMapper,
             [NotNull] Func<IDeclaredElement, TRes> declaredElementMapper,
             [NotNull] Func<IType, TRes> typeMapper
-        ) => MapWithAstManager<ITreeNode, IDeclaredElement, TRes>(ep, psiMapper, declaredElementMapper, typeMapper);
+        ) => MapWithAstManager<ITreeNode, IDeclaredElement, TRes>(ep, locks, psiMapper, declaredElementMapper, typeMapper);
 
         protected void MapWithAstManager<TNode, TElement, TRes>(
             [NotNull] IRdEndpoint<CodeElementModel, TRes> ep,
+            [NotNull] IShellLocks locks,
             [NotNull] Func<TNode, TRes> psiMapper,
             [NotNull] Func<TElement, TRes> declaredElementMapper,
             [NotNull] Func<IArrayType, TRes> typeMapper
         )
             where TNode : ITreeNode
             where TElement : IDeclaredElement =>
-            ep.SetWithReadLock(codeElementModel => AstManager.MapElement(
+            ep.SetWithReadLock(locks, codeElementModel => AstManager.MapElement(
                 codeElementModel.Id,
                 psiMapper,
                 declaredElementMapper,

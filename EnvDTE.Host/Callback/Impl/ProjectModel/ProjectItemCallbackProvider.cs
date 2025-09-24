@@ -25,16 +25,16 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
             DteProtocolModel model
         )
         {
-            model.ProjectItem_get_Name.SetWithReadLock(projectItemModel =>
+            model.ProjectItem_get_Name.SetWithReadLock(solution.Locks, projectItemModel =>
                 host.GetItemById<IProjectItem>(projectItemModel.Id)?.Name ?? "");
-            model.ProjectItem_set_Name.SetWithReadLock(request =>
+            model.ProjectItem_set_Name.SetWithReadLock(solution.Locks, request =>
             {
                 var item = host.GetItemById<IProjectItem>(request.Model.Id);
                 if (item == null) return Unit.Instance;
                 solution.InvokeUnderTransaction(cookie => cookie.Rename(item, request.NewName));
                 return Unit.Instance;
             });
-            model.ProjectItem_get_Kind.SetWithReadLock(projectItemModel =>
+            model.ProjectItem_get_Kind.SetWithReadLock(solution.Locks, projectItemModel =>
                 host.GetItemById<IProjectItem>(projectItemModel.Id)?.Kind switch
                 {
                     ProjectItemKind.PHYSICAL_FILE => ProjectItemKindModel.PhysicalFile,
@@ -43,14 +43,14 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                     ProjectItemKind.VIRTUAL_DIRECTORY => ProjectItemKindModel.VirtualDirectory,
                     _ => ProjectItemKindModel.Unknown,
                 });
-            model.ProjectItem_get_ProjectItems.SetWithReadLock(projectItemModel => host
+            model.ProjectItem_get_ProjectItems.SetWithReadLock(solution.Locks, projectItemModel => host
                 .GetItemById<IProjectFolder>(projectItemModel.Id)
                 ?.GetSubItems()
                 .Select(host.GetIdByItem)
                 .Where(id => id != 0)
                 .Select(id => new ProjectItemModel(id))
                 .AsList() ?? new List<ProjectItemModel>());
-            model.ProjectItem_get_Language.SetWithReadLock(projectItemModel => host
+            model.ProjectItem_get_Language.SetWithReadLock(solution.Locks, projectItemModel => host
                     .GetItemById<IProjectFile>(projectItemModel.Id)
                     ?.ToSourceFile()
                     ?.PrimaryPsiLanguage switch

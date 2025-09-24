@@ -21,7 +21,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
             DteProtocolModel model
         )
         {
-            model.FileCodeModel_get_CodeElements.SetWithReadLock(projectItemModel =>
+            model.FileCodeModel_get_CodeElements.SetWithReadLock(solution.Locks, projectItemModel =>
             {
                 var projectFile = host.GetItemById<IProjectFile>(projectItemModel.Id);
                 var psiFile = projectFile

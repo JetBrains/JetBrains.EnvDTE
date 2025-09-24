@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Application.Parts;
+using JetBrains.Application.Threading;
 using JetBrains.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
@@ -12,10 +13,14 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
     [SolutionComponent(InstantiationEx.LegacyDefault)]
     public sealed class CodeParameterCallbackProvider : CodeElementCallbackProviderBase
     {
-        protected override void DoRegisterCallbacks(ProjectModelViewHost host, DteProtocolModel model)
+        protected override void DoRegisterCallbacks(
+            ProjectModelViewHost host,
+            IShellLocks locks,
+            DteProtocolModel model)
         {
             MapWithAstManager<IParameterDeclaration, IParameter, CodeElementModel>(
                 model.CodeParameter_get_Type,
+                locks,
                 node => ToModel(node.DeclaredElement.NotNull().Type),
                 parameter => ToModel(parameter.Type),
                 type => throw new InvalidOperationException()

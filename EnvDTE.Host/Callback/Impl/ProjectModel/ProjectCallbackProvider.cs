@@ -19,8 +19,9 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
             DteProtocolModel model
         )
         {
-            model.Project_get_Name.SetWithReadLock(projectModel => host.GetItemById<IProject>(projectModel.Id)?.Name ?? "");
-            model.Project_set_Name.SetWithReadLock(request =>
+            model.Project_get_Name.SetWithReadLock(solution.Locks, projectModel =>
+                host.GetItemById<IProject>(projectModel.Id)?.Name ?? "");
+            model.Project_set_Name.SetWithReadLock(solution.Locks, request =>
             {
                 string name = request.NewName;
                 var project = host.GetItemById<IProject>(request.Model.Id);
@@ -28,9 +29,9 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                 solution.InvokeUnderTransaction(cookie => cookie.Rename(project, name));
                 return Unit.Instance;
             });
-            model.Project_get_FileName.SetWithReadLock(projectModel =>
+            model.Project_get_FileName.SetWithReadLock(solution.Locks, projectModel =>
                 host.GetItemById<IProject>(projectModel.Id)?.ProjectFile?.Name ?? "");
-            model.Project_Delete.SetWithReadLock(projectModel =>
+            model.Project_Delete.SetWithReadLock(solution.Locks, projectModel =>
             {
                 var project = host.GetItemById<IProject>(projectModel.Id);
                 if (project == null) return Unit.Instance;

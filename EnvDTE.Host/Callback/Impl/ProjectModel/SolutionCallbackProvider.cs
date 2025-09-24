@@ -19,9 +19,9 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
             DteProtocolModel model
         )
         {
-            model.Solution_FileName.SetWithReadLock(() => solution.SolutionFilePath.FullPath);
-            model.Solution_Count.SetWithReadLock(() => solution.GetAllProjects().Count);
-            model.Solution_Item.SetWithReadLock(index =>
+            model.Solution_FileName.SetWithReadLock(solution.Locks, () => solution.SolutionFilePath.FullPath);
+            model.Solution_Count.SetWithReadLock(solution.Locks, () => solution.GetAllProjects().Count);
+            model.Solution_Item.SetWithReadLock(solution.Locks, index =>
             {
                 var projects = solution.GetAllProjects();
                 if (projects.Count < index) return new Rider.Model.ProjectModel(-1);
@@ -29,7 +29,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                 int id = host.GetIdByItem(project);
                 return new Rider.Model.ProjectModel(id);
             });
-            model.Solution_get_Projects.SetWithReadLock(() => solution
+            model.Solution_get_Projects.SetWithReadLock(solution.Locks, () => solution
                 .GetAllProjects()
                 .Select(host.GetIdByItem)
                 .Where(id => id != 0)

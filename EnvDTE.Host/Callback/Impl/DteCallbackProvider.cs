@@ -19,13 +19,14 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
             DteProtocolModel model
         )
         {
-            model.DTE_Name.SetWithReadLock(() => "JetBrains Rider");
-            model.DTE_FileName.SetWithReadLock(() => FileSystemPath
+            model.DTE_Name.SetWithReadLock(solution.Locks, () => "JetBrains Rider");
+            model.DTE_FileName.SetWithReadLock(solution.Locks, () => FileSystemPath
                 .Parse(AppDomain.CurrentDomain.BaseDirectory)
                 .Combine(AppDomain.CurrentDomain.FriendlyName)
                 .FullPath
             );
-            model.DTE_CommandLineArgs.SetWithReadLock(() => Environment.GetCommandLineArgs().AggregateString(" "));
+            model.DTE_CommandLineArgs.SetWithReadLock(solution.Locks, () =>
+                Environment.GetCommandLineArgs().AggregateString(" "));
         }
     }
 }

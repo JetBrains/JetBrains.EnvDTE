@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Application.Parts;
+using JetBrains.Application.Threading;
 using JetBrains.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
@@ -18,11 +19,13 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
     {
         protected override void DoRegisterCallbacks(
             ProjectModelViewHost host,
+            IShellLocks locks,
             DteProtocolModel model
         )
         {
             MapWithAstManager<ITypeDeclaration, ITypeElement, List<CodeElementModel>>(
                 model.CodeElement_get_Bases,
+                locks,
                 node => GetSuperTypes(node.DeclaredElement).AsList(),
                 element => GetSuperTypes(element).AsList(),
                 type => new List<CodeElementModel>
@@ -33,6 +36,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
 
             MapWithAstManager<ICSharpTypeDeclaration, ITypeElement, CodeElementModel>(
                 model.CodeElement_get_Namespace,
+                locks,
                 CreateNamespaceModel,
                 element => ToModel(element.GetContainingNamespace()),
                 type => throw new NotImplementedException()

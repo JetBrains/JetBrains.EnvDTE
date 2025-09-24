@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using JetBrains.Application.Parts;
+using JetBrains.Application.Threading;
 using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.ProjectModel;
@@ -18,28 +19,33 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
     {
         protected override void DoRegisterCallbacks(
             ProjectModelViewHost host,
+            IShellLocks locks,
             DteProtocolModel model
         )
         {
             MapWithAstManager(
                 model.CodeElement_get_Children,
+                locks,
                 node => node.GetEnvDTEModelChildren().Select(CreateCodeElementModel).ToList(),
                 element => throw new NotImplementedException(),
                 type => throw new InvalidOperationException()
             );
             MapWithAstManager(
                 model.CodeElement_get_Access,
+                locks,
                 GetAccessRights,
                 GetAccessRights,
                 type => throw new NotImplementedException());
             MapWithAstManager(
                 model.CodeElement_get_Name,
+                locks,
                 TreeNodeExtensions.FindName,
                 element => element.ShortName,
                 type => type.GetPresentableName(CSharpLanguage.Instance.NotNull())
             );
             MapWithAstManager(
                 model.CodeElement_get_FullName,
+                locks,
                 node =>
                 {
                     if (!(node is ICSharpDeclaration declaration)) return null;
@@ -55,6 +61,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
             );
             MapWithAstManager(
                 model.CodeElement_get_ProjectItem,
+                locks,
                 node =>
                 {
                     var sourceFile = node.GetSourceFile();
@@ -66,6 +73,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
             );
             MapWithAstManager(
                 model.CodeElement_get_Parent,
+                locks,
                 node =>
                 {
                     var parent = node.GetEnvDTEModelParent();
