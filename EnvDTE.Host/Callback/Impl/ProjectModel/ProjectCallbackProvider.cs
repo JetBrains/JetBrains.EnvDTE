@@ -2,6 +2,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Application.Parts;
 using JetBrains.Core;
+using JetBrains.EnvDTE.Host.Callback.Impl.Properties;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
@@ -22,6 +23,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
             DteProtocolModel model
         )
         {
+            var propertyService = new ProjectPropertyService();
+
             model.Project_get_Name.SetWithReadLock(solution.Locks,
                 projectModel => GetProject(projectModel)?.Name ?? string.Empty);
 
@@ -48,20 +51,19 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                 var project = GetProject(args.Model);
                 if (project is null) return null;
 
-                return EnvDTEProjectPropertiesManager.GetPropertyValueAsync(lifetime, project, args.Name);
+                return propertyService.GetPropertyAsync(lifetime, project, args.Name);
             });
 
             model.Project_isValid_Property.SetSync(args =>
-                EnvDTEProjectPropertiesManager.IsValidProperty(args.Name));
+                propertyService.IsValidProperty(args.Name));
 
             model.Project_set_Property.SetVoidAsync(async (lifetime, args) =>
             {
                 var project = GetProject(args.Model);
                 if (project is null) return;
 
-                await EnvDTEProjectPropertiesManager.SetPropertyValueAsync(lifetime, project, args.Name, args.Value);
+                await propertyService.SetPropertyAsync(lifetime, project, args.Name, args.Value);
             });
-
 
             model.Project_Delete.SetWithReadLock(solution.Locks, projectModel =>
             {

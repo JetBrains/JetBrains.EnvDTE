@@ -2,20 +2,16 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using JetBrains.Application;
-using JetBrains.Application.Parts;
 using JetBrains.Build.Helpers.Msbuild;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.MSBuild;
-using JetBrains.ProjectModel.Properties;
 using JetBrains.ReSharper.Resources.Shell;
 
-namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel;
+namespace JetBrains.EnvDTE.Host.Callback.Impl.Properties;
 
-[ShellComponent(Instantiation.DemandAnyThreadSafe)]
-public class EnvDTEProjectPropertiesManager : IProjectPropertiesRequest
+public class ProjectPropertyService : IPropertyService<IProject>
 {
     // Visual Studio property names
     private const string FullPathProperty = "FullPath";
@@ -26,7 +22,7 @@ public class EnvDTEProjectPropertiesManager : IProjectPropertiesRequest
     private const string TargetFileNameProperty = "TargetFileName";
 
     // Direct mapping between VS property names and MSBuild property names
-    private static readonly ReadOnlyDictionary<string, string> Mappings = new(new Dictionary<string, string>()
+    private static readonly ReadOnlyDictionary<string, string> VsPropertyNameMap = new(new Dictionary<string, string>()
     {
         { FriendlyTargetFrameworkNameProperty, MSBuildProjectUtil.TargetFrameworkProperty },
         { FullPathProperty, MsbuildFile.Properties.MSBuildProjectDirectory },
@@ -36,26 +32,10 @@ public class EnvDTEProjectPropertiesManager : IProjectPropertiesRequest
         { MSBuildProjectUtil.TargetFrameworkMonikerProperty, MSBuildProjectUtil.TargetFrameworkMonikerProperty },
     });
 
-    public IEnumerable<string> RequestedProperties =>
-    [
-        MSBuildProjectUtil.RootNamespaceProperty,
-        MSBuildProjectUtil.AssemblyNameProperty,
-        MSBuildProjectUtil.TargetNameProperty,
-        MSBuildProjectUtil.TargetExtProperty,
-        MSBuildProjectUtil.TargetFrameworkProperty,
-        MSBuildProjectUtil.TargetFrameworkMonikerProperty,
-        MsbuildFile.Properties.MSBuildProjectDirectory,
-        TargetFileNameProperty
-    ];
-
-    [CanBeNull]
-    public static async Task<string> GetPropertyValueAsync(
-        Lifetime lifetime,
-        [NotNull] IProject project,
-        [NotNull] string vsPropertyName)
+    public async Task<string> GetPropertyAsync(Lifetime lifetime, IProject project, string vsPropertyName)
     {
         if (!TryMapPropertyName(vsPropertyName, out var propertyName))
-            throw new KeyNotFoundException($"Property '{vsPropertyName}' not found");
+            throw new PropertyNotFoundException(vsPropertyName);
 
         string result = null;
         await lifetime.StartMainWrite(() =>
@@ -65,24 +45,20 @@ public class EnvDTEProjectPropertiesManager : IProjectPropertiesRequest
         return result;
     }
 
-    public static async Task SetPropertyValueAsync(
-        Lifetime lifetime,
-        [NotNull] IProject project,
-        [NotNull] string vsPropertyName,
-        [CanBeNull] string propertyValue)
+    public async Task SetPropertyAsync(Lifetime lifetime, IProject project, string vsPropertyName, string propertyValue)
     {
         if (!TryMapPropertyName(vsPropertyName, out var propertyName))
-            throw new KeyNotFoundException($"Property '{vsPropertyName}' not found");
+            throw new PropertyNotFoundException(vsPropertyName);
 
         await lifetime.StartMainWrite(() =>
             project.GetSolution().GetComponent<IProjectModelEditor>().EditProjectMsBuildProperties(project, null,
                 editor => { editor.SetProperty(propertyName, propertyValue ?? string.Empty); }));
     }
 
-    public static bool IsValidProperty([NotNull] string vsPropertyName) =>
+    public bool IsValidProperty(string vsPropertyName) =>
         TryMapPropertyName(vsPropertyName, out _);
 
     // TODO: Add additional logic
     private static bool TryMapPropertyName([NotNull] string vsPropertyName, out string msBuildPropertyName) =>
-        Mappings.TryGetValue(vsPropertyName, out msBuildPropertyName);
+        VsPropertyNameMap.TryGetValue(vsPropertyName, out msBuildPropertyName);
 }
