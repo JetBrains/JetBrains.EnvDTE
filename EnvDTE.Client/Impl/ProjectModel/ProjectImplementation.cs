@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using EnvDTE;
 using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Impl.Common;
+using JetBrains.EnvDTE.Client.Impl.Props;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
@@ -13,11 +13,9 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         [NotNull] private readonly Rider.Model.ProjectModel _projectModel;
         [NotNull] private readonly PropertiesImplementation _properties;
 
-        [NotNull]
-        private DteImplementation Implementation => _dte;
+        [NotNull] private DteImplementation Implementation => _dte;
 
-        [NotNull]
-        private Rider.Model.ProjectModel ProjectModel => _projectModel;
+        [NotNull] private Rider.Model.ProjectModel ProjectModel => _projectModel;
 
         [NotNull, ItemNotNull]
         private List<ProjectItemModel> ProjectItemModels =>
@@ -38,16 +36,14 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         [NotNull]
         public ProjectItems ProjectItems => new ProjectItemsImplementation(Implementation, ProjectItemModels, this);
 
-        [NotNull]
-        public DTE DTE => Implementation;
+        [NotNull] public DTE DTE => Implementation;
 
         public string FileName => Implementation.DteProtocolModel.Project_get_FileName.Sync(ProjectModel);
         public string FullName => FileName;
         public Projects Collection => Implementation.Solution.Projects;
         public void Delete() => Implementation.DteProtocolModel.Project_Delete.Sync(ProjectModel);
 
-        [CanBeNull]
-        public ProjectItem ParentProjectItem { get; }
+        [CanBeNull] public ProjectItem ParentProjectItem { get; }
 
         public Properties Properties => _properties;
         public string Kind => Implementation.DteProtocolModel.Project_get_Kind.Sync(ProjectModel);
@@ -65,14 +61,21 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             {
                 if (arg is not string key) throw new ArgumentException();
 
-                if (!Implementation.DteProtocolModel.Project_isValid_Property.Sync(new(ProjectModel, key)))
-                    return new NullPropertyImplementation(_dte, _properties, key);
+                var propertyType =
+                    Implementation.DteProtocolModel.Project_getType_Property.Sync(new(ProjectModel, key));
 
-                return new PropertyImplementation(_dte, _properties, key,
-                    () =>
-                        _dte.DteProtocolModel.Project_get_Property.Sync(new (_projectModel, key)),
-                    value =>
-                        _dte.DteProtocolModel.Project_set_Property.Sync(new (_projectModel, key, value)));
+                return propertyType switch
+                {
+                    RdPropertyType.Null => new NullPropertyImplementation(_dte, _properties, key),
+                    RdPropertyType.Regular => new PropertyImplementation(_dte, _properties, key,
+                        () =>
+                            _dte.DteProtocolModel.Project_get_Property.Sync(new(_projectModel, key)),
+                        value =>
+                            _dte.DteProtocolModel.Project_set_Property.Sync(new(_projectModel, key, value))),
+                    RdPropertyType.ReadOnly => new ReadOnlyPropertyImplementation(_dte, _properties, key, () =>
+                        _dte.DteProtocolModel.Project_get_Property.Sync(new(_projectModel, key))),
+                    _ => throw new ArgumentOutOfRangeException($"Invalid property type: {propertyType}")
+                };
             });
         }
 

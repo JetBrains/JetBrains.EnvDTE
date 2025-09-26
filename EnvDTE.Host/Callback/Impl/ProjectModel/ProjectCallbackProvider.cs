@@ -14,7 +14,7 @@ using JetBrains.Rider.Model;
 namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
 {
     [SolutionComponent(InstantiationEx.LegacyDefault)]
-    public sealed class ProjectCallbackProvider : IEnvDteCallbackProvider
+    public sealed class ProjectCallbackProvider(ProjectPropertyService propertyService) : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(
             AstManager astManager,
@@ -23,8 +23,6 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
             DteProtocolModel model
         )
         {
-            var propertyService = new ProjectPropertyService();
-
             model.Project_get_Name.SetWithReadLock(solution.Locks,
                 projectModel => GetProject(projectModel)?.Name ?? string.Empty);
 
@@ -54,8 +52,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                 return propertyService.GetPropertyAsync(lifetime, project, args.Name);
             });
 
-            model.Project_isValid_Property.SetSync(args =>
-                propertyService.IsValidProperty(args.Name));
+            model.Project_getType_Property.SetSync(args =>
+                propertyService.GetPropertyType(args.Name));
 
             model.Project_set_Property.SetVoidAsync(async (lifetime, args) =>
             {

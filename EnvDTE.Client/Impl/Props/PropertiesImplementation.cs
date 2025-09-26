@@ -3,7 +3,7 @@ using System.Collections;
 using EnvDTE;
 using JetBrains.Annotations;
 
-namespace JetBrains.EnvDTE.Client.Impl.Common;
+namespace JetBrains.EnvDTE.Client.Impl.Props;
 
 public class PropertiesImplementation(
     [NotNull] DteImplementation dte,

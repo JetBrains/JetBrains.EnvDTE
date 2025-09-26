@@ -1,46 +1,59 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using JetBrains.Build.Helpers.Msbuild;
+using JetBrains.Application.Components;
+using JetBrains.Application.Parts;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
-using JetBrains.ProjectModel.MSBuild;
+using JetBrains.ProjectModel.ProjectsHost;
+using JetBrains.ProjectModel.ProjectsHost.SolutionHost;
 using JetBrains.ReSharper.Resources.Shell;
+using JetBrains.Rider.Model;
+using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl.Properties;
 
-public class ProjectPropertyService : IPropertyService<IProject>
+[SolutionComponent(Instantiation.DemandAnyThreadSafe)]
+public class ProjectPropertyService(
+    Lifetime serviceLifetime,
+    ILogger logger,
+    ISolution solution,
+    ISimpleLazy<IProjectModelEditor> projectModelEditor)
+    : IPropertyService<IProject>
 {
-    // Visual Studio property names
-    private const string FullPathProperty = "FullPath";
-    private const string FriendlyTargetFrameworkNameProperty = "FriendlyTargetFramework";
-    private const string OutputFileNameProperty = "OutputFileName";
+    // Right now you can only statically request properties to be loaded into configuration through the `JetBrains.ProjectModel.Properties.IProjectPropertiesRequest`
+    // A way to make this more efficient would be to make properties in `JetBrains.ProjectModel.Properties.ProjectPropertiesRequests`
+    // modifiable, so that we can dynamically request new properties after the user has accessed them (and they were not inside the configuration)
+    // This way we would "cache" them inside configurations in case the user read them again
 
-    // MsBuild property names
-    private const string TargetFileNameProperty = "TargetFileName";
-
-    // Direct mapping between VS property names and MSBuild property names
-    private static readonly ReadOnlyDictionary<string, string> VsPropertyNameMap = new(new Dictionary<string, string>()
-    {
-        { FriendlyTargetFrameworkNameProperty, MSBuildProjectUtil.TargetFrameworkProperty },
-        { FullPathProperty, MsbuildFile.Properties.MSBuildProjectDirectory },
-        { OutputFileNameProperty, TargetFileNameProperty },
-        { MSBuildProjectUtil.RootNamespaceProperty, MSBuildProjectUtil.RootNamespaceProperty },
-        { MSBuildProjectUtil.AssemblyNameProperty, MSBuildProjectUtil.AssemblyNameProperty },
-        { MSBuildProjectUtil.TargetFrameworkMonikerProperty, MSBuildProjectUtil.TargetFrameworkMonikerProperty },
-    });
-
+    // TODO It might be necessary to reload the project here, other parts of the system might change properties without reloading the active configurations
     public async Task<string> GetPropertyAsync(Lifetime lifetime, IProject project, string vsPropertyName)
     {
         if (!TryMapPropertyName(vsPropertyName, out var propertyName))
             throw new PropertyNotFoundException(vsPropertyName);
 
+        // Try to get the property from the active configurations and only fall back to reading the project properties if necessary
+        // We first try this to avoid using the project model editor because it will reload the project via the MsBuild task
+        foreach (var configuration in project.ProjectProperties.ActiveConfigurations.Configurations)
+        {
+            if (configuration.PropertiesCollection.TryGetValue(propertyName, out var value)) return value;
+        }
+
+        var buildSettings = project.ProjectProperties.BuildSettings;
+        var configurationName =
+            buildSettings is not null ? $"{buildSettings.Configuration}|{buildSettings.PlatformTarget}" : null;
+
         string result = null;
-        await lifetime.StartMainWrite(() =>
-            project.GetSolution().GetComponent<IProjectModelEditor>().EditProjectMsBuildProperties(project, null,
-                editor => { result = editor.TryGetValue(propertyName); }));
+        try
+        {
+            await lifetime.StartMainWrite(() => projectModelEditor.Value.EditProjectMsBuildProperties(project, configurationName,
+                editor => result = editor.TryGetValue(propertyName)));
+        }
+        catch (Exception e)
+        {
+            logger.Error(e, $"Failed to get property for project: '{project.Name}'");
+        }
 
         return result;
     }
@@ -50,15 +63,51 @@ public class ProjectPropertyService : IPropertyService<IProject>
         if (!TryMapPropertyName(vsPropertyName, out var propertyName))
             throw new PropertyNotFoundException(vsPropertyName);
 
-        await lifetime.StartMainWrite(() =>
-            project.GetSolution().GetComponent<IProjectModelEditor>().EditProjectMsBuildProperties(project, null,
-                editor => { editor.SetProperty(propertyName, propertyValue ?? string.Empty); }));
+        var isSuccess = false;
+        try
+        {
+            await lifetime.StartMainWrite(() => projectModelEditor.Value.EditProjectMsBuildProperties(project, null,
+                editor => isSuccess = editor.SetProperty(propertyName, propertyValue ?? string.Empty)));
+        }
+        catch (Exception e)
+        {
+            logger.Error(e, $"Failed to set property for project: '{project.Name}'");
+        }
+
+        if (!isSuccess) return;
+
+        // If the property is successfully set, we need to reload the project so that the change is applied to the
+        // active configurations
+        var projectMark = project.GetProjectMark();
+        if (projectMark is null)
+        {
+            logger.Warn($"Failed to reload the project '{project.Name}' becasue the project mark is null");
+            return;
+        }
+
+        var solutionHost = solution.ProjectsHostContainer().GetComponent<ISolutionHost>();
+        // We don't have to wait for the reload to complete, but that also means that we need to use the service
+        // lifetime for the reload, because the passed lifetime will likely be terminated before the reload completes
+        await serviceLifetime.StartMainWrite(() => solutionHost.ReloadProjectSync(projectMark));
     }
 
-    public bool IsValidProperty(string vsPropertyName) =>
-        TryMapPropertyName(vsPropertyName, out _);
+    public RdPropertyType GetPropertyType(string vsPropertyName)
+    {
+        if (!VisualStudioProjectProperties.PropertyMap.TryGetValue(vsPropertyName, out var prop))
+            return RdPropertyType.Null;
 
-    // TODO: Add additional logic
-    private static bool TryMapPropertyName([NotNull] string vsPropertyName, out string msBuildPropertyName) =>
-        VsPropertyNameMap.TryGetValue(vsPropertyName, out msBuildPropertyName);
+        return prop.IsReadOnly ? RdPropertyType.ReadOnly : RdPropertyType.Regular;
+    }
+
+    private static bool TryMapPropertyName([NotNull] string vsPropertyName, out string propertyName)
+    {
+        if (VisualStudioProjectProperties.PropertyMap.TryGetValue(vsPropertyName, out var prop))
+        {
+            propertyName = prop.RiderName;
+            return true;
+        }
+
+        propertyName = null;
+        return false;
+    }
 }

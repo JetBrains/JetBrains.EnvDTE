@@ -5,7 +5,6 @@ using JetBrains.Annotations;
 using JetBrains.Core;
 using JetBrains.EnvDTE.Client.Impl.ProjectModel;
 using JetBrains.Rider.Model;
-using Solution = EnvDTE.Solution;
 
 namespace JetBrains.EnvDTE.Client.Impl
 {
