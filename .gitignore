@@ -28,3 +28,6 @@ bin
 # Ignore Nuke output
 .tmp/
 .gradle
+
+# Ignore local properties
+local.properties

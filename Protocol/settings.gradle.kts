@@ -1,5 +1,14 @@
 rootProject.name = "Protocol"
 
+val propertiesFile = rootDir.resolve("local.properties")
+if (propertiesFile.exists()) {
+    val props = java.util.Properties()
+    props.load(propertiesFile.inputStream())
+    if (props.getProperty("gradle.offline") == "true") {
+        gradle.startParameter.isOffline = true
+    }
+}
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
