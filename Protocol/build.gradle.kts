@@ -25,6 +25,9 @@ dependencies {
 
 repositories {
     mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 
 version = libs.versions.riderSdk
@@ -98,10 +101,8 @@ tasks {
         }
     }
 
-    val rdGen = ":protocol:rdgen"
-
     register("prepare") {
-        dependsOn(rdGen, generateDotNetSdkProperties, generateNuGetConfig)
+        dependsOn("rdgen", generateDotNetSdkProperties, generateNuGetConfig)
     }
 }
 
