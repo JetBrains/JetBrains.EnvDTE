@@ -1,0 +1,36 @@
+<Project>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <AssemblyName>JetBrains.EnvDTE.Host</AssemblyName>
+        <RootNamespace>JetBrains.EnvDTE.Host</RootNamespace>
+        <IsPackable>false</IsPackable>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\Subplatform.snk</AssemblyOriginatorKeyFile>
+
+        <NoWarn>NU1701</NoWarn>
+
+        <NoPackageAnalysis>true</NoPackageAnalysis>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+
+        <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+        <DefaultItemExcludes>$(DefaultItemExcludes);obj\**</DefaultItemExcludes>
+        <OutputPath>bin\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+        <DefineConstants>TRACE;DEBUG;JET_MODE_ASSERT</DefineConstants>
+    </PropertyGroup>
+
+    <Target BeforeTargets="CoreCompile" Name="CheckForGradlePrepared" Condition="!Exists('$(JetBrainsRiderRdBackendCommonReference)')">
+        <Error Text="Please run `./gradlew :prepare`" />
+    </Target>
+
+    <Import Project="$(MSBuildThisFileDirectory)..\Protocol\build\DotNetSdkPath.Generated.props" Condition="Exists('$(MSBuildThisFileDirectory)..\Protocol\build\DotNetSdkPath.Generated.props')" />
+
+    <PropertyGroup>
+        <JetBrainsRiderRdBackendCommonReference>$(DotNetSdkPath)\Build\PackageReference.JetBrains.Rider.RdBackend.Common.Props</JetBrainsRiderRdBackendCommonReference>
+        <JetBrainsRiderBackendReference>$(DotNetSdkPath)\Build\PackageReference.JetBrains.Rider.Rider.Backend.Props</JetBrainsRiderBackendReference>
+    </PropertyGroup>
+</Project>
