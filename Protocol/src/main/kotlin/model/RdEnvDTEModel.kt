@@ -83,6 +83,7 @@ object DteProtocolModel : Ext(DteRoot) {
             field("newName", string)
         }, void)
         call("Project_get_FileName", projectModel, string)
+        call("Project_get_UniqueName", projectModel, string)
         call("Project_get_Kind", projectModel, string)
 
         call("Project_get_Property", structdef("Project_get_PropertyRequest") {

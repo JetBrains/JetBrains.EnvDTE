@@ -9,13 +9,11 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 {
     public sealed class ProjectImplementation : Project
     {
-        [NotNull] private readonly DteImplementation _dte;
-        [NotNull] private readonly Rider.Model.ProjectModel _projectModel;
         [NotNull] private readonly PropertiesImplementation _properties;
 
-        [NotNull] private DteImplementation Implementation => _dte;
+        [NotNull] private DteImplementation Implementation { get; }
 
-        [NotNull] private Rider.Model.ProjectModel ProjectModel => _projectModel;
+        [NotNull] private Rider.Model.ProjectModel ProjectModel { get; }
 
         [NotNull, ItemNotNull]
         private List<ProjectItemModel> ProjectItemModels =>
@@ -39,22 +37,30 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         [NotNull] public DTE DTE => Implementation;
 
         public string FileName => Implementation.DteProtocolModel.Project_get_FileName.Sync(ProjectModel);
+
         public string FullName => FileName;
+
+        public string UniqueName => Implementation.DteProtocolModel.Project_get_UniqueName.Sync(ProjectModel);
+
         public Projects Collection => Implementation.Solution.Projects;
+
         public void Delete() => Implementation.DteProtocolModel.Project_Delete.Sync(ProjectModel);
 
         [CanBeNull] public ProjectItem ParentProjectItem { get; }
 
         public Properties Properties => _properties;
+
         public string Kind => Implementation.DteProtocolModel.Project_get_Kind.Sync(ProjectModel);
+
+        public object Object => this;
 
         public ProjectImplementation(
             [NotNull] DteImplementation dte,
             [NotNull] Rider.Model.ProjectModel projectModel,
             [CanBeNull] ProjectItem parentProjectItem = null)
         {
-            _dte = dte;
-            _projectModel = projectModel;
+            Implementation = dte;
+            ProjectModel = projectModel;
             ParentProjectItem = parentProjectItem;
 
             _properties = new PropertiesImplementation(Implementation, this, arg =>
@@ -66,9 +72,9 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 
                 return new PropertyImplementation(dte, _properties!, propertyInfo,
                     name =>
-                        _dte.DteProtocolModel.Project_get_Property.Sync(new(_projectModel, name)),
+                        Implementation.DteProtocolModel.Project_get_Property.Sync(new(ProjectModel, name)),
                     (name, value) =>
-                        _dte.DteProtocolModel.Project_set_Property.Sync(new(_projectModel, name, value)));
+                        Implementation.DteProtocolModel.Project_set_Property.Sync(new(ProjectModel, name, value)));
             });
         }
 
@@ -80,8 +86,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             set => throw new NotImplementedException();
         }
 
-        public string UniqueName => throw new NotImplementedException();
-        public object Object => throw new NotImplementedException();
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
 

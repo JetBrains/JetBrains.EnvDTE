@@ -10,19 +10,22 @@ using JetBrains.ProjectModel;
 using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
+using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Rider.Model;
+using Key = JetBrains.Util.Key;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
 {
     [SolutionComponent(InstantiationEx.LegacyDefault)]
     public sealed class ProjectCallbackProvider(ProjectPropertyService propertyService) : IEnvDteCallbackProvider
     {
+        private readonly Key _uniqueNameKey = new("EnvDTE.UniqueName");
+
         public void RegisterCallbacks(
             AstManager astManager,
             ISolution solution,
             ProjectModelViewHost host,
-            DteProtocolModel model
-        )
+            DteProtocolModel model)
         {
             model.Project_get_Name.SetWithReadLock(solution.Locks,
                 projectModel => GetProject(projectModel)?.Name ?? string.Empty);
@@ -38,6 +41,24 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
 
             model.Project_get_FileName.SetWithReadLock(solution.Locks, projectModel =>
                 GetProject(projectModel)?.ProjectFileLocation.FullPath ?? string.Empty);
+
+            model.Project_get_UniqueName.SetAsync(async (lifetime, projectModel) =>
+            {
+                var project = GetProject(projectModel);
+                if (project is null) return string.Empty;
+
+                string uniqueName = null;
+                await lifetime.StartReadActionAsync(() =>
+                {
+                    uniqueName = project.GetProperty(_uniqueNameKey) as string;
+                });
+                if (uniqueName is not null) return uniqueName;
+
+                uniqueName = CalculateProjectUniqueName(project);
+                // Save the unique name to the project properties so we don't have to calculate it every time
+                await lifetime.StartMainWrite(() => project.SetProperty(_uniqueNameKey, uniqueName));
+                return uniqueName;
+            });
 
             model.Project_get_Kind.SetSync(projectModel =>
             {
@@ -72,6 +93,14 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
 
             [CanBeNull]
             IProject GetProject(Rider.Model.ProjectModel rdModel) => host.GetItemById<IProject>(rdModel.Id);
+        }
+
+        private static string CalculateProjectUniqueName([NotNull] IProject project)
+        {
+            var solutionDirPath = project.GetSolution().SolutionDirectory;
+            var projectFilePath = project.ProjectFileLocation;
+
+            return projectFilePath.MakeRelativeTo(solutionDirPath).FullPath;
         }
     }
 }
