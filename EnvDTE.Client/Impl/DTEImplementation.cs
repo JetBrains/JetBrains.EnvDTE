@@ -3,6 +3,7 @@ using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
 using JetBrains.Core;
+using JetBrains.EnvDTE.Client.Impl.IDE;
 using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl;
 using JetBrains.Lifetimes;
 using JetBrains.Rider.Model;
@@ -12,6 +13,8 @@ namespace JetBrains.EnvDTE.Client.Impl
     [PublicAPI]
     public sealed class DteImplementation : DTE, DTE2
     {
+        [CanBeNull] private ItemOperationsImplementation _itemOperations;
+
         internal Lifetime DteLifetime { get; }
         [NotNull] internal DteProtocolModel DteProtocolModel { get; }
 
@@ -28,6 +31,8 @@ namespace JetBrains.EnvDTE.Client.Impl
         [NotNull] public Solution Solution { get; }
 
         public string CommandLineArguments => DteProtocolModel.DTE_CommandLineArgs.Sync(Unit.Instance);
+
+        public ItemOperations ItemOperations => _itemOperations ?? new ItemOperationsImplementation(this);
 
         public DteImplementation([NotNull] DteProtocolModel dteProtocolModel, Lifetime? lifetime = null)
         {
@@ -84,7 +89,6 @@ namespace JetBrains.EnvDTE.Client.Impl
             ref object[] ContextParams
         ) => throw new NotImplementedException();
 
-        public ItemOperations ItemOperations => throw new NotImplementedException();
         public UndoContext UndoContext => throw new NotImplementedException();
         public Macros Macros => throw new NotImplementedException();
         public object ActiveSolutionProjects => throw new NotImplementedException();
