@@ -16,21 +16,14 @@ using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
 {
-    public abstract class CodeElementCallbackProviderBase : IEnvDteCallbackProvider
+    public abstract class CodeElementCallbackProviderBase(ISolution solution, AstManager astManager, ProjectModelViewHost host)
+        : IEnvDteCallbackProvider
     {
         [NotNull]
         private ILogger Logger { get; } = JetBrains.Util.Logging.Logger.GetLogger<CodeElementCallbackProvider>();
 
-        private AstManager AstManager { get; set; }
-
-        public void RegisterCallbacks(
-            AstManager astManager,
-            ISolution solution,
-            ProjectModelViewHost host,
-            DteProtocolModel model
-        )
+        public void RegisterCallbacks(DteProtocolModel model)
         {
-            AstManager = astManager;
             DoRegisterCallbacks(host, solution.Locks, model);
         }
 
@@ -44,7 +37,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
         protected CodeElementModel CreateNamespaceModel([NotNull] ICSharpTypeDeclaration declaration)
         {
             var ns = declaration.OwnerNamespaceDeclaration;
-            int id = AstManager.GetOrCreateId(ns);
+            int id = astManager.GetOrCreateId(ns);
             int typeId = PsiElementRegistrar.GetTypeId(ns);
             return new CodeElementModel(typeId, id);
         }
@@ -66,7 +59,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
         )
             where TNode : ITreeNode
             where TElement : IDeclaredElement =>
-            ep.SetWithReadLock(locks, codeElementModel => AstManager.MapElement(
+            ep.SetWithReadLock(locks, codeElementModel => astManager.MapElement(
                 codeElementModel.Id,
                 psiMapper,
                 declaredElementMapper,
@@ -91,7 +84,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
         [NotNull]
         protected CodeElementModel CreateCodeElementModel([NotNull] ITreeNode node)
         {
-            int childId = AstManager.GetOrCreateId(node);
+            int childId = astManager.GetOrCreateId(node);
             int childTypeId = PsiElementRegistrar.GetTypeId(node);
             return new CodeElementModel(childTypeId, childId);
         }
@@ -102,7 +95,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
             var declarations = typeElement.GetDeclarations();
             if (declarations.IsEmpty())
             {
-                int id = AstManager.GetOrCreateId(typeElement);
+                int id = astManager.GetOrCreateId(typeElement);
                 int typeId = PsiElementRegistrar.GetTypeId(typeElement);
                 return new CodeElementModel(typeId, id);
             }
@@ -110,7 +103,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
             if (declarations.IsSingle())
             {
                 var declaration = declarations.Single();
-                int id = AstManager.GetOrCreateId(declaration);
+                int id = astManager.GetOrCreateId(declaration);
                 int typeId = PsiElementRegistrar.GetTypeId(declaration);
                 return new CodeElementModel(typeId, id);
             }
@@ -124,7 +117,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
         {
             var element = type.GetTypeElement();
             if (element != null) return ToModel(element);
-            int id = AstManager.GetOrCreateId((IArrayType) type);
+            int id = astManager.GetOrCreateId((IArrayType) type);
             return new CodeElementModel(PsiElementRegistrar.ClassDeclarationId, id);
         }
     }

@@ -11,15 +11,11 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
 {
-    [SolutionComponent(InstantiationEx.LegacyDefault)]
-    public sealed class FileCodeModelCallbackProvider : IEnvDteCallbackProvider
+    [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
+    public sealed class FileCodeModelCallbackProvider(ISolution solution, ProjectModelViewHost host, AstManager astManager)
+        : IEnvDteCallbackProvider
     {
-        public void RegisterCallbacks(
-            AstManager astManager,
-            ISolution solution,
-            ProjectModelViewHost host,
-            DteProtocolModel model
-        )
+        public void RegisterCallbacks(DteProtocolModel model)
         {
             model.FileCodeModel_get_CodeElements.SetWithReadLock(solution.Locks, projectItemModel =>
             {

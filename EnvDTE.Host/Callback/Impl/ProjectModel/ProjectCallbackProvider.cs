@@ -5,7 +5,6 @@ using JetBrains.Application.Parts;
 using JetBrains.Core;
 using JetBrains.EnvDTE.Host.Callback.Impl.Properties;
 using JetBrains.EnvDTE.Host.Callback.Util;
-using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
 using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.ProjectModel;
@@ -16,16 +15,13 @@ using Key = JetBrains.Util.Key;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
 {
-    [SolutionComponent(InstantiationEx.LegacyDefault)]
-    public sealed class ProjectCallbackProvider(ProjectPropertyService propertyService) : IEnvDteCallbackProvider
+    [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
+    public sealed class ProjectCallbackProvider(ProjectPropertyService propertyService, ISolution solution, ProjectModelViewHost host)
+        : IEnvDteCallbackProvider
     {
         private readonly Key _uniqueNameKey = new("EnvDTE.UniqueName");
 
-        public void RegisterCallbacks(
-            AstManager astManager,
-            ISolution solution,
-            ProjectModelViewHost host,
-            DteProtocolModel model)
+        public void RegisterCallbacks(DteProtocolModel model)
         {
             model.Project_get_Name.SetWithReadLock(solution.Locks,
                 projectModel => GetProject(projectModel)?.Name ?? string.Empty);
@@ -89,11 +85,10 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                 solution.InvokeUnderTransaction(cookie => cookie.Remove(project));
                 return Unit.Instance;
             });
-            return;
-
-            [CanBeNull]
-            IProject GetProject(Rider.Model.ProjectModel rdModel) => host.GetItemById<IProject>(rdModel.Id);
         }
+
+        [CanBeNull]
+        private IProject GetProject(Rider.Model.ProjectModel rdModel) => host.GetItemById<IProject>(rdModel.Id);
 
         private static string CalculateProjectUniqueName([NotNull] IProject project)
         {

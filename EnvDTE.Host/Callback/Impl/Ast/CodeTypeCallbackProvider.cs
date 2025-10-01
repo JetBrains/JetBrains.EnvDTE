@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.Application.Parts;
 using JetBrains.Application.Threading;
 using JetBrains.Diagnostics;
+using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.ReSharper.Psi;
@@ -14,8 +15,9 @@ using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl.Ast
 {
-    [SolutionComponent(InstantiationEx.LegacyDefault)]
-    public sealed class CodeTypeCallbackProvider : CodeElementCallbackProviderBase
+    [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
+    public sealed class CodeTypeCallbackProvider(ISolution solution, AstManager astManager, ProjectModelViewHost host)
+        : CodeElementCallbackProviderBase(solution, astManager, host)
     {
         protected override void DoRegisterCallbacks(
             ProjectModelViewHost host,
