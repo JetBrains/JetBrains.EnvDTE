@@ -65,6 +65,15 @@ object DteProtocolModel : Ext(DteRoot) {
         field("platform", string)
     }
 
+    val ItemOperations_open_FileRequest = structdef {
+        field("fileName", string)
+        field("viewKind", string)
+    }
+
+    val ideWindow = structdef {
+        // TODO
+    }
+
     init {
         createDteCallbacks()
         createSolutionCallbacks()
@@ -90,6 +99,10 @@ object DteProtocolModel : Ext(DteRoot) {
         call("DTE_Name", void, string)
         call("DTE_FileName", void, string)
         call("DTE_CommandLineArgs", void, string)
+
+        // See ItemOperationsProvider
+        call("ItemOperations_open_File", ItemOperations_open_FileRequest, ideWindow)
+        call("ItemOperations_isOpen_File", ItemOperations_open_FileRequest, bool)
     }
 
     private fun createSolutionCallbacks() {
