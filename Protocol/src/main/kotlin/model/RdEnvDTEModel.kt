@@ -51,17 +51,6 @@ object DteProtocolModel : Ext(DteRoot) {
       +"None"
     }
 
-    val Project_get_PropertyRequest = structdef {
-        field("model", projectModel)
-        field("name", string)
-    }
-
-    val rdPropertyType = enum {
-        +"Regular"
-        +"Null"
-        +"ReadOnly"
-    }
-
     init {
         createDteCallbacks()
         createSolutionCallbacks()
@@ -96,8 +85,10 @@ object DteProtocolModel : Ext(DteRoot) {
         call("Project_get_FileName", projectModel, string)
         call("Project_get_Kind", projectModel, string)
 
-        call("Project_get_Property", Project_get_PropertyRequest, string.nullable)
-        call("Project_getType_Property", Project_get_PropertyRequest, rdPropertyType)
+        call("Project_get_Property", structdef("Project_get_PropertyRequest") {
+            field("model", projectModel)
+            field("name", string)
+        }, string.nullable)
         call("Project_set_Property", structdef("Project_set_PropertyRequest") {
             field("model", projectModel)
             field("name", string)

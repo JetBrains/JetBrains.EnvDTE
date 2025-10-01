@@ -61,21 +61,14 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             {
                 if (arg is not string key) throw new ArgumentException();
 
-                var propertyType =
-                    Implementation.DteProtocolModel.Project_getType_Property.Sync(new(ProjectModel, key));
+                if (!VisualStudioProperties.Map.TryGetValue(key, out var propertyInfo))
+                    return new NullPropertyImplementation(dte, _properties!, key);
 
-                return propertyType switch
-                {
-                    RdPropertyType.Null => new NullPropertyImplementation(_dte, _properties, key),
-                    RdPropertyType.Regular => new PropertyImplementation(_dte, _properties, key,
-                        () =>
-                            _dte.DteProtocolModel.Project_get_Property.Sync(new(_projectModel, key)),
-                        value =>
-                            _dte.DteProtocolModel.Project_set_Property.Sync(new(_projectModel, key, value))),
-                    RdPropertyType.ReadOnly => new ReadOnlyPropertyImplementation(_dte, _properties, key, () =>
-                        _dte.DteProtocolModel.Project_get_Property.Sync(new(_projectModel, key))),
-                    _ => throw new ArgumentOutOfRangeException($"Invalid property type: {propertyType}")
-                };
+                return new PropertyImplementation(dte, _properties!, propertyInfo,
+                    name =>
+                        _dte.DteProtocolModel.Project_get_Property.Sync(new(_projectModel, name)),
+                    (name, value) =>
+                        _dte.DteProtocolModel.Project_set_Property.Sync(new(_projectModel, name, value)));
             });
         }
 

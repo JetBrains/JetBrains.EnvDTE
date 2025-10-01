@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using JetBrains.Application.Parts;
 using JetBrains.Core;
@@ -47,13 +48,10 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
             model.Project_get_Property.SetAsync((lifetime, args) =>
             {
                 var project = GetProject(args.Model);
-                if (project is null) return null;
+                if (project is null) return Task.FromResult<string>(null);
 
                 return propertyService.GetPropertyAsync(lifetime, project, args.Name);
             });
-
-            model.Project_getType_Property.SetSync(args =>
-                propertyService.GetPropertyType(args.Name));
 
             model.Project_set_Property.SetVoidAsync(async (lifetime, args) =>
             {
