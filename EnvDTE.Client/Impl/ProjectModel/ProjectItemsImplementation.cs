@@ -36,7 +36,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             new(dte, projectItemModel, containingProject);
 
         public IEnumerator GetEnumerator() =>
-            projectItemModels.Select(model => new ProjectItemImplementation(dte, model, containingProject)).GetEnumerator();
+            projectItemModels.Select(CreateProjectItem).GetEnumerator();
 
         #region NotImplemented
 

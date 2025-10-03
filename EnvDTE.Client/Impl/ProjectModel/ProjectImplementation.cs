@@ -25,16 +25,9 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         }
 
         [NotNull]
-        public ProjectItems ProjectItems
-        {
-            get
-            {
-                _projectItems ??= Constants.vsProjectKindSolutionItems.Equals(_dte.DteProtocolModel.Project_get_Kind.Sync(_projectModel))
+        public ProjectItems ProjectItems => Constants.vsProjectKindSolutionItems.Equals(Kind)
                         ? new SolutionFolderProjectItemsImplementation(_dte, ProjectItemModels, this, this)
                         : new ProjectItemsImplementation(_dte, ProjectItemModels, this, this);
-                return _projectItems;
-            }
-        }
 
         [NotNull] public DTE DTE => _dte;
 

@@ -16,8 +16,14 @@ public class SolutionFolderProjectItemImplementation(
     {
         get
         {
-            _subProjectImplementation ??= new(
-                DteImplementation, new Rider.Model.ProjectModel(ProjectItemModel.Id), this);
+            if (_subProjectImplementation is null)
+            {
+                // See documentation
+                _subProjectImplementation =
+                    (dte.DteProtocolModel.ProjectItem_get_Kind.Sync(projectItemModel) == ProjectItemKindModel.PhysicalFile)
+                    ? null
+                    : new(DteImplementation, new Rider.Model.ProjectModel(ProjectItemModel.Id), this);
+            }
             return _subProjectImplementation;
         }
     }
