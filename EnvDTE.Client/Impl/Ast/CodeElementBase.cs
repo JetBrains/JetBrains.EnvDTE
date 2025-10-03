@@ -82,10 +82,12 @@ namespace JetBrains.EnvDTE.Client.Impl.Ast
             this
         );
 
+        // TODO: Rework the code elements
         [NotNull]
         public ProjectItem ProjectItem => new ProjectItemImplementation(
             Implementation,
-            Implementation.DteProtocolModel.CodeElement_get_ProjectItem.Sync(Model)
+            Implementation.DteProtocolModel.CodeElement_get_ProjectItem.Sync(Model),
+            null
         );
 
         public vsCMAccess Access

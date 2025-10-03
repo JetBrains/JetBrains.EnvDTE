@@ -7,34 +7,22 @@ using JetBrains.Annotations;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 {
-    public sealed class ProjectsImplementation : Projects
+    public sealed class ProjectsImplementation(
+        [NotNull] DteImplementation dte,
+        [NotNull, ItemNotNull] IReadOnlyList<Rider.Model.ProjectModel> projectModels)
+        : Projects
     {
         [NotNull]
-        private DteImplementation Implementation { get; }
+        public DTE Parent => dte;
 
-        [NotNull, ItemNotNull]
-        private IReadOnlyList<Rider.Model.ProjectModel> ProjectModels { get; }
-
-        public ProjectsImplementation(
-            [NotNull] DteImplementation implementation,
-            [NotNull, ItemNotNull] IReadOnlyList<Rider.Model.ProjectModel> projectModels
-        )
-        {
-            Implementation = implementation;
-            ProjectModels = projectModels;
-        }
+        public int Count => projectModels.Count;
 
         [NotNull]
-        public DTE Parent => Implementation;
-
-        public int Count => ProjectModels.Count;
+        public DTE DTE => dte;
 
         [NotNull]
-        public DTE DTE => Implementation;
-
-        [NotNull]
-        IEnumerator Projects.GetEnumerator() => ProjectModels
-            .Select(model => new ProjectImplementation(Implementation, model))
+        IEnumerator Projects.GetEnumerator() => projectModels
+            .Select(model => new ProjectImplementation(dte, model))
             .GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => (this as Projects).GetEnumerator();
@@ -42,8 +30,8 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         [NotNull]
         public Project Item(object index)
         {
-            if (!(index is int number)) throw new ArgumentException();
-            return new ProjectImplementation(Implementation, ProjectModels[number]);
+            if (index is not int number) throw new ArgumentException();
+            return new ProjectImplementation(dte, projectModels[number]);
         }
 
         public Properties Properties => throw new NotImplementedException();

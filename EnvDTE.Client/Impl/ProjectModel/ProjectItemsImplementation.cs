@@ -8,38 +8,43 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 {
-    public sealed class ProjectItemsImplementation : ProjectItems
+    public class ProjectItemsImplementation(
+        [NotNull] DteImplementation dte,
+        [NotNull] List<ProjectItemModel> projectItemModels,
+        [NotNull] ProjectImplementation containingProject,
+        [NotNull] object parent,
+        [CanBeNull] ProjectItemImplementation projectItem = null
+        )
+        : ProjectItems
     {
-        private DteImplementation Implementation { get; }
-        private List<ProjectItemModel> ProjectItemModels { get; }
+        protected DteImplementation DteImplementation => dte;
+        protected ProjectItemImplementation ParentProjectItemImplementation => projectItem;
+        protected ProjectImplementation ContainingProjectImplementation => containingProject;
 
-        public ProjectItemsImplementation(
-            DteImplementation implementation,
-            List<ProjectItemModel> projectItemModels,
-            object parent)
-        {
-            Implementation = implementation;
-            ProjectItemModels = projectItemModels;
-            Parent = parent;
-        }
-
-        public DTE DTE => Implementation;
-        public object Parent { get; }
-        public int Count => ProjectItemModels.Count;
+        public DTE DTE => dte;
+        public object Parent => parent;
+        public int Count => projectItemModels.Count;
+        public virtual string Kind => Constants.vsProjectItemKindPhysicalFolder;
 
         [CanBeNull]
         public ProjectItem Item(object index)
         {
-            if (!(index is int number)) return null;
-            var itemModel = ProjectItemModels.ElementAtOrDefault(number);
-            if (itemModel == null) return null;
-            return new ProjectItemImplementation(Implementation, itemModel);
+            // Project items list is 1-based in VS
+            if (index is not int number) throw new ArgumentOutOfRangeException(nameof(index));
+            if (number < 1 || number > projectItemModels.Count) throw new ArgumentOutOfRangeException(nameof(index));
+
+            var itemModel = projectItemModels.ElementAtOrDefault(number - 1);
+            return itemModel is null ? null : CreateProjectItem(itemModel);
         }
 
-        public IEnumerator GetEnumerator() =>
-            ProjectItemModels.Select(model => new ProjectItemImplementation(Implementation, model)).GetEnumerator();
+        protected virtual ProjectItemImplementation CreateProjectItem(ProjectItemModel projectItemModel) =>
+            new(dte, projectItemModel, containingProject, projectItem);
 
-        public string Kind => throw new NotImplementedException();
+        public IEnumerator GetEnumerator() =>
+            projectItemModels.Select(model => new ProjectItemImplementation(dte, model, containingProject, projectItem)).GetEnumerator();
+
+        #region NotImplemented
+
         public Project ContainingProject => throw new NotImplementedException();
         public ProjectItem AddFromFile(string FileName) => throw new NotImplementedException();
         public ProjectItem AddFromTemplate(string FileName, string Name) => throw new NotImplementedException();
@@ -49,5 +54,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             throw new NotImplementedException();
 
         public ProjectItem AddFromFileCopy(string FilePath) => throw new NotImplementedException();
+
+        #endregion
     }
 }

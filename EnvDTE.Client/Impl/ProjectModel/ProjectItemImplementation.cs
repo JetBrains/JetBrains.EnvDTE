@@ -7,46 +7,38 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 {
-    public sealed class ProjectItemImplementation : ProjectItem
+    public class ProjectItemImplementation(
+        [NotNull] DteImplementation dte,
+        [NotNull] ProjectItemModel projectItemModel,
+        [CanBeNull] ProjectImplementation containingProject,
+        [CanBeNull] ProjectItemImplementation parent = null)
+        : ProjectItem
     {
-        [NotNull]
-        private DteImplementation Implementation { get; }
-
-        [NotNull]
-        internal ProjectItemModel ProjectItemModel { get; }
-
-        public ProjectItemImplementation(
-            [NotNull] DteImplementation implementation,
-            [NotNull] ProjectItemModel projectItemModel
-        )
-        {
-            Implementation = implementation;
-            ProjectItemModel = projectItemModel;
-        }
-
-        [NotNull]
-        public DTE DTE => Implementation;
+        protected DteImplementation DteImplementation => dte;
+        internal ProjectItemModel ProjectItemModel => projectItemModel;
+        [NotNull] public DTE DTE => dte;
 
         public short FileCount => 1;
 
         [NotNull]
         public string Name
         {
-            get => Implementation.DteProtocolModel.ProjectItem_get_Name.Sync(ProjectItemModel);
-            set => Implementation
+            get => dte.DteProtocolModel.ProjectItem_get_Name.Sync(projectItemModel);
+            set => dte
                 .DteProtocolModel
                 .ProjectItem_set_Name
-                .Sync(new ProjectItem_set_NameRequest(ProjectItemModel, value));
+                .Sync(new ProjectItem_set_NameRequest(projectItemModel, value));
         }
 
         [NotNull]
-        public string Kind => Implementation.DteProtocolModel.ProjectItem_get_Kind.Sync(ProjectItemModel) switch
+        public virtual string Kind => dte.DteProtocolModel.ProjectItem_get_Kind.Sync(projectItemModel) switch
         {
             ProjectItemKindModel.PhysicalFile => Constants.vsProjectItemKindPhysicalFile,
             ProjectItemKindModel.PhysicalFolder => Constants.vsProjectItemKindPhysicalFolder,
             ProjectItemKindModel.Project => Constants.vsProjectItemKindSubProject,
             ProjectItemKindModel.VirtualDirectory => Constants.vsProjectItemKindVirtualFolder,
-            _ => Constants.vsProjectItemKindUnknown
+            ProjectItemKindModel.Unknown => Constants.vsProjectItemKindUnknown,
+            _ => throw new ArgumentOutOfRangeException()
         };
 
         [CanBeNull]
@@ -55,18 +47,23 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             get
             {
                 if (Kind != Constants.vsProjectItemKindPhysicalFile) return null;
-                var language = Implementation.DteProtocolModel.ProjectItem_get_Language.Sync(ProjectItemModel);
+                var language = dte.DteProtocolModel.ProjectItem_get_Language.Sync(projectItemModel);
                 if (!SupportedLanguageUtils.IsSupported(language.ToEnvDTELanguage())) return null;
-                return new FileCodeModelImpl(Implementation, this);
+                return new FileCodeModelImpl(dte, this);
             }
         }
 
         [NotNull]
-        public ProjectItems ProjectItems => new ProjectItemsImplementation(
-            Implementation,
-            Implementation.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(ProjectItemModel),
-            this
-        );
+        public virtual ProjectItems ProjectItems =>  new ProjectItemsImplementation(dte,
+            dte.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(projectItemModel), containingProject, parent);
+
+        public ProjectItems Collection => parent is null ? containingProject.ProjectItems : parent.ProjectItems;
+
+        public virtual object Object => this;
+        public virtual Project SubProject => null;
+        public Project ContainingProject => containingProject;
+
+        #region NotImplemented
 
         public bool IsDirty
         {
@@ -74,9 +71,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             set => throw new NotImplementedException();
         }
 
-        public ProjectItems Collection => throw new NotImplementedException();
         public Properties Properties => throw new NotImplementedException();
-        public object Object => throw new NotImplementedException();
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
 
@@ -88,10 +83,8 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 
         public ConfigurationManager ConfigurationManager => throw new NotImplementedException();
         public Document Document => throw new NotImplementedException();
-        public Project SubProject => throw new NotImplementedException();
-        public Project ContainingProject => throw new NotImplementedException();
-        public string get_FileNames(short index) => throw new System.NotImplementedException();
-        public bool SaveAs(string NewFileName) => throw new System.NotImplementedException();
+        public string get_FileNames(short index) => throw new NotImplementedException();
+        public bool SaveAs(string NewFileName) => throw new NotImplementedException();
 
         public bool get_IsOpen(string ViewKind = "{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}") =>
             throw new NotImplementedException();
@@ -99,15 +92,17 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         public Window Open(string ViewKind = "{00000000-0000-0000-0000-000000000000}") =>
             throw new NotImplementedException();
 
-        public void Remove() => throw new System.NotImplementedException();
-        public void ExpandView() => throw new System.NotImplementedException();
-        public object get_Extender(string ExtenderName) => throw new System.NotImplementedException();
-        public void Save(string FileName = "") => throw new System.NotImplementedException();
-        public void Delete() => throw new System.NotImplementedException();
+        public void Remove() => throw new NotImplementedException();
+        public void ExpandView() => throw new NotImplementedException();
+        public object get_Extender(string ExtenderName) => throw new NotImplementedException();
+        public void Save(string FileName = "") => throw new NotImplementedException();
+        public void Delete() => throw new NotImplementedException();
+
+        #endregion NotImplemented
 
         public override bool Equals(object obj) =>
             ReferenceEquals(this, obj) || obj is ProjectItemImplementation other &&
-            ProjectItemModel.Equals(other.ProjectItemModel);
+            projectItemModel.Equals(other.ProjectItemModel);
 
         public override int GetHashCode() => ProjectItemModel.GetHashCode();
     }
