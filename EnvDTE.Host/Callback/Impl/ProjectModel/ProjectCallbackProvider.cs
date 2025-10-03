@@ -19,6 +19,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
     public sealed class ProjectCallbackProvider(ProjectPropertyService propertyService, ISolution solution, ProjectModelViewHost host)
         : IEnvDteCallbackProvider
     {
+        private const string SolutionFolderProjectGuid = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
         private readonly Key _uniqueNameKey = new("EnvDTE.UniqueName");
 
         public void RegisterCallbacks(DteProtocolModel model)
@@ -58,8 +59,13 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
 
             model.Project_get_Kind.SetSync(projectModel =>
             {
-                var guid = GetProject(projectModel)?.ProjectProperties.ProjectTypeGuids.FirstOrDefault();
-                return guid is null ? string.Empty : guid.Value.ToString("B").ToUpperInvariant();
+                var project = GetProject(projectModel);
+                if (project is null) return string.Empty;
+
+                if (project.ProjectProperties.ProjectKind == ProjectKind.SOLUTION_FOLDER) return SolutionFolderProjectGuid;
+
+                var guid = project.ProjectProperties.ProjectTypeGuids.FirstOrDefault();
+                return guid.ToString("B").ToUpperInvariant();
             });
 
             model.Project_get_Property.SetAsync((lifetime, args) =>
