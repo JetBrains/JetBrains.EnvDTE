@@ -43,12 +43,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                 });
 
             model.ProjectItem_get_ProjectItems.SetWithReadLock(solution.Locks, projectItemModel =>
-                GetProjectFolder(projectItemModel.Id)
-                    ?.GetSubItems()
-                    .Select(host.GetIdByItem)
-                    .Where(id => id != 0)
-                    .Select(id => new ProjectItemModel(id))
-                    .AsList() ?? new List<ProjectItemModel>());
+                GetFilteredProjectItemModels(projectItemModel).AsList());
 
             model.ProjectItem_get_Language.SetWithReadLock(solution.Locks, projectItemModel =>
                 GetProjectFile(projectItemModel.Id)?.ToSourceFile()?.PrimaryPsiLanguage switch
@@ -63,6 +58,24 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
         [CanBeNull] private IProjectItem GetProjectItem(int id) => host.GetItemById<IProjectItem>(id);
         [CanBeNull] private IProjectFile GetProjectFile(int id) => host.GetItemById<IProjectFile>(id);
 
-        [CanBeNull] private IProjectFolder GetProjectFolder(int id) => host.GetItemById<IProjectFolder>(id);
+        private IEnumerable<ProjectItemModel> GetFilteredProjectItemModels(ProjectItemModel projectItemModel)
+        {
+            var rootItem = host.GetItemById<IProjectFolder>(projectItemModel.Id);
+            if (rootItem is null) return [];
+
+            // If we are returning subitems of a project, the project file should not be returned
+            IProjectFile projectFile = null;
+            if (rootItem is IProject project) projectFile = project.ProjectFile;
+
+            return rootItem.GetSubItems().Where(item => item switch
+                {
+                    ProjectFolderImpl folder => !folder.IsHidden,
+                    IProjectFile file => projectFile is not null && !file.Equals(projectFile),
+                    _ => true
+                })
+                .Select(host.GetIdByItem)
+                .Where(id => id != 0)
+                .Select(id => new ProjectItemModel(id));
+        }
     }
 }
