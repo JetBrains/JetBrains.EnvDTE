@@ -7,9 +7,8 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel;
 public class SolutionFolderProjectItemImplementation(
     [NotNull] DteImplementation dte,
     [NotNull] ProjectItemModel projectItemModel,
-    [NotNull] ProjectImplementation containingProject,
-    [NotNull] ProjectItemImplementation parent)
-    : ProjectItemImplementation(dte, projectItemModel, containingProject, parent)
+    [NotNull] ProjectImplementation containingProject)
+    : ProjectItemImplementation(dte, projectItemModel, containingProject)
 {
     [CanBeNull] private ProjectImplementation _subProjectImplementation;
 

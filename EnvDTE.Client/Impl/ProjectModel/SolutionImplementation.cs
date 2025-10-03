@@ -7,13 +7,13 @@ using EnvDTE80;
 using EnvDTE90;
 using JetBrains.Annotations;
 using JetBrains.Core;
+using JetBrains.EnvDTE.Client.Util;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 {
     public sealed class SolutionImplementation : Solution, Solution4
     {
-        [NotNull]
-        private DteImplementation Implementation { get; }
+        [NotNull] private DteImplementation Implementation { get; }
 
         [NotNull, ItemNotNull]
         private List<Rider.Model.ProjectModel> ProjectModels => Implementation
@@ -29,10 +29,11 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 
         public Project Item(object index)
         {
-            if (!(index is int number)) throw new ArgumentException();
-            var item = Implementation.DteProtocolModel.Solution_Item.Sync(number);
-            if (item.Id == -1) throw new ArgumentException();
-            return new ProjectImplementation(Implementation, item);
+            var i = ImplementationUtil.GetValidIndexOrThrow(index);
+            var item = Implementation.DteProtocolModel.Solution_Item.Sync(i);
+            return item is null
+                ? throw new ArgumentOutOfRangeException()
+                : new ProjectImplementation(Implementation, item);
         }
 
         public int Count => Implementation.DteProtocolModel.Solution_Count.Sync(Unit.Instance);

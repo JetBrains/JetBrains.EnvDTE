@@ -10,8 +10,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
     public class ProjectItemImplementation(
         [NotNull] DteImplementation dte,
         [NotNull] ProjectItemModel projectItemModel,
-        [CanBeNull] ProjectImplementation containingProject,
-        [CanBeNull] ProjectItemImplementation parent = null)
+        [NotNull] ProjectImplementation containingProject)
         : ProjectItem
     {
         protected DteImplementation DteImplementation => dte;
@@ -55,9 +54,9 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 
         [NotNull]
         public virtual ProjectItems ProjectItems =>  new ProjectItemsImplementation(dte,
-            dte.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(projectItemModel), containingProject, parent);
+            dte.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(projectItemModel), containingProject, this);
 
-        public ProjectItems Collection => parent is null ? containingProject.ProjectItems : parent.ProjectItems;
+        public ProjectItems Collection => containingProject.ProjectItems;
 
         public virtual object Object => this;
         public virtual Project SubProject => null;

@@ -9,11 +9,11 @@ public class SolutionFolderProjectItemsImplementation(
     [NotNull] DteImplementation dte,
     [NotNull] List<ProjectItemModel> projectItemModels,
     [NotNull] ProjectImplementation containingProject,
-    [CanBeNull] ProjectItemImplementation parent = null)
+    [NotNull] object parent)
     : ProjectItemsImplementation(dte, projectItemModels, containingProject, parent)
 {
     public override string Kind => Constants.vsProjectItemsKindSolutionItems;
 
     protected override ProjectItemImplementation CreateProjectItem(ProjectItemModel projectItemModel) =>
-        new SolutionFolderProjectItemImplementation(DteImplementation, projectItemModel, ContainingProjectImplementation, ParentProjectItemImplementation);
+        new SolutionFolderProjectItemImplementation(DteImplementation, projectItemModel, ContainingProjectImplementation);
 }

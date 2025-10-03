@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
+using JetBrains.EnvDTE.Client.Util;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 {
@@ -30,8 +31,8 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         [NotNull]
         public Project Item(object index)
         {
-            if (index is not int number) throw new ArgumentException();
-            return new ProjectImplementation(dte, projectModels[number]);
+            var i = ImplementationUtil.GetValidIndexOrThrow(index, projectModels.Count);
+            return new ProjectImplementation(dte, projectModels[i]);
         }
 
         public Properties Properties => throw new NotImplementedException();

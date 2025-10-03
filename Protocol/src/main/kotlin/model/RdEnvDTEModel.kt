@@ -71,7 +71,7 @@ object DteProtocolModel : Ext(DteRoot) {
         // see SolutionCallbackProvider
         call("Solution_FileName", void, string)
         call("Solution_Count", void, int)
-		call("Solution_Item", int, projectModel)
+		call("Solution_Item", int, projectModel.nullable)
         call("Solution_get_Projects", void, immutableList(projectModel))
     }
 

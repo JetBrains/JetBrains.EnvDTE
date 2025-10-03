@@ -29,7 +29,9 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         {
             get
             {
-                _projectItems ??= new ProjectItemsImplementation(_dte, ProjectItemModels, this, this);
+                _projectItems ??= Constants.vsProjectKindSolutionItems.Equals(_dte.DteProtocolModel.Project_get_Kind.Sync(_projectModel))
+                        ? new SolutionFolderProjectItemsImplementation(_dte, ProjectItemModels, this, this)
+                        : new ProjectItemsImplementation(_dte, ProjectItemModels, this, this);
                 return _projectItems;
             }
         }
@@ -62,12 +64,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             _dte = dte;
             _projectModel = projectModel;
             ParentProjectItem = parentProjectItem;
-
-            var projectItemModels = _dte.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(new ProjectItemModel(projectModel.Id));
-            _projectItems =
-                Constants.vsProjectKindSolutionItems.Equals(_dte.DteProtocolModel.Project_get_Kind.Sync(projectModel))
-                    ? new SolutionFolderProjectItemsImplementation(dte, projectItemModels, this, parentProjectItem)
-                    : new ProjectItemsImplementation(dte, projectItemModels, this, parentProjectItem);
 
             _properties = new PropertiesImplementation(_dte, this, arg =>
             {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
+using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
@@ -12,13 +13,10 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         [NotNull] DteImplementation dte,
         [NotNull] List<ProjectItemModel> projectItemModels,
         [NotNull] ProjectImplementation containingProject,
-        [NotNull] object parent,
-        [CanBeNull] ProjectItemImplementation projectItem = null
-        )
+        [NotNull] object parent)
         : ProjectItems
     {
         protected DteImplementation DteImplementation => dte;
-        protected ProjectItemImplementation ParentProjectItemImplementation => projectItem;
         protected ProjectImplementation ContainingProjectImplementation => containingProject;
 
         public DTE DTE => dte;
@@ -29,19 +27,16 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         [CanBeNull]
         public ProjectItem Item(object index)
         {
-            // Project items list is 1-based in VS
-            if (index is not int number) throw new ArgumentOutOfRangeException(nameof(index));
-            if (number < 1 || number > projectItemModels.Count) throw new ArgumentOutOfRangeException(nameof(index));
-
-            var itemModel = projectItemModels.ElementAtOrDefault(number - 1);
+            var i = ImplementationUtil.GetValidIndexOrThrow(index, projectItemModels.Count);
+            var itemModel = projectItemModels.ElementAtOrDefault(i);
             return itemModel is null ? null : CreateProjectItem(itemModel);
         }
 
         protected virtual ProjectItemImplementation CreateProjectItem(ProjectItemModel projectItemModel) =>
-            new(dte, projectItemModel, containingProject, projectItem);
+            new(dte, projectItemModel, containingProject);
 
         public IEnumerator GetEnumerator() =>
-            projectItemModels.Select(model => new ProjectItemImplementation(dte, model, containingProject, projectItem)).GetEnumerator();
+            projectItemModels.Select(model => new ProjectItemImplementation(dte, model, containingProject)).GetEnumerator();
 
         #region NotImplemented
 
