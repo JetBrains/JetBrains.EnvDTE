@@ -51,13 +51,31 @@ object DteProtocolModel : Ext(DteRoot) {
       +"None"
     }
 
+    private val addExistingItemRequest = openstruct {
+        field("parentItem", projectItemModel)
+        field("path", string)
+        field("isDirectory", bool)
+    }
+
     init {
         createDteCallbacks()
         createSolutionCallbacks()
         createProjectCallbacks()
         createProjectItemCallbacks()
+        createProjectItemsCallbacks()
         createFileCodeModelCallbacks()
         createCodeElementCallbacks()
+    }
+
+    private fun createProjectItemsCallbacks() {
+        // see ProjectItemsProvider
+        call("ProjectItems_addFromFile", addExistingItemRequest, projectItemModel.nullable)
+        call("ProjectItems_addFromFileCopy", addExistingItemRequest, projectItemModel.nullable)
+        call("ProjectItems_addFromDirectory", addExistingItemRequest, projectItemModel.nullable)
+        call("ProjectItems_addFolder", structdef("ProjectItems_addFolderRequest") {
+            field("parentItem", projectItemModel)
+            field("name", string)
+        }, projectItemModel.nullable)
     }
 
     private fun createDteCallbacks() {
@@ -109,6 +127,7 @@ object DteProtocolModel : Ext(DteRoot) {
         call("ProjectItem_get_Kind", projectItemModel, projectItemKindModel)
         call("ProjectItem_get_ProjectItems", projectItemModel, immutableList(projectItemModel))
         call("ProjectItem_get_Language", projectItemModel, languageModel)
+        call("ProjectItem_remove", projectItemModel, void)
     }
 
     private fun createFileCodeModelCallbacks() {

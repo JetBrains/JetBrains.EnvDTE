@@ -1,22 +1,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
 using JetBrains.Core;
+using JetBrains.DocumentManagers.Transactions;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.ProjectModel;
+using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.VB;
+using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Rider.Model;
 using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-    public sealed class ProjectItemCallbackProvider(ISolution solution, ProjectModelViewHost host)
+    public sealed class ProjectItemCallbackProvider(
+        ISolution solution,
+        ProjectModelViewHost host,
+        ISimpleLazy<IProjectModelEditor> projectModelEditor)
         : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(DteProtocolModel model)
@@ -53,6 +60,13 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                     _ => LanguageModel.Unknown
                 }
             );
+
+            model.ProjectItem_remove.SetVoidAsync(async (lifetime, projectItemModel) =>
+            {
+                var projectItem = GetProjectItem(projectItemModel.Id);
+                if (projectItem is null) return;
+                await lifetime.StartMainWrite(() => projectModelEditor.Value.Remove(projectItem));
+            });
         }
 
         [CanBeNull] private IProjectItem GetProjectItem(int id) => host.GetItemById<IProjectItem>(id);

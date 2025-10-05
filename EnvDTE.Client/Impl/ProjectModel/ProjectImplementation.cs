@@ -11,17 +11,16 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
     {
         private readonly PropertiesImplementation _properties;
         private readonly DteImplementation _dte;
-        private readonly Rider.Model.ProjectModel _projectModel;
-        [CanBeNull] private ProjectItemsImplementation _projectItems;
+        internal readonly Rider.Model.ProjectModel ProjectModel;
 
         [NotNull, ItemNotNull]
         private List<ProjectItemModel> ProjectItemModels =>
-            _dte.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(new ProjectItemModel(_projectModel.Id));
+            _dte.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(new ProjectItemModel(ProjectModel.Id));
 
         public string Name
         {
-            get => _dte .DteProtocolModel.Project_get_Name.Sync(_projectModel);
-            set => _dte.DteProtocolModel.Project_set_Name.Sync(new Project_set_NameRequest(_projectModel, value));
+            get => _dte .DteProtocolModel.Project_get_Name.Sync(ProjectModel);
+            set => _dte.DteProtocolModel.Project_set_Name.Sync(new Project_set_NameRequest(ProjectModel, value));
         }
 
         [NotNull]
@@ -31,21 +30,21 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 
         [NotNull] public DTE DTE => _dte;
 
-        public string FileName => _dte.DteProtocolModel.Project_get_FileName.Sync(_projectModel);
+        public string FileName => _dte.DteProtocolModel.Project_get_FileName.Sync(ProjectModel);
 
         public string FullName => FileName;
 
-        public string UniqueName => _dte.DteProtocolModel.Project_get_UniqueName.Sync(_projectModel);
+        public string UniqueName => _dte.DteProtocolModel.Project_get_UniqueName.Sync(ProjectModel);
 
         public Projects Collection => _dte.Solution.Projects;
 
-        public void Delete() => _dte.DteProtocolModel.Project_Delete.Sync(_projectModel);
+        public void Delete() => _dte.DteProtocolModel.Project_Delete.Sync(ProjectModel);
 
         [CanBeNull] public ProjectItem ParentProjectItem { get; }
 
         public Properties Properties => _properties;
 
-        public string Kind => _dte.DteProtocolModel.Project_get_Kind.Sync(_projectModel);
+        public string Kind => _dte.DteProtocolModel.Project_get_Kind.Sync(ProjectModel);
 
         public object Object => this;
 
@@ -55,7 +54,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             [CanBeNull] ProjectItemImplementation parentProjectItem = null)
         {
             _dte = dte;
-            _projectModel = projectModel;
+            ProjectModel = projectModel;
             ParentProjectItem = parentProjectItem;
 
             _properties = new PropertiesImplementation(_dte, this, arg =>
@@ -67,9 +66,9 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 
                 return new PropertyImplementation(dte, _properties!, propertyInfo,
                     name =>
-                        _dte.DteProtocolModel.Project_get_Property.Sync(new(_projectModel, name)),
+                        _dte.DteProtocolModel.Project_get_Property.Sync(new(ProjectModel, name)),
                     (name, value) =>
-                        _dte.DteProtocolModel.Project_set_Property.Sync(new(_projectModel, name, value)));
+                        _dte.DteProtocolModel.Project_set_Property.Sync(new(ProjectModel, name, value)));
             });
         }
 

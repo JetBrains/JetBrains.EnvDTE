@@ -15,6 +15,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
     {
         protected DteImplementation DteImplementation => dte;
         internal ProjectItemModel ProjectItemModel => projectItemModel;
+
         [NotNull] public DTE DTE => dte;
 
         public short FileCount => 1;
@@ -29,16 +30,8 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
                 .Sync(new ProjectItem_set_NameRequest(projectItemModel, value));
         }
 
-        [NotNull]
-        public virtual string Kind => dte.DteProtocolModel.ProjectItem_get_Kind.Sync(projectItemModel) switch
-        {
-            ProjectItemKindModel.PhysicalFile => Constants.vsProjectItemKindPhysicalFile,
-            ProjectItemKindModel.PhysicalFolder => Constants.vsProjectItemKindPhysicalFolder,
-            ProjectItemKindModel.Project => Constants.vsProjectItemKindSubProject,
-            ProjectItemKindModel.VirtualDirectory => Constants.vsProjectItemKindVirtualFolder,
-            ProjectItemKindModel.Unknown => Constants.vsProjectItemKindUnknown,
-            _ => throw new ArgumentOutOfRangeException()
-        };
+        [NotNull] public virtual string Kind =>
+            dte.DteProtocolModel.ProjectItem_get_Kind.Sync(projectItemModel).FromRdItemKindModel();
 
         [CanBeNull]
         public FileCodeModel FileCodeModel
@@ -61,6 +54,8 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         public virtual object Object => this;
         public virtual Project SubProject => null;
         public Project ContainingProject => containingProject;
+
+        public void Remove() => dte.DteProtocolModel.ProjectItem_remove.Sync(projectItemModel);
 
         #region NotImplemented
 
@@ -91,7 +86,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
         public Window Open(string ViewKind = "{00000000-0000-0000-0000-000000000000}") =>
             throw new NotImplementedException();
 
-        public void Remove() => throw new NotImplementedException();
         public void ExpandView() => throw new NotImplementedException();
         public object get_Extender(string ExtenderName) => throw new NotImplementedException();
         public void Save(string FileName = "") => throw new NotImplementedException();
