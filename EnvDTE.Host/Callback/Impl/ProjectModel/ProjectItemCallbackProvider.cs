@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
@@ -51,7 +52,9 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                 });
 
             model.ProjectItem_get_ProjectItems.SetWithReadLock(solution.Locks, projectItemModel =>
-                GetFilteredProjectItemModels(projectItemModel).AsList());
+                GetFilteredProjectItems(projectItemModel)
+                    .Select(item => new ProjectItemModel(host.GetIdByItem(item)))
+                    .AsList());
 
             model.ProjectItem_get_Language.SetWithReadLock(solution.Locks, projectItemModel =>
                 GetProjectFile(projectItemModel.Id)?.ToSourceFile()?.PrimaryPsiLanguage switch
@@ -70,12 +73,23 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                 logger.Trace($"Removing project item '{projectItem.Name}'");
                 await lifetime.StartMainWrite(() => projectModelEditor.Value.Remove(projectItem));
             });
+
+            model.ProjectItem_get_SubItemIndex.SetAsync(async (lifetime, args) =>
+            {
+                string[] itemNames = null;
+                await lifetime.StartReadActionAsync(() =>
+                {
+                    itemNames = GetFilteredProjectItems(args.Item).Select(item => item.Name).ToArray();
+                });
+                var index =  itemNames.IndexOf(args.Name, StringComparer.OrdinalIgnoreCase);
+                return index == -1 ? null : index;
+            });
         }
 
         [CanBeNull] private IProjectItem GetProjectItem(int id) => host.GetItemById<IProjectItem>(id);
         [CanBeNull] private IProjectFile GetProjectFile(int id) => host.GetItemById<IProjectFile>(id);
 
-        private IEnumerable<ProjectItemModel> GetFilteredProjectItemModels(ProjectItemModel projectItemModel)
+        private IEnumerable<IProjectItem> GetFilteredProjectItems(ProjectItemModel projectItemModel)
         {
             var rootItem = host.GetItemById<IProjectFolder>(projectItemModel.Id);
             if (rootItem is null) return [];
@@ -84,15 +98,13 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
             IProjectFile projectFile = null;
             if (rootItem is IProject project) projectFile = project.ProjectFile;
 
+            // I Removed id != 0 model id filter, it shouldn't be a problem because we filter out hidden items
             return rootItem.GetSubItems().Where(item => item switch
-                {
-                    ProjectFolderImpl folder => !folder.IsHidden,
-                    IProjectFile file => projectFile is not null && !file.Equals(projectFile),
-                    _ => true
-                })
-                .Select(host.GetIdByItem)
-                .Where(id => id != 0)
-                .Select(id => new ProjectItemModel(id));
+            {
+                ProjectFolderImpl folder => !folder.IsHidden,
+                IProjectFile file => projectFile is null || !file.Equals(projectFile),
+                _ => true
+            });
         }
     }
 }

@@ -128,6 +128,10 @@ object DteProtocolModel : Ext(DteRoot) {
         call("ProjectItem_get_ProjectItems", projectItemModel, immutableList(projectItemModel))
         call("ProjectItem_get_Language", projectItemModel, languageModel)
         call("ProjectItem_remove", projectItemModel, void)
+        call("ProjectItem_get_SubItemIndex", structdef("ProjectItem_getSubItemIndexRequest") {
+            field("item", projectItemModel)
+            field("name", string)
+        }, int.nullable)
     }
 
     private fun createFileCodeModelCallbacks() {
