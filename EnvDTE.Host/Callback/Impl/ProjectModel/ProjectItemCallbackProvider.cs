@@ -21,6 +21,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
     public sealed class ProjectItemCallbackProvider(
+        ILogger logger,
         ISolution solution,
         ProjectModelViewHost host,
         ISimpleLazy<IProjectModelEditor> projectModelEditor)
@@ -65,6 +66,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
             {
                 var projectItem = GetProjectItem(projectItemModel.Id);
                 if (projectItem is null) return;
+
+                logger.Trace($"Removing project item '{projectItem.Name}'");
                 await lifetime.StartMainWrite(() => projectModelEditor.Value.Remove(projectItem));
             });
         }

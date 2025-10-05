@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
 using JetBrains.DocumentManagers.Transactions;
@@ -17,6 +19,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel;
 
 [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
 public class ProjectItemsCallbackProvider(
+    ILogger logger,
     ISolution solution,
     ProjectModelViewHost host,
     ISimpleLazy<IProjectModelEditor> projectModelEditor) : IEnvDteCallbackProvider
@@ -36,6 +39,8 @@ public class ProjectItemsCallbackProvider(
     {
         var parentFolder = GetParentFolder(request.ParentItem.Id);
         if (parentFolder is null) return null;
+
+        logger.Trace($"Adding folder '{request.Name}' to '{parentFolder.Location}'");
 
         IProjectFolder result = null;
         await lifetime.StartMainWrite(() =>
@@ -57,26 +62,33 @@ public class ProjectItemsCallbackProvider(
         if (parentFolder is null) return null;
 
         var sourcePath = VirtualFileSystemPath.Parse(request.Path, InteractionContext.SolutionContext);
-        if (request.IsDirectory && !sourcePath.ExistsDirectory || !request.IsDirectory && !sourcePath.ExistsFile) return null;
+        if (request.IsDirectory && !sourcePath.ExistsDirectory || !request.IsDirectory && !sourcePath.ExistsFile)
+            throw new InvalidOperationException("Cannot add non-existing item");
 
-        if (sourcePath.Equals(parentFolder.Location)) return null;
-        if (sourcePath.IsPrefixOf(parentFolder.Location)) return null;
+        if (sourcePath.Equals(parentFolder.Location))
+            throw new InvalidOperationException("Cannot add item to itself");
+        if (sourcePath.IsPrefixOf(parentFolder.Location))
+            throw new InvalidOperationException("Cannot add item to its subfolder");
 
         if (copyBeforeAdd)
         {
             var destinationPath = parentFolder.Location / sourcePath.Name;
+            logger.Trace($"Copying {sourcePath} to {destinationPath}");
 
             try
             {
                 sourcePath.Copy(destinationPath, false);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return null;
+                logger.Error(e, $"Failed to copy {sourcePath} to {destinationPath}");
+                throw new IOException("Failed to copy the item");
             }
 
             sourcePath = destinationPath;
         }
+
+        logger.Trace($"Adding existing item from '{sourcePath}' to '{parentFolder.Location}'");
 
         IProjectItem result = null;
         await lifetime.StartMainWrite(() =>
@@ -99,5 +111,5 @@ public class ProjectItemsCallbackProvider(
             : new ProjectItemModel(host.GetIdByItem(result));
     }
 
-    private IProjectFolder GetParentFolder(int id) => host.GetItemById<IProjectFolder>(id);
+    [CanBeNull] private IProjectFolder GetParentFolder(int id) => host.GetItemById<IProjectFolder>(id);
 }
