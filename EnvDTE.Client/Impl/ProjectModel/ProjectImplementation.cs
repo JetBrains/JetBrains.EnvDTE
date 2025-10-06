@@ -7,11 +7,15 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 {
-    public sealed class ProjectImplementation : Project
+    public sealed class ProjectImplementation(
+        [NotNull] DteImplementation dte,
+        [NotNull] Rider.Model.ProjectModel projectModel,
+        [CanBeNull] ProjectItemImplementation parentProjectItem = null)
+        : Project
     {
-        private readonly PropertiesImplementation _properties;
-        private readonly DteImplementation _dte;
-        internal readonly Rider.Model.ProjectModel ProjectModel;
+        [CanBeNull] private ProjectPropertiesImplementation _properties;
+        private readonly DteImplementation _dte = dte;
+        internal readonly Rider.Model.ProjectModel ProjectModel = projectModel;
 
         [NotNull, ItemNotNull]
         private List<ProjectItemModel> ProjectItemModels =>
@@ -40,37 +44,20 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 
         public void Delete() => _dte.DteProtocolModel.Project_Delete.Sync(ProjectModel);
 
-        [CanBeNull] public ProjectItem ParentProjectItem { get; }
+        [CanBeNull] public ProjectItem ParentProjectItem { get; } = parentProjectItem;
 
-        public Properties Properties => _properties;
+        public Properties Properties
+        {
+            get
+            {
+                _properties ??= new ProjectPropertiesImplementation(_dte, this, ProjectModel);
+                return _properties;
+            }
+        }
 
         public string Kind => _dte.DteProtocolModel.Project_get_Kind.Sync(ProjectModel);
 
         public object Object => this;
-
-        public ProjectImplementation(
-            [NotNull] DteImplementation dte,
-            [NotNull] Rider.Model.ProjectModel projectModel,
-            [CanBeNull] ProjectItemImplementation parentProjectItem = null)
-        {
-            _dte = dte;
-            ProjectModel = projectModel;
-            ParentProjectItem = parentProjectItem;
-
-            _properties = new PropertiesImplementation(_dte, this, arg =>
-            {
-                if (arg is not string key) throw new ArgumentException();
-
-                if (!VisualStudioProperties.Map.TryGetValue(key, out var propertyInfo))
-                    return new NullPropertyImplementation(dte, _properties!, key);
-
-                return new PropertyImplementation(dte, _properties!, propertyInfo,
-                    name =>
-                        _dte.DteProtocolModel.Project_get_Property.Sync(new(ProjectModel, name)),
-                    (name, value) =>
-                        _dte.DteProtocolModel.Project_set_Property.Sync(new(ProjectModel, name, value)));
-            });
-        }
 
         #region NotImplemented
 

@@ -7,7 +7,7 @@ public class NullPropertyImplementation(
     [NotNull] DteImplementation dte,
     [NotNull] PropertiesImplementation parent,
     [NotNull] string key)
-    : PropertyImplementationBase(dte, parent, key)
+    : ScalarPropertyImplementation(dte, parent, key)
 {
     public override object Value
     {

@@ -1,28 +1,22 @@
-using System;
-using System.Collections;
-using EnvDTE;
+﻿using System.Collections;
 using JetBrains.Annotations;
+using EnvDTE;
 
 namespace JetBrains.EnvDTE.Client.Impl.Props;
 
-public class PropertiesImplementation(
+public abstract class PropertiesImplementation(
     [NotNull] DteImplementation dte,
-    [NotNull] object parent,
-    [NotNull] Func<object, PropertyImplementationBase> getItem)
-    : Properties
+    [NotNull] object parent) : Properties
 {
+    protected readonly DteImplementation DteImplementation = dte;
+
+    public object Application => null;
     public object Parent => parent;
-    public DTE DTE => dte;
+    public DTE DTE => DteImplementation;
 
-    public Property Item(object index) => getItem(index);
+    public abstract int Count { get; }
 
-    #region NotImplemented
-
-    public object Application => throw new NotImplementedException();
-    public int Count => throw new NotImplementedException();
-
-    IEnumerator Properties.GetEnumerator() => throw new NotImplementedException();
-    IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
-
-    #endregion
+    public abstract Property Item(object index);
+    public abstract IEnumerator GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

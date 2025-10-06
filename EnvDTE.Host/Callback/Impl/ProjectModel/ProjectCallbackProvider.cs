@@ -1,22 +1,38 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
 using JetBrains.Core;
-using JetBrains.EnvDTE.Host.Callback.Impl.Properties;
+using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Callback.Util;
+using JetBrains.Lifetimes;
+using JetBrains.Platform.MsBuildHost.Models;
+using JetBrains.Platform.MsBuildHost.Utils;
 using JetBrains.ProjectModel;
+using JetBrains.ProjectModel.ProjectsHost;
+using JetBrains.ProjectModel.ProjectsHost.Impl;
+using JetBrains.ProjectModel.ProjectsHost.MsBuild;
+using JetBrains.ProjectModel.ProjectsHost.SolutionHost;
+using JetBrains.ProjectModel.Properties;
 using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Rider.Model;
+using JetBrains.Threading;
+using JetBrains.Util;
 using Key = JetBrains.Util.Key;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-    public sealed class ProjectCallbackProvider(ProjectPropertyService propertyService, ISolution solution, ProjectModelViewHost host)
+    public sealed class ProjectCallbackProvider(
+        Lifetime componentLifetime,
+        ILogger logger,
+        ISolution solution,
+        ProjectModelViewHost host)
         : IEnvDteCallbackProvider
     {
         private const string SolutionFolderProjectGuid = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
@@ -68,20 +84,37 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                 return guid.ToString("B").ToUpperInvariant();
             });
 
-            model.Project_get_Property.SetAsync((lifetime, args) =>
+            model.Project_get_Property.SetAsync(async (lifetime, args) =>
             {
                 var project = GetProject(args.Model);
-                if (project is null) return Task.FromResult<string>(null);
+                if (project is null) return null;
 
-                return propertyService.GetPropertyAsync(lifetime, project, args.Name);
+                string value = null;
+                await lifetime.StartReadActionAsync(() =>
+                {
+                    value = project.GetRequestedProjectProperty(project.GetCurrentTargetFrameworkId(), args.Name);
+                });
+                return value;
             });
 
             model.Project_set_Property.SetVoidAsync(async (lifetime, args) =>
             {
-                var project = GetProject(args.Model);
-                if (project is null) return;
+                var projectMark = GetProject(args.Model)?.GetProjectMark();
+                if (projectMark is null) return;
 
-                await propertyService.SetPropertyAsync(lifetime, project, args.Name, args.Value);
+                logger.Assert(!projectMark.IsVCXProject(), "Properties of C++ projects cannot be changed this way");
+
+                var projectHostContainer = solution.ProjectsHostContainer();
+                var projectHost = projectHostContainer.GetComponent<MsBuildProjectHost>();
+                var solutionHost = projectHostContainer.GetComponent<ISolutionHost>();
+
+                var rdSaveProperties = new List<RdSaveProperty>
+                {
+                    MsBuildModelHelper.CreateSimpleSaveProperty(args.Name, args.Value, null)
+                };
+                await lifetime.StartMainWrite(() => projectHost.SaveProperties(projectMark, rdSaveProperties));
+
+                componentLifetime.StartMainWrite(() => solutionHost.ReloadProjectAsync(projectMark)).NoAwait();
             });
 
             model.Project_Delete.SetWithReadLock(solution.Locks, projectModel =>
