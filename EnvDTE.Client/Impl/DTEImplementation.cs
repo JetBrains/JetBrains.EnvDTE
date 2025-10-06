@@ -3,7 +3,7 @@ using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
 using JetBrains.Core;
-using JetBrains.EnvDTE.Client.Impl.ProjectModel;
+using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl
@@ -103,7 +103,7 @@ namespace JetBrains.EnvDTE.Client.Impl
             set => throw new NotImplementedException();
         }
 
-        public global::EnvDTE.Debugger Debugger => throw new NotImplementedException();
+        public Debugger Debugger => throw new NotImplementedException();
         public string SatelliteDllPath(string Path, string Name) => throw new NotImplementedException();
         public string Edition => throw new NotImplementedException();
         public ToolWindows ToolWindows => throw new NotImplementedException();

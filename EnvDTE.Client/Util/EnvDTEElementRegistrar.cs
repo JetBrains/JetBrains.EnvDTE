@@ -2,7 +2,7 @@ using System;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Impl;
-using JetBrains.EnvDTE.Client.Impl.Ast;
+using JetBrains.EnvDTE.Client.Impl.AstImpl;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Util
