@@ -21,13 +21,13 @@ public class ProjectPropertiesImplementation(
         {
             case int intIndex:
             {
-                var i = ImplementationUtil.GetValidIndexOrThrow(intIndex, VisualStudioProperties.Map.Count);
-                propertyInfo = VisualStudioProperties.Map.ElementAt(i).Value;
+                var i = ImplementationUtil.GetValidIndexOrThrow(intIndex, VisualStudioProjectProperties.Map.Count);
+                propertyInfo = VisualStudioProjectProperties.Map.ElementAt(i).Value;
                 break;
             }
             case string stringIndex:
             {
-                if (!VisualStudioProperties.Map.TryGetValue(stringIndex, out propertyInfo))
+                if (!VisualStudioProjectProperties.Map.TryGetValue(stringIndex, out propertyInfo))
                     return new NullPropertyImplementation(DteImplementation, this, stringIndex);
                 break;
             }
@@ -38,8 +38,8 @@ public class ProjectPropertiesImplementation(
         return new ProjectPropertyImplementation(DteImplementation, this, projectModel, propertyInfo);
     }
 
-    public override int Count => VisualStudioProperties.Map.Count;
+    public override int Count => VisualStudioProjectProperties.Map.Count;
 
-    public override IEnumerator GetEnumerator() => VisualStudioProperties.Map.Values.Select(info =>
+    public override IEnumerator GetEnumerator() => VisualStudioProjectProperties.Map.Values.Select(info =>
         new ProjectPropertyImplementation(DteImplementation, this, projectModel, info)).GetEnumerator();
 }

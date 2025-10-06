@@ -71,5 +71,8 @@ public class EnvDteProjectPropertyRequest : IProjectPropertiesRequest
         "EnableNETAnalyzers",
         "AnalysisLevel",
         "EnforceCodeStyleInBuild",
+        // Configuration properties
+        // TODO: Figure out what we are going to do with these
+        "IntermediateOutputPath"
     ];
 }

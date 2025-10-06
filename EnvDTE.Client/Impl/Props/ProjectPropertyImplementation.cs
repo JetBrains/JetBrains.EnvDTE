@@ -8,7 +8,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Props;
 // Doesn't work for CPP projects
 public class ProjectPropertyImplementation(
     [NotNull] DteImplementation dte,
-    [NotNull] ProjectPropertiesImplementation parent,
+    [NotNull] PropertiesImplementation parent,
     [NotNull] Rider.Model.ProjectModel projectModel,
     [NotNull] StringPropertyInfo propertyInfo)
     : ScalarPropertyImplementation(dte, parent, propertyInfo.VisualStudioName)

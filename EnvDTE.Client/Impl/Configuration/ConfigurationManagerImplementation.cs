@@ -2,22 +2,29 @@
 using System.Collections;
 using EnvDTE;
 using JetBrains.Annotations;
-using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.Configuration;
 
 public class ConfigurationManagerImplementation(
     [NotNull] DteImplementation dte,
-    [NotNull] Rider.Model.ProjectModel parent) : ConfigurationManager
+    [NotNull] Rider.Model.ProjectModel project)
+    : ConfigurationManager
 {
+    [CanBeNull] private global::EnvDTE.Configuration _activeConfiguration;
     public DTE DTE => dte;
-    public object Parent => parent;
+    public object Parent => project;
 
-    public int Count => dte.DteProtocolModel.Project_get_ConfigurationCount.Sync(parent);
-    public object ConfigurationRowNames => dte.DteProtocolModel.Project_get_ConfigurationNames.Sync(parent);
-    public object PlatformNames => dte.DteProtocolModel.Project_get_PlatformNames.Sync(parent);
+    public int Count => dte.DteProtocolModel.Project_get_ConfigurationCount.Sync(project);
+    public object ConfigurationRowNames => dte.DteProtocolModel.Project_get_ConfigurationNames.Sync(project);
+    public object PlatformNames => dte.DteProtocolModel.Project_get_PlatformNames.Sync(project);
 
-    public global::EnvDTE.Configuration ActiveConfiguration { get; }
+    public global::EnvDTE.Configuration ActiveConfiguration {
+        get
+        {
+            _activeConfiguration ??= new ProjectActiveConfigurationImplementation(dte, this, project);
+            return _activeConfiguration;
+        }
+    }
 
     #region NotImplemented
 

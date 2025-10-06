@@ -8,7 +8,7 @@ namespace JetBrains.EnvDTE.Client.Impl.Props;
 // Based on my research and testing, all the project properties in VS come from:
 // https://github.com/dotnet/project-system/blob/9475b6468a9f9b1b627f62d9d9225d23c02e5a49/src/Microsoft.VisualStudio.ProjectSystem.Managed/ProjectSystem/Rules/GeneralBrowseObject.xaml
 // This map is generated based on that file (except 'FullPath' property which is mapped to 'MSBuildProjectDirectory' instead of 'ProjectDir')
-internal static class VisualStudioProperties
+internal static class VisualStudioProjectProperties
 {
     internal static readonly IReadOnlyDictionary<string, StringPropertyInfo> Map =
         new Dictionary<string, StringPropertyInfo>

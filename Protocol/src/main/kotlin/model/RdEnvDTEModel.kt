@@ -23,32 +23,36 @@ object DteProtocolModel : Ext(DteRoot) {
     }
 
     val projectItemKindModel = enum {
-      +"Unknown"
-      +"PhysicalFile"
-      +"PhysicalFolder"
-      +"Project"
-      +"VirtualDirectory"
+        +"Unknown"
+        +"PhysicalFile"
+        +"PhysicalFolder"
+        +"Project"
+        +"VirtualDirectory"
     }
 
     val languageModel = enum {
-      +"Unknown"
-      +"CSharp"
-      +"VB"
+        +"Unknown"
+        +"CSharp"
+        +"VB"
+        +"Cpp"
+        +"JS"
+        +"JSON"
+        +"JSX"
     }
 
     val codeElementModel = structdef {
-      field("TypeId", int)
-      field("Id", int)
+        field("TypeId", int)
+        field("Id", int)
     }
 
     val access = enum {
-      +"Public"
-      +"Private"
-      +"Protected"
-      +"Internal"
-      +"ProtectedInternal"
-      +"PrivateProtected"
-      +"None"
+        +"Public"
+        +"Private"
+        +"Protected"
+        +"Internal"
+        +"ProtectedInternal"
+        +"PrivateProtected"
+        +"None"
     }
 
     private val addExistingItemRequest = openstruct {
@@ -89,7 +93,7 @@ object DteProtocolModel : Ext(DteRoot) {
         // see SolutionCallbackProvider
         call("Solution_FileName", void, string)
         call("Solution_Count", void, int)
-		call("Solution_Item", int, projectModel.nullable)
+        call("Solution_Item", int, projectModel.nullable)
         call("Solution_get_Projects", void, immutableList(projectModel))
     }
 
@@ -103,6 +107,7 @@ object DteProtocolModel : Ext(DteRoot) {
         call("Project_get_FileName", projectModel, string)
         call("Project_get_UniqueName", projectModel, string)
         call("Project_get_Kind", projectModel, string)
+        call("Project_get_Language", projectModel, languageModel)
 
         call("Project_get_Property", structdef("Project_get_PropertyRequest") {
             field("model", projectModel)
@@ -120,6 +125,10 @@ object DteProtocolModel : Ext(DteRoot) {
         call("Project_get_ConfigurationNames", projectModel, immutableList(string))
         call("Project_get_PlatformNames", projectModel, immutableList(string))
         call("Project_get_ConfigurationCount", projectModel, int)
+        call("Project_get_IsBuildable", projectModel, bool)
+        call("Project_get_IsDeployable", projectModel, bool)
+        call("Project_get_ActiveConfigPlatformName", projectModel, string.nullable)
+        call("Project_get_ActiveConfigName", projectModel, string.nullable)
     }
 
     private fun createProjectItemCallbacks() {
@@ -140,37 +149,37 @@ object DteProtocolModel : Ext(DteRoot) {
     }
 
     private fun createFileCodeModelCallbacks() {
-      // see FileCodeModelCallbackProvider
-      call("FileCodeModel_get_CodeElements", projectItemModel, immutableList(codeElementModel))
+        // see FileCodeModelCallbackProvider
+        call("FileCodeModel_get_CodeElements", projectItemModel, immutableList(codeElementModel))
     }
 
     private fun createCodeElementCallbacks() {
-      // see CodeElementCallbackProvider
-      call("CodeElement_get_Children", codeElementModel, immutableList(codeElementModel))
-      call("CodeElement_get_Access", codeElementModel, access)
-      call("CodeElement_get_Name", codeElementModel, string.nullable)
-      call("CodeElement_get_FullName", codeElementModel, string.nullable)
-      call("CodeElement_get_ProjectItem", codeElementModel, projectItemModel.nullable)
-      call("CodeElement_get_Parent", codeElementModel, codeElementModel.nullable)
+        // see CodeElementCallbackProvider
+        call("CodeElement_get_Children", codeElementModel, immutableList(codeElementModel))
+        call("CodeElement_get_Access", codeElementModel, access)
+        call("CodeElement_get_Name", codeElementModel, string.nullable)
+        call("CodeElement_get_FullName", codeElementModel, string.nullable)
+        call("CodeElement_get_ProjectItem", codeElementModel, projectItemModel.nullable)
+        call("CodeElement_get_Parent", codeElementModel, codeElementModel.nullable)
 
-      createCodeTypeCallbacks()
-      createCodeFunctionCallbacks()
-      createCodeParameterCallbacks()
+        createCodeTypeCallbacks()
+        createCodeFunctionCallbacks()
+        createCodeParameterCallbacks()
     }
 
     private fun createCodeTypeCallbacks() {
-      // see CodeTypeCallbackProvider
-      call("CodeElement_get_Bases", codeElementModel, immutableList(codeElementModel))
-      call("CodeElement_get_Namespace", codeElementModel, codeElementModel.nullable)
+        // see CodeTypeCallbackProvider
+        call("CodeElement_get_Bases", codeElementModel, immutableList(codeElementModel))
+        call("CodeElement_get_Namespace", codeElementModel, codeElementModel.nullable)
     }
 
     private fun createCodeFunctionCallbacks() {
-      // see CodeFunctionCallbackProvider
-      call("CodeFunction_get_Type", codeElementModel, codeElementModel.nullable)
+        // see CodeFunctionCallbackProvider
+        call("CodeFunction_get_Type", codeElementModel, codeElementModel.nullable)
     }
 
     private fun createCodeParameterCallbacks() {
-      // see CodeParameterCallbackProvider
-      call("CodeParameter_get_Type", codeElementModel, codeElementModel.nullable)
+        // see CodeParameterCallbackProvider
+        call("CodeParameter_get_Type", codeElementModel, codeElementModel.nullable)
     }
 }

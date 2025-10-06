@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
@@ -86,6 +85,14 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                 return guid.ToString("B").ToUpperInvariant();
             });
 
+            model.Project_get_Language.SetSync(projectModel =>
+            {
+                var project = GetProject(projectModel);
+                if (project is null) return LanguageModel.Unknown;
+
+                return project.ProjectProperties.DefaultLanguage.ToRdLanguageModel();
+            });
+
             model.Project_get_Property.SetAsync(async (lifetime, args) =>
             {
                 var project = GetProject(args.Model);
@@ -155,6 +162,46 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                     .Select(cp => cp.Platform)
                     .Distinct()
                     .ToList();
+            });
+
+            model.Project_get_IsBuildable.SetSync(projectModel =>
+            {
+                var project = GetProject(projectModel);
+                if (project is null) return false;
+
+                return project.ProjectProperties.BuildSettings?.IsBuildable ?? false;
+            });
+
+            model.Project_get_IsDeployable.SetSync(projectModel =>
+            {
+                var project = GetProject(projectModel);
+                if (project is null) return false;
+
+                return project.ProjectProperties.BuildSettings?.IsDeployable ?? false;
+            });
+
+            model.Project_get_ActiveConfigName.SetSync(projectModel =>
+            {
+                var project = GetProject(projectModel);
+                if (project is null) return null;
+
+                var config = project.ProjectProperties.TryGetConfiguration<IProjectConfiguration>(
+                    project.GetCurrentTargetFrameworkId());
+
+                return config?.Name;
+            });
+
+            model.Project_get_ActiveConfigPlatformName.SetSync(projectModel =>
+            {
+                var project = GetProject(projectModel);
+                if (project is null) return null;
+
+                var config = project.ProjectProperties.TryGetConfiguration<IProjectConfiguration>(
+                    project.GetCurrentTargetFrameworkId());
+
+                return config?.PropertiesCollection.TryGetValue("Platform", out var platform) == true
+                    ? platform
+                    : null;
             });
         }
 
