@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using EnvDTE;
 using JetBrains.Annotations;
+using JetBrains.EnvDTE.Client.Impl.Configuration;
 using JetBrains.EnvDTE.Client.Impl.Props;
 using JetBrains.Rider.Model;
 
@@ -59,6 +60,8 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
 
         public object Object => this;
 
+        public ConfigurationManager ConfigurationManager { get; } = new ConfigurationManagerImplementation(dte, projectModel);
+
         #region NotImplemented
 
         public bool IsDirty
@@ -76,7 +79,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModel
             set => throw new NotImplementedException();
         }
 
-        public ConfigurationManager ConfigurationManager => throw new NotImplementedException();
         public Globals Globals => throw new NotImplementedException();
         public CodeModel CodeModel => throw new NotImplementedException();
         public void SaveAs(string NewFileName) => throw new NotImplementedException();

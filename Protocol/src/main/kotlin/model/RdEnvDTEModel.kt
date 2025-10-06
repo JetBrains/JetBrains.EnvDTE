@@ -115,6 +115,11 @@ object DteProtocolModel : Ext(DteRoot) {
         }, void)
 
         call("Project_Delete", projectModel, void)
+
+        // Configuration
+        call("Project_get_ConfigurationNames", projectModel, immutableList(string))
+        call("Project_get_PlatformNames", projectModel, immutableList(string))
+        call("Project_get_ConfigurationCount", projectModel, int)
     }
 
     private fun createProjectItemCallbacks() {

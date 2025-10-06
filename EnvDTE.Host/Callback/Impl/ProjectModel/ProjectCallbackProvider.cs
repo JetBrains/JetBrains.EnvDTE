@@ -19,6 +19,7 @@ using JetBrains.ProjectModel.Properties;
 using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
+using JetBrains.RdBackend.Common.Features.ProjectModel.View.EditProperties.Solutions;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Rider.Model;
 using JetBrains.Threading;
@@ -32,7 +33,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
         Lifetime componentLifetime,
         ILogger logger,
         ISolution solution,
-        ProjectModelViewHost host)
+        ProjectModelViewHost host,
+        MsBuildProjectsConfigurationsStore configurationsStore)
         : IEnvDteCallbackProvider
     {
         private const string SolutionFolderProjectGuid = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
@@ -123,6 +125,36 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModel
                 if (project is null) return Unit.Instance;
                 solution.InvokeUnderTransaction(cookie => cookie.Remove(project));
                 return Unit.Instance;
+            });
+
+            model.Project_get_ConfigurationCount.SetSync(projectModel =>
+            {
+                var projectMark = GetProject(projectModel)?.GetProjectMark();
+                if (projectMark is null) return 0;
+
+                return configurationsStore.GetConfigurationsAndPlatforms(projectMark).Count;
+            });
+
+            model.Project_get_ConfigurationNames.SetSync(projectModel =>
+            {
+                var projectMark = GetProject(projectModel)?.GetProjectMark();
+                if (projectMark is null) return [];
+
+                return configurationsStore.GetConfigurationsAndPlatforms(projectMark)
+                    .Select(cp => cp.Configuration)
+                    .Distinct()
+                    .ToList();
+            });
+
+            model.Project_get_PlatformNames.SetSync(projectModel =>
+            {
+                var projectMark = GetProject(projectModel)?.GetProjectMark();
+                if (projectMark is null) return [];
+
+                return configurationsStore.GetConfigurationsAndPlatforms(projectMark)
+                    .Select(cp => cp.Platform)
+                    .Distinct()
+                    .ToList();
             });
         }
 
