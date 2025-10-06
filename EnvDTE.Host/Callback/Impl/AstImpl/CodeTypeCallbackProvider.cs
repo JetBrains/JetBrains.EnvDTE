@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Application.Parts;
-using JetBrains.Application.Threading;
 using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
@@ -25,10 +24,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
                 model.CodeElement_get_Bases,
                 node => GetSuperTypes(node.DeclaredElement).AsList(),
                 element => GetSuperTypes(element).AsList(),
-                type => new List<CodeElementModel>
-                {
-                    ToModel(TypeFactory.CreateTypeByCLRName("System.Array", type.Module))
-                }
+                type => [ToModel(TypeFactory.CreateTypeByCLRName("System.Array", type.Module))]
             );
 
             MapWithAstManager<ICSharpTypeDeclaration, ITypeElement, CodeElementModel>(
@@ -37,13 +33,18 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
                 element => ToModel(element.GetContainingNamespace()),
                 type => throw new NotImplementedException()
             );
+            return;
 
-            IEnumerable<CodeElementModel> GetSuperTypes(ITypeElement declaredType) =>
-                from typeElement in declaredType.NotNull().GetSuperTypeElements()
-                where typeElement != null
-                let child = ToModel(typeElement)
-                where child != null
-                select child;
+
+            IEnumerable<CodeElementModel> GetSuperTypes(ITypeElement declaredType)
+            {
+                using var _ = CompilationContextCookie.GetExplicitUniversalContextIfNotSet();
+                return from typeElement in declaredType.NotNull().GetSuperTypeElements()
+                    where typeElement != null
+                    let child = ToModel(typeElement)
+                    where child != null
+                    select child;
+            }
         }
     }
 }

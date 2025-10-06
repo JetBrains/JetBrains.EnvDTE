@@ -1,6 +1,5 @@
 using System;
 using JetBrains.Application.Parts;
-using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.ProjectModel;
 using JetBrains.Rd.Tasks;
 using JetBrains.Rider.Model;

@@ -28,6 +28,11 @@ public class ConfigurationManagerImplementation(
         }
     }
 
+    // TODO: This should enumerate all configurations, not just active one
+    public IEnumerator GetEnumerator() => new List<Configuration>([ActiveConfiguration]).GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
     #region NotImplemented
 
     public object SupportedPlatforms => throw new NotImplementedException();
@@ -46,10 +51,6 @@ public class ConfigurationManagerImplementation(
         throw new NotImplementedException();
 
     public void DeletePlatform(string name) => throw new NotImplementedException();
-
-    public IEnumerator GetEnumerator() => throw new NotImplementedException();
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     #endregion
 }

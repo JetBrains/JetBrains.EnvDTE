@@ -90,13 +90,14 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             IProjectFile projectFile = null;
             if (rootItem is IProject project) projectFile = project.ProjectFile;
 
-            // I Removed id != 0 model id filter, it shouldn't be a problem because we filter out hidden items
+            // Even though we filter out hidden items, in some edge cases it happens that visible items have an id of 0
+            // So we have to check for that as well.
             return rootItem.GetSubItems().Where(item => item switch
             {
                 ProjectFolderImpl folder => !folder.IsHidden,
                 IProjectFile file => projectFile is null || !file.Equals(projectFile),
                 _ => true
-            });
+            }).Where(item => host.GetIdByItem(item) != 0);
         }
     }
 }

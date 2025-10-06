@@ -1,10 +1,8 @@
 using System;
 using System.Linq;
 using JetBrains.Annotations;
-using JetBrains.Application.Threading;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.EnvDTE.Host.Manager;
-using JetBrains.ProjectModel;
 using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.ReSharper.Psi;

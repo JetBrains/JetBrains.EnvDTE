@@ -1,6 +1,5 @@
 using System;
 using JetBrains.Application.Parts;
-using JetBrains.Application.Threading;
 using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
