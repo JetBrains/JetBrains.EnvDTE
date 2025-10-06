@@ -12,14 +12,13 @@ using JetBrains.Rider.Model;
 namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-    public sealed class CodeFunctionCallbackProvider(ISolution solution, AstManager astManager, ProjectModelViewHost host)
-        : CodeElementCallbackProviderBase(solution, astManager, host)
+    public sealed class CodeFunctionCallbackProvider(AstManager astManager, ProjectModelViewHost host)
+        : CodeElementCallbackProviderBase(astManager, host)
     {
-        protected override void DoRegisterCallbacks(ProjectModelViewHost host, IShellLocks locks, DteProtocolModel model)
+        protected override void DoRegisterCallbacks(ProjectModelViewHost host, DteProtocolModel model)
         {
             MapWithAstManager<IFunctionDeclaration, IFunction, CodeElementModel>(
                 model.CodeFunction_get_Type,
-                locks,
                 node => ToModel(node.DeclaredElement.NotNull().ReturnType),
                 function => ToModel(function.ReturnType),
                 type => throw new InvalidOperationException()

@@ -110,7 +110,7 @@ namespace JetBrains.EnvDTE.Client.Impl.AstImpl
         public string Language => Implementation
             .DteProtocolModel
             .ProjectItem_get_Language
-            .Sync(Implementation.DteProtocolModel.CodeElement_get_ProjectItem.Sync(Model))
+            .Sync(new(Implementation.DteProtocolModel.CodeElement_get_ProjectItem.Sync(Model)))
             .ToEnvDTELanguage();
     }
 }

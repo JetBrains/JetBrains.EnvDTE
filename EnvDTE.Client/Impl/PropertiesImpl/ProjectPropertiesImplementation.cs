@@ -5,13 +5,14 @@ using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Impl.PropertiesImpl.PropertyInfo;
 using JetBrains.EnvDTE.Client.Util;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.PropertiesImpl;
 
 public class ProjectPropertiesImplementation(
     [NotNull] DteImplementation dte,
     [NotNull] object parent,
-    [NotNull] Rider.Model.ProjectModel projectModel)
+    [NotNull] ProjectItemModel projectModel)
     : PropertiesImplementation(dte, parent)
 {
     public override Property Item(object index)

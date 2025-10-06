@@ -18,8 +18,8 @@ object DteProtocolModel : Ext(DteRoot) {
         field("id", int)
     }
 
-    val projectModel = structdef {
-        field("id", int)
+    val projectItemRequest = openstruct {
+        field("projectItemModel", projectItemModel)
     }
 
     val projectItemKindModel = enum {
@@ -55,8 +55,7 @@ object DteProtocolModel : Ext(DteRoot) {
         +"None"
     }
 
-    private val addExistingItemRequest = openstruct {
-        field("parentItem", projectItemModel)
+    private val addExistingItemRequest = openstruct extends projectItemRequest {
         field("path", string)
         field("isDirectory", bool)
     }
@@ -76,8 +75,7 @@ object DteProtocolModel : Ext(DteRoot) {
         call("ProjectItems_addFromFile", addExistingItemRequest, projectItemModel.nullable)
         call("ProjectItems_addFromFileCopy", addExistingItemRequest, projectItemModel.nullable)
         call("ProjectItems_addFromDirectory", addExistingItemRequest, projectItemModel.nullable)
-        call("ProjectItems_addFolder", structdef("ProjectItems_addFolderRequest") {
-            field("parentItem", projectItemModel)
+        call("ProjectItems_addFolder", structdef("ProjectItems_addFolderRequest") extends projectItemRequest {
             field("name", string)
         }, projectItemModel.nullable)
     }
@@ -93,64 +91,59 @@ object DteProtocolModel : Ext(DteRoot) {
         // see SolutionCallbackProvider
         call("Solution_FileName", void, string)
         call("Solution_Count", void, int)
-        call("Solution_Item", int, projectModel.nullable)
-        call("Solution_get_Projects", void, immutableList(projectModel))
+        call("Solution_Item", int, projectItemModel.nullable)
+        call("Solution_get_Projects", void, immutableList(projectItemModel))
     }
 
     private fun createProjectCallbacks() {
         // see ProjectCallbackProvider
-        call("Project_get_Name", projectModel, string)
-        call("Project_set_Name", structdef("Project_set_NameRequest") {
-            field("model", projectModel)
+        call("Project_get_Name", projectItemRequest, string)
+        call("Project_set_Name", structdef("Project_set_NameRequest") extends projectItemRequest {
             field("newName", string)
         }, void)
-        call("Project_get_FileName", projectModel, string)
-        call("Project_get_UniqueName", projectModel, string)
-        call("Project_get_Kind", projectModel, string)
-        call("Project_get_Language", projectModel, languageModel)
+        call("Project_get_FileName", projectItemRequest, string)
+        call("Project_get_UniqueName", projectItemRequest, string)
+        call("Project_get_Kind", projectItemRequest, string)
+        call("Project_get_Language", projectItemRequest, languageModel)
 
-        call("Project_get_Property", structdef("Project_get_PropertyRequest") {
-            field("model", projectModel)
+        call("Project_get_Property", structdef("Project_get_PropertyRequest") extends projectItemRequest {
             field("name", string)
         }, string.nullable)
-        call("Project_set_Property", structdef("Project_set_PropertyRequest") {
-            field("model", projectModel)
+        call("Project_set_Property", structdef("Project_set_PropertyRequest") extends projectItemRequest {
             field("name", string)
             field("value", string.nullable)
         }, void)
 
-        call("Project_Delete", projectModel, void)
+        call("Project_Delete", projectItemRequest, void)
 
         // Configuration
-        call("Project_get_ConfigurationNames", projectModel, immutableList(string))
-        call("Project_get_PlatformNames", projectModel, immutableList(string))
-        call("Project_get_ConfigurationCount", projectModel, int)
-        call("Project_get_IsBuildable", projectModel, bool)
-        call("Project_get_IsDeployable", projectModel, bool)
-        call("Project_get_ActiveConfigPlatformName", projectModel, string.nullable)
-        call("Project_get_ActiveConfigName", projectModel, string.nullable)
+        call("Project_get_ConfigurationNames", projectItemRequest, immutableList(string))
+        call("Project_get_PlatformNames", projectItemRequest, immutableList(string))
+        call("Project_get_ConfigurationCount", projectItemRequest, int)
+        call("Project_get_IsBuildable", projectItemRequest, bool)
+        call("Project_get_IsDeployable", projectItemRequest, bool)
+        call("Project_get_ActiveConfigPlatformName", projectItemRequest, string.nullable)
+        call("Project_get_ActiveConfigName", projectItemRequest, string.nullable)
     }
 
     private fun createProjectItemCallbacks() {
         // see ProjectItemCallbackProvider
-        call("ProjectItem_get_Name", projectItemModel, string)
-        call("ProjectItem_set_Name", structdef("ProjectItem_set_NameRequest") {
-            field("model", projectItemModel)
+        call("ProjectItem_get_Name", projectItemRequest, string)
+        call("ProjectItem_set_Name", structdef("ProjectItem_set_NameRequest") extends projectItemRequest {
             field("newName", string)
         }, void)
-        call("ProjectItem_get_Kind", projectItemModel, projectItemKindModel)
-        call("ProjectItem_get_ProjectItems", projectItemModel, immutableList(projectItemModel))
-        call("ProjectItem_get_Language", projectItemModel, languageModel)
-        call("ProjectItem_remove", projectItemModel, void)
-        call("ProjectItem_get_SubItemIndex", structdef("ProjectItem_getSubItemIndexRequest") {
-            field("item", projectItemModel)
+        call("ProjectItem_get_Kind", projectItemRequest, projectItemKindModel)
+        call("ProjectItem_get_ProjectItems", projectItemRequest, immutableList(projectItemModel))
+        call("ProjectItem_get_Language", projectItemRequest, languageModel)
+        call("ProjectItem_remove", projectItemRequest, void)
+        call("ProjectItem_get_SubItemIndex", structdef("ProjectItem_getSubItemIndexRequest") extends projectItemRequest {
             field("name", string)
         }, int.nullable)
     }
 
     private fun createFileCodeModelCallbacks() {
         // see FileCodeModelCallbackProvider
-        call("FileCodeModel_get_CodeElements", projectItemModel, immutableList(codeElementModel))
+        call("FileCodeModel_get_CodeElements", projectItemRequest, immutableList(codeElementModel))
     }
 
     private fun createCodeElementCallbacks() {

@@ -33,7 +33,7 @@ namespace JetBrains.EnvDTE.Client.Impl.AstImpl
         public string Language => DteImplementation
             .DteProtocolModel
             .ProjectItem_get_Language
-            .Sync(MyParent.ProjectItemModel).ToEnvDTELanguage();
+            .Sync(new(MyParent.ProjectItemModel)).ToEnvDTELanguage();
 
         [NotNull]
         public CodeElements CodeElements => new CodeElementsImplementation(
@@ -41,7 +41,7 @@ namespace JetBrains.EnvDTE.Client.Impl.AstImpl
             DteImplementation
                 .DteProtocolModel
                 .FileCodeModel_get_CodeElements
-                .Sync(MyParent.ProjectItemModel),
+                .Sync(new(MyParent.ProjectItemModel)),
             this
         );
 

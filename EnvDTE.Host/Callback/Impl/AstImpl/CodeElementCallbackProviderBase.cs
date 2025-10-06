@@ -11,12 +11,15 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
+using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Rider.Model;
 using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
 {
-    public abstract class CodeElementCallbackProviderBase(ISolution solution, AstManager astManager, ProjectModelViewHost host)
+    public abstract class CodeElementCallbackProviderBase(
+        AstManager astManager,
+        ProjectModelViewHost host)
         : IEnvDteCallbackProvider
     {
         [NotNull]
@@ -24,12 +27,11 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
 
         public void RegisterCallbacks(DteProtocolModel model)
         {
-            DoRegisterCallbacks(host, solution.Locks, model);
+            DoRegisterCallbacks(host, model);
         }
 
         protected abstract void DoRegisterCallbacks(
             [NotNull] ProjectModelViewHost host,
-            [NotNull] IShellLocks locks,
             [NotNull] DteProtocolModel model
         );
 
@@ -44,27 +46,27 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
 
         protected void MapWithAstManager<TRes>(
             [NotNull] IRdEndpoint<CodeElementModel, TRes> ep,
-            [NotNull] IShellLocks locks,
             [NotNull] Func<ITreeNode, TRes> psiMapper,
             [NotNull] Func<IDeclaredElement, TRes> declaredElementMapper,
             [NotNull] Func<IType, TRes> typeMapper
-        ) => MapWithAstManager<ITreeNode, IDeclaredElement, TRes>(ep, locks, psiMapper, declaredElementMapper, typeMapper);
+        ) => MapWithAstManager<ITreeNode, IDeclaredElement, TRes>(ep, psiMapper, declaredElementMapper,
+            typeMapper);
 
         protected void MapWithAstManager<TNode, TElement, TRes>(
             [NotNull] IRdEndpoint<CodeElementModel, TRes> ep,
-            [NotNull] IShellLocks locks,
             [NotNull] Func<TNode, TRes> psiMapper,
             [NotNull] Func<TElement, TRes> declaredElementMapper,
             [NotNull] Func<IArrayType, TRes> typeMapper
         )
             where TNode : ITreeNode
             where TElement : IDeclaredElement =>
-            ep.SetWithReadLock(locks, codeElementModel => astManager.MapElement(
-                codeElementModel.Id,
-                psiMapper,
-                declaredElementMapper,
-                typeMapper
-            ));
+            ep.SetAsync((lifetime, model) =>
+                lifetime.StartReadActionAsync(() => astManager.MapElement(
+                    model.Id,
+                    psiMapper,
+                    declaredElementMapper,
+                    typeMapper
+                )));
 
         // More type-safe and change-resistant and less error-prone than the usual switch
         [CanBeNull]
@@ -117,7 +119,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
         {
             var element = type.GetTypeElement();
             if (element != null) return ToModel(element);
-            int id = astManager.GetOrCreateId((IArrayType) type);
+            int id = astManager.GetOrCreateId((IArrayType)type);
             return new CodeElementModel(PsiElementRegistrar.ClassDeclarationId, id);
         }
     }

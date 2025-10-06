@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using JetBrains.Application.Parts;
-using JetBrains.Application.Threading;
 using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.EnvDTE.Host.Manager;
@@ -16,38 +15,30 @@ using JetBrains.Rider.Model;
 namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-    public sealed class CodeElementCallbackProvider(ISolution solution, AstManager astManager, ProjectModelViewHost host)
-        : CodeElementCallbackProviderBase(solution, astManager, host)
+    public sealed class CodeElementCallbackProvider(AstManager astManager, ProjectModelViewHost host)
+        : CodeElementCallbackProviderBase(astManager, host)
     {
-        protected override void DoRegisterCallbacks(
-            ProjectModelViewHost host,
-            IShellLocks locks,
-            DteProtocolModel model
-        )
+        protected override void DoRegisterCallbacks(ProjectModelViewHost host, DteProtocolModel model)
         {
             MapWithAstManager(
                 model.CodeElement_get_Children,
-                locks,
                 node => node.GetEnvDTEModelChildren().Select(CreateCodeElementModel).ToList(),
                 element => throw new NotImplementedException(),
                 type => throw new InvalidOperationException()
             );
             MapWithAstManager(
                 model.CodeElement_get_Access,
-                locks,
                 GetAccessRights,
                 GetAccessRights,
                 type => throw new NotImplementedException());
             MapWithAstManager(
                 model.CodeElement_get_Name,
-                locks,
                 TreeNodeExtensions.FindName,
                 element => element.ShortName,
                 type => type.GetPresentableName(CSharpLanguage.Instance.NotNull())
             );
             MapWithAstManager(
                 model.CodeElement_get_FullName,
-                locks,
                 node =>
                 {
                     if (!(node is ICSharpDeclaration declaration)) return null;
@@ -57,13 +48,12 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
                     element,
                     ns => ns.QualifiedName,
                     type => type.GetClrName().FullName,
-                    function => $"{function.GetContainingType().NotNull().GetClrName().FullName}.{function.ShortName}"
+                    function => $"{function.ContainingType.NotNull().GetClrName().FullName}.{function.ShortName}"
                 ),
                 type => type.GetLongPresentableName(CSharpLanguage.Instance.NotNull())
             );
             MapWithAstManager(
                 model.CodeElement_get_ProjectItem,
-                locks,
                 node =>
                 {
                     var sourceFile = node.GetSourceFile();
@@ -75,7 +65,6 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
             );
             MapWithAstManager(
                 model.CodeElement_get_Parent,
-                locks,
                 node =>
                 {
                     var parent = node.GetEnvDTEModelParent();

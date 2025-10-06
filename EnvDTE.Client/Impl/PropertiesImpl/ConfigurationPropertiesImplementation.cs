@@ -5,19 +5,21 @@ using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Impl.PropertiesImpl.PropertyInfo;
 using JetBrains.EnvDTE.Client.Util;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.PropertiesImpl;
 
 public class ConfigurationPropertiesImplementation(
     [NotNull] DteImplementation dte,
     [NotNull] object parent,
-    [NotNull] Rider.Model.ProjectModel projectModel)
+    [NotNull] ProjectItemModel projectModel)
     : PropertiesImplementation(dte, parent)
 {
     public override Property Item(object index)
     {
-        var projectLanguage = DteImplementation.DteProtocolModel.Project_get_Language.Sync(projectModel);
-        var languageSpecificMap = VisualStudioConfigurationProperties.GetLanguageSpecificMap(projectLanguage);
+        var projectLanguage = DteImplementation.DteProtocolModel.Project_get_Language.Sync(new(projectModel));
+        var languageSpecificMap =
+            VisualStudioConfigurationProperties.GetLanguageSpecificMap(projectLanguage);
 
         StringPropertyInfo propertyInfo;
         switch (index)
@@ -49,7 +51,7 @@ public class ConfigurationPropertiesImplementation(
 
     public override IEnumerator GetEnumerator()
     {
-        var projectLanguage = DteImplementation.DteProtocolModel.Project_get_Language.Sync(projectModel);
+        var projectLanguage = DteImplementation.DteProtocolModel.Project_get_Language.Sync(new(projectModel));
         return VisualStudioConfigurationProperties.Map.Values
             .Concat(VisualStudioConfigurationProperties.GetLanguageSpecificMap(projectLanguage).Values)
             .Select(info => new ProjectPropertyImplementation(DteImplementation, this, projectModel, info))

@@ -8,6 +8,7 @@ using EnvDTE90;
 using JetBrains.Annotations;
 using JetBrains.Core;
 using JetBrains.EnvDTE.Client.Util;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 {
@@ -16,7 +17,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         [NotNull] private DteImplementation Implementation { get; }
 
         [NotNull, ItemNotNull]
-        private List<Rider.Model.ProjectModel> ProjectModels => Implementation
+        private List<ProjectItemModel> ProjectModels => Implementation
             .DteProtocolModel
             .Solution_get_Projects
             .Sync(Unit.Instance);

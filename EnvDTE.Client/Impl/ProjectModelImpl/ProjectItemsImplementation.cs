@@ -33,7 +33,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             int? intIndex;
             if (index is string name)
                 intIndex = dte.DteProtocolModel.ProjectItem_get_SubItemIndex.Sync(
-                    new(GetParentItemModel(), name));
+                    new(name, GetParentItemModel()));
             else
                 intIndex = ImplementationUtil.GetValidIndexOrThrow(index, projectItemModels.Count);
 
@@ -62,7 +62,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             if (kindModel != ProjectItemKindModel.PhysicalFolder) throw new ArgumentException(nameof(kind));
 
             var id = dte.DteProtocolModel.ProjectItems_addFolder.Sync(
-                new(GetParentItemModel(), name));
+                new(name, GetParentItemModel()));
             return id is null ? null : CreateProjectItem(id);
         }
 
@@ -79,7 +79,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             // Max timeout because of dialog for external files and long operation in case of directories
             // TODO: Figure out if a better approach is possible
             var id = addCall.Sync(
-                new(GetParentItemModel(), fullPath, isDirectory), RpcTimeouts.Maximal);
+                new(fullPath, isDirectory, GetParentItemModel()), RpcTimeouts.Maximal);
             return id is null ? null : CreateProjectItem(id);
         }
 

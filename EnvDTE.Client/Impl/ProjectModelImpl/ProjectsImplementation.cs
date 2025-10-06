@@ -5,12 +5,13 @@ using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Util;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 {
     public sealed class ProjectsImplementation(
         [NotNull] DteImplementation dte,
-        [NotNull, ItemNotNull] IReadOnlyList<Rider.Model.ProjectModel> projectModels)
+        [NotNull, ItemNotNull] IReadOnlyList<ProjectItemModel> projectModels)
         : Projects
     {
         [NotNull]

@@ -16,18 +16,13 @@ using JetBrains.Util;
 namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-    public sealed class CodeTypeCallbackProvider(ISolution solution, AstManager astManager, ProjectModelViewHost host)
-        : CodeElementCallbackProviderBase(solution, astManager, host)
+    public sealed class CodeTypeCallbackProvider(AstManager astManager, ProjectModelViewHost host)
+        : CodeElementCallbackProviderBase(astManager, host)
     {
-        protected override void DoRegisterCallbacks(
-            ProjectModelViewHost host,
-            IShellLocks locks,
-            DteProtocolModel model
-        )
+        protected override void DoRegisterCallbacks(ProjectModelViewHost host, DteProtocolModel model)
         {
             MapWithAstManager<ITypeDeclaration, ITypeElement, List<CodeElementModel>>(
                 model.CodeElement_get_Bases,
-                locks,
                 node => GetSuperTypes(node.DeclaredElement).AsList(),
                 element => GetSuperTypes(element).AsList(),
                 type => new List<CodeElementModel>
@@ -38,7 +33,6 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
 
             MapWithAstManager<ICSharpTypeDeclaration, ITypeElement, CodeElementModel>(
                 model.CodeElement_get_Namespace,
-                locks,
                 CreateNamespaceModel,
                 element => ToModel(element.GetContainingNamespace()),
                 type => throw new NotImplementedException()

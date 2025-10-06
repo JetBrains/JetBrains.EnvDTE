@@ -23,15 +23,15 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         [NotNull]
         public string Name
         {
-            get => dte.DteProtocolModel.ProjectItem_get_Name.Sync(projectItemModel);
+            get => dte.DteProtocolModel.ProjectItem_get_Name.Sync(new(projectItemModel));
             set => dte
                 .DteProtocolModel
                 .ProjectItem_set_Name
-                .Sync(new ProjectItem_set_NameRequest(projectItemModel, value));
+                .Sync(new ProjectItem_set_NameRequest(value, projectItemModel));
         }
 
         [NotNull] public virtual string Kind =>
-            dte.DteProtocolModel.ProjectItem_get_Kind.Sync(projectItemModel).FromRdItemKindModel();
+            dte.DteProtocolModel.ProjectItem_get_Kind.Sync(new(projectItemModel)).FromRdItemKindModel();
 
         [CanBeNull]
         public FileCodeModel FileCodeModel
@@ -39,7 +39,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             get
             {
                 if (Kind != Constants.vsProjectItemKindPhysicalFile) return null;
-                var language = dte.DteProtocolModel.ProjectItem_get_Language.Sync(projectItemModel);
+                var language = dte.DteProtocolModel.ProjectItem_get_Language.Sync(new (projectItemModel));
                 if (!SupportedLanguageUtils.IsSupported(language.ToEnvDTELanguage())) return null;
                 return new FileCodeModelImpl(dte, this);
             }
@@ -47,7 +47,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 
         [NotNull]
         public virtual ProjectItems ProjectItems =>  new ProjectItemsImplementation(dte,
-            dte.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(projectItemModel), containingProject, this);
+            dte.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(new(projectItemModel)), containingProject, this);
 
         public ProjectItems Collection => containingProject.ProjectItems;
 
@@ -55,7 +55,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         public virtual Project SubProject => null;
         public Project ContainingProject => containingProject;
 
-        public void Remove() => dte.DteProtocolModel.ProjectItem_remove.Sync(projectItemModel);
+        public void Remove() => dte.DteProtocolModel.ProjectItem_remove.Sync(new(projectItemModel));
 
         #region NotImplemented
 

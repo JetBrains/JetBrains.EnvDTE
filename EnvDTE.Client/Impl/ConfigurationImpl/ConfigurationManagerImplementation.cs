@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using EnvDTE;
 using JetBrains.Annotations;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ConfigurationImpl;
 
 public class ConfigurationManagerImplementation(
     [NotNull] DteImplementation dte,
-    [NotNull] Rider.Model.ProjectModel project)
+    [NotNull] ProjectItemModel project)
     : ConfigurationManager
 {
     [CanBeNull] private Configuration _activeConfiguration;
     public DTE DTE => dte;
     public object Parent => project;
 
-    public int Count => dte.DteProtocolModel.Project_get_ConfigurationCount.Sync(project);
-    public object ConfigurationRowNames => dte.DteProtocolModel.Project_get_ConfigurationNames.Sync(project);
-    public object PlatformNames => dte.DteProtocolModel.Project_get_PlatformNames.Sync(project);
+    public int Count => dte.DteProtocolModel.Project_get_ConfigurationCount.Sync(new (project));
+    public object ConfigurationRowNames => dte.DteProtocolModel.Project_get_ConfigurationNames.Sync(new (project));
+    public object PlatformNames => dte.DteProtocolModel.Project_get_PlatformNames.Sync(new (project));
 
     public Configuration ActiveConfiguration {
         get

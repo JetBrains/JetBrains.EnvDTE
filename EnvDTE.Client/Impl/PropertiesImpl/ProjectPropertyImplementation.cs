@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Impl.PropertiesImpl.Exceptions;
 using JetBrains.EnvDTE.Client.Impl.PropertiesImpl.PropertyInfo;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.PropertiesImpl;
 
@@ -8,7 +9,7 @@ namespace JetBrains.EnvDTE.Client.Impl.PropertiesImpl;
 public class ProjectPropertyImplementation(
     [NotNull] DteImplementation dte,
     [NotNull] PropertiesImplementation parent,
-    [NotNull] Rider.Model.ProjectModel projectModel,
+    [NotNull] ProjectItemModel projectModel,
     [NotNull] StringPropertyInfo propertyInfo)
     : ScalarPropertyImplementation(dte, parent, propertyInfo.VisualStudioName)
 {
@@ -17,7 +18,7 @@ public class ProjectPropertyImplementation(
         get
         {
             var value = DteImplementation.DteProtocolModel.Project_get_Property.Sync(
-                new(projectModel, propertyInfo.RiderName));
+                new(propertyInfo.RiderName, projectModel));
 
             return propertyInfo.ParseValue(value);
         }
@@ -27,7 +28,7 @@ public class ProjectPropertyImplementation(
 
             var canonicalValue = propertyInfo.GetCanonicalValueOrThrow(value);
             DteImplementation.DteProtocolModel.Project_set_Property.Sync(
-                new(projectModel, propertyInfo.RiderName, canonicalValue));
+                new(propertyInfo.RiderName, canonicalValue, projectModel));
         }
     }
 }

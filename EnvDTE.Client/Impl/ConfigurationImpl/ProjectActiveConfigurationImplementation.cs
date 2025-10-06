@@ -2,13 +2,14 @@
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Impl.PropertiesImpl;
+using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ConfigurationImpl;
 
 public class ProjectActiveConfigurationImplementation(
     [NotNull] DteImplementation dte,
     [NotNull] ConfigurationManagerImplementation parent,
-    [NotNull] Rider.Model.ProjectModel project)
+    [NotNull] ProjectItemModel project)
     : Configuration
 {
     [CanBeNull] private ConfigurationPropertiesImplementation _properties;
@@ -19,8 +20,8 @@ public class ProjectActiveConfigurationImplementation(
     public object Owner => parent.Parent;
     public vsConfigurationType Type => vsConfigurationType.vsConfigurationTypeProject;
 
-    public string ConfigurationName => dte.DteProtocolModel.Project_get_ActiveConfigName.Sync(project);
-    public string PlatformName => dte.DteProtocolModel.Project_get_ActiveConfigPlatformName.Sync(project);
+    public string ConfigurationName => dte.DteProtocolModel.Project_get_ActiveConfigName.Sync(new (project));
+    public string PlatformName => dte.DteProtocolModel.Project_get_ActiveConfigPlatformName.Sync(new (project));
 
     public Properties Properties
     {
@@ -31,8 +32,8 @@ public class ProjectActiveConfigurationImplementation(
         }
     }
 
-    public bool IsBuildable => dte.DteProtocolModel.Project_get_IsBuildable.Sync(project);
-    public bool IsDeployable => dte.DteProtocolModel.Project_get_IsDeployable.Sync(project);
+    public bool IsBuildable => dte.DteProtocolModel.Project_get_IsBuildable.Sync(new (project));
+    public bool IsDeployable => dte.DteProtocolModel.Project_get_IsDeployable.Sync(new (project));
 
     #region NotImplemented
 

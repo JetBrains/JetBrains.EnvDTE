@@ -3,19 +3,16 @@ using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
-using JetBrains.Core;
 using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.Lifetimes;
 using JetBrains.Platform.MsBuildHost.Models;
 using JetBrains.Platform.MsBuildHost.Utils;
 using JetBrains.ProjectModel;
-using JetBrains.ProjectModel.ProjectsHost;
 using JetBrains.ProjectModel.ProjectsHost.Impl;
 using JetBrains.ProjectModel.ProjectsHost.MsBuild;
 using JetBrains.ProjectModel.ProjectsHost.SolutionHost;
 using JetBrains.ProjectModel.Properties;
-using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View.EditProperties.Solutions;
@@ -36,31 +33,31 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         MsBuildProjectsConfigurationsStore configurationsStore)
         : IEnvDteCallbackProvider
     {
+        private const string PlatformProperty = "Platform";
         private const string SolutionFolderProjectGuid = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
         private readonly Key _uniqueNameKey = new("EnvDTE.UniqueName");
 
         public void RegisterCallbacks(DteProtocolModel model)
         {
-            model.Project_get_Name.SetWithReadLock(solution.Locks,
-                projectModel => GetProject(projectModel)?.Name ?? string.Empty);
+            model.Project_get_Name.SetWithProjectSync(host, (_, project) => project.Name);
 
-            model.Project_set_Name.SetWithReadLock(solution.Locks, request =>
+            model.Project_set_Name.SetWithProjectVoidAsync(host, (lifetime, req, project) =>
+                lifetime.StartReadActionAsync(() =>
+                    solution.InvokeUnderTransaction(cookie => cookie.Rename(project, req.NewName))));
+
+            model.Project_get_FileName.SetWithProjectSync(host, (_, project) =>
             {
-                var name = request.NewName;
-                var project = GetProject(request.Model);
-                if (project is null) return Unit.Instance;
-                solution.InvokeUnderTransaction(cookie => cookie.Rename(project, name));
-                return Unit.Instance;
+                // TODO
+                string fileName = project.ProjectFileLocation.FullPath;
+                // await lifetime.StartReadActionAsync(() =>
+                // {
+                //     fileName = project.ProjectFileLocation.FullPath;
+                // });
+                return fileName;
             });
 
-            model.Project_get_FileName.SetWithReadLock(solution.Locks, projectModel =>
-                GetProject(projectModel)?.ProjectFileLocation.FullPath ?? string.Empty);
-
-            model.Project_get_UniqueName.SetAsync(async (lifetime, projectModel) =>
+            model.Project_get_UniqueName.SetWithProjectAsync(host, async (lifetime, _, project) =>
             {
-                var project = GetProject(projectModel);
-                if (project is null) return string.Empty;
-
                 string uniqueName = null;
                 await lifetime.StartReadActionAsync(() =>
                 {
@@ -74,44 +71,30 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 return uniqueName;
             });
 
-            model.Project_get_Kind.SetSync(projectModel =>
+            model.Project_get_Kind.SetWithProjectSync(host, (_, project) =>
             {
-                var project = GetProject(projectModel);
-                if (project is null) return string.Empty;
-
                 if (project.ProjectProperties.ProjectKind == ProjectKind.SOLUTION_FOLDER) return SolutionFolderProjectGuid;
 
                 var guid = project.ProjectProperties.ProjectTypeGuids.FirstOrDefault();
                 return guid.ToString("B").ToUpperInvariant();
             });
 
-            model.Project_get_Language.SetSync(projectModel =>
+            model.Project_get_Language.SetWithProjectSync(host, (_, project) =>
+                project.ProjectProperties.DefaultLanguage.ToRdLanguageModel());
+
+            model.Project_get_Property.SetWithProjectAsync(host, async (lifetime, req, project) =>
             {
-                var project = GetProject(projectModel);
-                if (project is null) return LanguageModel.Unknown;
-
-                return project.ProjectProperties.DefaultLanguage.ToRdLanguageModel();
-            });
-
-            model.Project_get_Property.SetAsync(async (lifetime, args) =>
-            {
-                var project = GetProject(args.Model);
-                if (project is null) return null;
-
                 string value = null;
                 await lifetime.StartReadActionAsync(() =>
                 {
-                    value = project.GetRequestedProjectProperty(project.GetCurrentTargetFrameworkId(), args.Name);
+                    value = project.GetRequestedProjectProperty(project.GetCurrentTargetFrameworkId(), req.Name);
                 });
                 return value;
             });
 
-            model.Project_set_Property.SetVoidAsync(async (lifetime, args) =>
+            model.Project_set_Property.SetWithProjectMarkVoidAsync(host, async (lifetime, args, mark) =>
             {
-                var projectMark = GetProject(args.Model)?.GetProjectMark();
-                if (projectMark is null) return;
-
-                logger.Assert(!projectMark.IsVCXProject(), "Properties of C++ projects cannot be changed this way");
+                logger.Assert(!mark.IsVCXProject(), "Properties of C++ projects cannot be changed this way");
 
                 var projectHostContainer = solution.ProjectsHostContainer();
                 var projectHost = projectHostContainer.GetComponent<MsBuildProjectHost>();
@@ -121,92 +104,52 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 {
                     MsBuildModelHelper.CreateSimpleSaveProperty(args.Name, args.Value, null)
                 };
-                await lifetime.StartMainWrite(() => projectHost.SaveProperties(projectMark, rdSaveProperties));
+                await lifetime.StartMainWrite(() => projectHost.SaveProperties(mark, rdSaveProperties));
 
-                componentLifetime.StartMainWrite(() => solutionHost.ReloadProjectAsync(projectMark)).NoAwait();
+                componentLifetime.StartMainWrite(() => solutionHost.ReloadProjectAsync(mark)).NoAwait();
             });
 
-            model.Project_Delete.SetWithReadLock(solution.Locks, projectModel =>
+            model.Project_Delete.SetWithProjectVoidAsync(host, async (lifetime, _, project) =>
             {
-                var project = GetProject(projectModel);
-                if (project is null) return Unit.Instance;
-                solution.InvokeUnderTransaction(cookie => cookie.Remove(project));
-                return Unit.Instance;
+                await lifetime.StartReadActionAsync(() =>
+                    solution.InvokeUnderTransaction(cookie => cookie.Remove(project)));
             });
 
-            model.Project_get_ConfigurationCount.SetSync(projectModel =>
-            {
-                var projectMark = GetProject(projectModel)?.GetProjectMark();
-                if (projectMark is null) return 0;
+            model.Project_get_ConfigurationCount.SetWithProjectMarkSync(host, (_, mark) =>
+                configurationsStore.GetConfigurationsAndPlatforms(mark).Count);
 
-                return configurationsStore.GetConfigurationsAndPlatforms(projectMark).Count;
-            });
-
-            model.Project_get_ConfigurationNames.SetSync(projectModel =>
-            {
-                var projectMark = GetProject(projectModel)?.GetProjectMark();
-                if (projectMark is null) return [];
-
-                return configurationsStore.GetConfigurationsAndPlatforms(projectMark)
+            model.Project_get_ConfigurationNames.SetWithProjectMarkSync(host, (_, mark) =>
+                configurationsStore.GetConfigurationsAndPlatforms(mark)
                     .Select(cp => cp.Configuration)
                     .Distinct()
-                    .ToList();
-            });
+                    .ToList());
 
-            model.Project_get_PlatformNames.SetSync(projectModel =>
-            {
-                var projectMark = GetProject(projectModel)?.GetProjectMark();
-                if (projectMark is null) return [];
-
-                return configurationsStore.GetConfigurationsAndPlatforms(projectMark)
+            model.Project_get_PlatformNames.SetWithProjectMarkSync(host, (_, mark) =>
+                configurationsStore.GetConfigurationsAndPlatforms(mark)
                     .Select(cp => cp.Platform)
                     .Distinct()
-                    .ToList();
-            });
+                    .ToList());
 
-            model.Project_get_IsBuildable.SetSync(projectModel =>
+            model.Project_get_IsBuildable.SetWithProjectSync(host, (_, project) =>
+                project.ProjectProperties.BuildSettings?.IsBuildable ?? false);
+
+            model.Project_get_IsDeployable.SetWithProjectSync(host, (_, project) =>
+                project.ProjectProperties.BuildSettings?.IsDeployable ?? false);
+
+            model.Project_get_ActiveConfigName.SetWithProjectSync(host, (_, project) =>
+                project.ProjectProperties.TryGetConfiguration<IProjectConfiguration>(
+                    project.GetCurrentTargetFrameworkId())?.Name);
+
+            model.Project_get_ActiveConfigPlatformName.SetWithProjectSync(host, (_, project) =>
             {
-                var project = GetProject(projectModel);
-                if (project is null) return false;
-
-                return project.ProjectProperties.BuildSettings?.IsBuildable ?? false;
-            });
-
-            model.Project_get_IsDeployable.SetSync(projectModel =>
-            {
-                var project = GetProject(projectModel);
-                if (project is null) return false;
-
-                return project.ProjectProperties.BuildSettings?.IsDeployable ?? false;
-            });
-
-            model.Project_get_ActiveConfigName.SetSync(projectModel =>
-            {
-                var project = GetProject(projectModel);
-                if (project is null) return null;
-
                 var config = project.ProjectProperties.TryGetConfiguration<IProjectConfiguration>(
                     project.GetCurrentTargetFrameworkId());
 
-                return config?.Name;
-            });
-
-            model.Project_get_ActiveConfigPlatformName.SetSync(projectModel =>
-            {
-                var project = GetProject(projectModel);
-                if (project is null) return null;
-
-                var config = project.ProjectProperties.TryGetConfiguration<IProjectConfiguration>(
-                    project.GetCurrentTargetFrameworkId());
-
-                return config?.PropertiesCollection.TryGetValue("Platform", out var platform) == true
+                return config?.PropertiesCollection.TryGetValue(PlatformProperty, out var platform) == true
                     ? platform
                     : null;
             });
         }
-
-        [CanBeNull]
-        private IProject GetProject(Rider.Model.ProjectModel rdModel) => host.GetItemById<IProject>(rdModel.Id);
 
         private static string CalculateProjectUniqueName([NotNull] IProject project)
         {

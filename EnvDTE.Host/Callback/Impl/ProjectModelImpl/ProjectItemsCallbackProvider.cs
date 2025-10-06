@@ -6,6 +6,7 @@ using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.DocumentManagers.Transactions.ProjectHostActions.Modifications;
+using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.Rd.Tasks;
@@ -26,20 +27,18 @@ public class ProjectItemsCallbackProvider(
 {
     public void RegisterCallbacks(DteProtocolModel model)
     {
-        model.ProjectItems_addFolder.SetAsync(AddFolderAsync);
-        model.ProjectItems_addFromFile.SetAsync((lifetime, request) =>
-            AddExistingItemAsync(lifetime, request));
-        model.ProjectItems_addFromDirectory.SetAsync((lifetime, request) =>
-            AddExistingItemAsync(lifetime, request, copyBeforeAdd: true));
-        model.ProjectItems_addFromFileCopy.SetAsync((lifetime, request) =>
-            AddExistingItemAsync(lifetime, request, copyBeforeAdd: true));
+        model.ProjectItems_addFolder.SetWithProjectFolderAsync(host, AddFolderAsync);
+        model.ProjectItems_addFromFile.SetWithProjectFolderAsync(host, (lifetime, request, projectFolder) =>
+            AddExistingItemAsync(lifetime, request, projectFolder));
+        model.ProjectItems_addFromDirectory.SetWithProjectFolderAsync(host, (lifetime, request , projectFolder) =>
+            AddExistingItemAsync(lifetime, request, projectFolder, copyBeforeAdd: true));
+        model.ProjectItems_addFromFileCopy.SetWithProjectFolderAsync(host, (lifetime, request, projectFolder) =>
+            AddExistingItemAsync(lifetime, request, projectFolder, copyBeforeAdd: true));
     }
 
-    private async Task<ProjectItemModel> AddFolderAsync(Lifetime lifetime, ProjectItems_addFolderRequest request)
+    private async Task<ProjectItemModel> AddFolderAsync(Lifetime lifetime, ProjectItems_addFolderRequest request,
+        IProjectFolder parentFolder)
     {
-        var parentFolder = GetParentFolder(request.ParentItem.Id);
-        if (parentFolder is null) return null;
-
         logger.Trace($"Adding folder '{request.Name}' to '{parentFolder.Location}'");
 
         IProjectFolder result = null;
@@ -56,11 +55,9 @@ public class ProjectItemsCallbackProvider(
     private async Task<ProjectItemModel> AddExistingItemAsync(
         Lifetime lifetime,
         AddExistingItemRequest request,
+        IProjectFolder parentFolder,
         bool copyBeforeAdd = false)
     {
-        var parentFolder = GetParentFolder(request.ParentItem.Id);
-        if (parentFolder is null) return null;
-
         var sourcePath = VirtualFileSystemPath.Parse(request.Path, InteractionContext.SolutionContext);
         if (request.IsDirectory && !sourcePath.ExistsDirectory || !request.IsDirectory && !sourcePath.ExistsFile)
             throw new InvalidOperationException("Cannot add non-existing item");
