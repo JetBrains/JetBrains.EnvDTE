@@ -6,6 +6,4 @@ using JetBrains.Rider.Backend.Product;
 namespace JetBrains.EnvDTE.Host;
 
 [ZoneMarker]
-// TODO: Rider backend zone?
-public class ZoneMarker :  IRequire<IReSharperHostCoreFeatureZone>, IRequire<IRiderBackendFeatureZone>,
-    IRequire<IProductWithRiderBackendEnvironmentZone>;
+public class ZoneMarker : IRequire<IRiderBackendFeatureZone>, IRequire<IProductWithRiderBackendEnvironmentZone>;

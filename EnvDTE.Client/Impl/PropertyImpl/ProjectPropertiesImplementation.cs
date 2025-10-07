@@ -3,11 +3,11 @@ using System.Collections;
 using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Impl.PropertiesImpl.PropertyInfo;
+using JetBrains.EnvDTE.Client.Impl.PropertyImpl.PropertyInfo;
 using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertiesImpl;
+namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl;
 
 public class ProjectPropertiesImplementation(
     [NotNull] DteImplementation dte,
@@ -17,18 +17,20 @@ public class ProjectPropertiesImplementation(
 {
     public override Property Item(object index)
     {
+        var map = VisualStudioProjectProperties.Map;
+
         StringPropertyInfo propertyInfo;
         switch (index)
         {
             case int intIndex:
             {
-                var i = ImplementationUtil.GetValidIndexOrThrow(intIndex, VisualStudioProjectProperties.Map.Count);
-                propertyInfo = VisualStudioProjectProperties.Map.ElementAt(i).Value;
+                var i = ImplementationUtil.GetValidIndexOrThrow(intIndex, map.Count);
+                propertyInfo = map.ElementAt(i).Value;
                 break;
             }
             case string stringIndex:
             {
-                if (!VisualStudioProjectProperties.Map.TryGetValue(stringIndex, out propertyInfo))
+                if (!map.TryGetValue(stringIndex, out propertyInfo))
                     return new NullPropertyImplementation(DteImplementation, this, stringIndex);
                 break;
             }

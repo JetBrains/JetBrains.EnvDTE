@@ -12,33 +12,27 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 {
-    public sealed class SolutionImplementation : Solution, Solution4
+    public sealed class SolutionImplementation([NotNull] DteImplementation dte) : Solution, Solution4
     {
-        [NotNull] private DteImplementation Implementation { get; }
-
         [NotNull, ItemNotNull]
-        private List<ProjectItemModel> ProjectModels => Implementation
-            .DteProtocolModel
-            .Solution_get_Projects
-            .Sync(Unit.Instance);
+        private List<ProjectItemModel> ProjectModels => dte.DteProtocolModel.Solution_get_Projects.Sync(Unit.Instance);
 
-        internal SolutionImplementation([NotNull] DteImplementation dte) => Implementation = dte;
-        public DTE DTE => Implementation;
-        public DTE Parent => Implementation;
-        public string FileName => Implementation.DteProtocolModel.Solution_FileName.Sync(Unit.Instance);
+        public DTE DTE => dte;
+        public DTE Parent => dte;
+        public string FileName => dte.DteProtocolModel.Solution_FileName.Sync(Unit.Instance);
         public string FullName => FileName;
 
         public Project Item(object index)
         {
             var i = ImplementationUtil.GetValidIndexOrThrow(index);
-            var item = Implementation.DteProtocolModel.Solution_Item.Sync(i);
+            var item = dte.DteProtocolModel.Solution_Item.Sync(i);
             return item is null
                 ? throw new ArgumentOutOfRangeException()
-                : new ProjectImplementation(Implementation, item);
+                : new ProjectImplementation(dte, item);
         }
 
-        public int Count => Implementation.DteProtocolModel.Solution_Count.Sync(Unit.Instance);
-        public Projects Projects => new ProjectsImplementation(Implementation, ProjectModels);
+        public int Count => dte.DteProtocolModel.Solution_Count.Sync(Unit.Instance);
+        public Projects Projects => new ProjectsImplementation(dte, ProjectModels);
         public IEnumerator GetEnumerator() => Projects.GetEnumerator();
 
         #region NotImplemented

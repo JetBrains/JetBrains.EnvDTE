@@ -1,7 +1,7 @@
 ﻿using System;
 using EnvDTE;
 using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Impl.PropertiesImpl;
+using JetBrains.EnvDTE.Client.Impl.PropertyImpl;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ConfigurationImpl;
@@ -9,7 +9,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ConfigurationImpl;
 public class ProjectActiveConfigurationImplementation(
     [NotNull] DteImplementation dte,
     [NotNull] ConfigurationManagerImplementation parent,
-    [NotNull] ProjectItemModel project)
+    [NotNull] ProjectItemModel parentItemModel)
     : Configuration
 {
     [CanBeNull] private ConfigurationPropertiesImplementation _properties;
@@ -20,20 +20,20 @@ public class ProjectActiveConfigurationImplementation(
     public object Owner => parent.Parent;
     public vsConfigurationType Type => vsConfigurationType.vsConfigurationTypeProject;
 
-    public string ConfigurationName => dte.DteProtocolModel.Project_get_ActiveConfigName.Sync(new (project));
-    public string PlatformName => dte.DteProtocolModel.Project_get_ActiveConfigPlatformName.Sync(new (project));
+    public string ConfigurationName => dte.DteProtocolModel.Project_get_ActiveConfigName.Sync(new (parentItemModel));
+    public string PlatformName => dte.DteProtocolModel.Project_get_ActiveConfigPlatformName.Sync(new (parentItemModel));
 
     public Properties Properties
     {
         get
         {
-            _properties ??= new ConfigurationPropertiesImplementation(dte, this, project);
+            _properties ??= new ConfigurationPropertiesImplementation(dte, this, parentItemModel);
             return _properties;
         }
     }
 
-    public bool IsBuildable => dte.DteProtocolModel.Project_get_IsBuildable.Sync(new (project));
-    public bool IsDeployable => dte.DteProtocolModel.Project_get_IsDeployable.Sync(new (project));
+    public bool IsBuildable => dte.DteProtocolModel.Project_get_IsBuildable.Sync(new (parentItemModel));
+    public bool IsDeployable => dte.DteProtocolModel.Project_get_IsDeployable.Sync(new (parentItemModel));
 
     #region NotImplemented
 

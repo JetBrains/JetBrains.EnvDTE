@@ -2,7 +2,7 @@ using System;
 using EnvDTE;
 using JetBrains.Annotations;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertiesImpl;
+namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl;
 
 public abstract class ScalarPropertyImplementation(
     [NotNull] DteImplementation dte,

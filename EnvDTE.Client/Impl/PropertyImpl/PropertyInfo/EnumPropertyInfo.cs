@@ -1,8 +1,8 @@
 ﻿using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Impl.PropertiesImpl.Exceptions;
+using JetBrains.EnvDTE.Client.Impl.PropertyImpl.Exceptions;
 using JetBrains.EnvDTE.Client.Util;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertiesImpl.PropertyInfo;
+namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl.PropertyInfo;
 
 internal class EnumPropertyInfo(
     [NotNull] string visualStudioName,

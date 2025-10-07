@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertiesImpl.Exceptions;
+namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl.Exceptions;
 
 [Serializable]
 public class InvalidEnumPropertyValueException()

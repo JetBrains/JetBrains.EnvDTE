@@ -86,6 +86,7 @@ public class ProjectItemsCallbackProvider(
 
         logger.Trace($"Adding existing item from '{sourcePath}' to '{parentFolder.Location}'");
 
+        // Based on `JetBrains.RdBackend.Common.Features.ProjectModel.View.ProjectModelTaskHandler.AddItemsHandler`
         IProjectItem result = null;
         await lifetime.StartMainWrite(() =>
             // TODO: Maybe ordering context is necessary
@@ -106,6 +107,4 @@ public class ProjectItemsCallbackProvider(
             ? null
             : new ProjectItemModel(host.GetIdByItem(result));
     }
-
-    [CanBeNull] private IProjectFolder GetParentFolder(int id) => host.GetItemById<IProjectFolder>(id);
 }

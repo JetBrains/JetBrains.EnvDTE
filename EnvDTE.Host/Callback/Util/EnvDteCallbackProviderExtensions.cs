@@ -131,12 +131,9 @@ namespace JetBrains.EnvDTE.Host.Callback.Util
             where TReq : ProjectItemRequest where TItem : class, IProjectItem
         {
             projectItem = host.GetItemById<TItem>(req.ProjectItemModel.Id);
-            if (projectItem is null)
-            {
-                Log.Warn($"{nameof(TItem)} not found for id: {req.ProjectItemModel.Id}." +
-                         " Project model probably changed, and id on the client side is outdated.");
-                return false;
-            }
+            if (projectItem is null) throw new InvalidOperationException(
+                $"{nameof(TItem)} not found for id: {req.ProjectItemModel.Id}." +
+                " Project model probably changed, and id on the client side is outdated.");
 
             return true;
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertiesImpl;
+namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl;
 
 public class NullPropertyImplementation(
     [NotNull] DteImplementation dte,

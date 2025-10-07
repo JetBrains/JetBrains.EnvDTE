@@ -7,14 +7,12 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Util
 {
-	public sealed class EnvDTEElementRegistrar
-	{
+	public sealed class EnvDTEElementRegistrar([NotNull] DteImplementation implementation)
+    {
 		[NotNull]
-        public DteImplementation Implementation { get; }
+        public DteImplementation Implementation { get; } = implementation;
 
-		public EnvDTEElementRegistrar([NotNull] DteImplementation implementation) => Implementation = implementation;
-
-		[NotNull]
+        [NotNull]
         public CodeElement Convert([NotNull] CodeElementModel model, object parent) => model.TypeId switch
 		{
 			1 => new CodeNamespaceImpl(Implementation, model, parent),

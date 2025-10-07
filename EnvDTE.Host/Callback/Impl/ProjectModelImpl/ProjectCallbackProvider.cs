@@ -45,24 +45,11 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 lifetime.StartReadActionAsync(() =>
                     solution.InvokeUnderTransaction(cookie => cookie.Rename(project, req.NewName))));
 
-            model.Project_get_FileName.SetWithProjectSync(host, (_, project) =>
-            {
-                // TODO
-                string fileName = project.ProjectFileLocation.FullPath;
-                // await lifetime.StartReadActionAsync(() =>
-                // {
-                //     fileName = project.ProjectFileLocation.FullPath;
-                // });
-                return fileName;
-            });
+            model.Project_get_FileName.SetWithProjectSync(host, (_, project) => project.ProjectFileLocation.FullPath);
 
             model.Project_get_UniqueName.SetWithProjectAsync(host, async (lifetime, _, project) =>
             {
-                string uniqueName = null;
-                await lifetime.StartReadActionAsync(() =>
-                {
-                    uniqueName = project.GetProperty(_uniqueNameKey) as string;
-                });
+                var uniqueName = await lifetime.StartReadActionAsync(() => project.GetProperty(_uniqueNameKey) as string);
                 if (uniqueName is not null) return uniqueName;
 
                 uniqueName = CalculateProjectUniqueName(project);
@@ -83,14 +70,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 project.ProjectProperties.DefaultLanguage.ToRdLanguageModel());
 
             model.Project_get_Property.SetWithProjectAsync(host, async (lifetime, req, project) =>
-            {
-                string value = null;
                 await lifetime.StartReadActionAsync(() =>
-                {
-                    value = project.GetRequestedProjectProperty(project.GetCurrentTargetFrameworkId(), req.Name);
-                });
-                return value;
-            });
+                    project.GetRequestedProjectProperty(project.GetCurrentTargetFrameworkId(), req.Name)));
 
             model.Project_set_Property.SetWithProjectMarkVoidAsync(host, async (lifetime, args, mark) =>
             {
@@ -109,11 +90,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 componentLifetime.StartMainWrite(() => solutionHost.ReloadProjectAsync(mark)).NoAwait();
             });
 
-            model.Project_Delete.SetWithProjectVoidAsync(host, async (lifetime, _, project) =>
-            {
-                await lifetime.StartReadActionAsync(() =>
-                    solution.InvokeUnderTransaction(cookie => cookie.Remove(project)));
-            });
+            model.Project_Delete.SetWithProjectVoidAsync(host, (lifetime, _, project) =>
+                lifetime.StartReadActionAsync(() => solution.InvokeUnderTransaction(cookie => cookie.Remove(project))));
 
             model.Project_get_ConfigurationCount.SetWithProjectMarkSync(host, (_, mark) =>
                 configurationsStore.GetConfigurationsAndPlatforms(mark).Count);

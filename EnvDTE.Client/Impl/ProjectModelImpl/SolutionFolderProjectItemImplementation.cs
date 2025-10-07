@@ -20,10 +20,12 @@ public class SolutionFolderProjectItemImplementation(
             {
                 // See documentation
                 _subProjectImplementation =
-                    (DteImplementation.DteProtocolModel.ProjectItem_get_Kind.Sync(new(ProjectItemModel)) == ProjectItemKindModel.PhysicalFile)
-                    ? null
-                    : new(DteImplementation, new ProjectItemModel(ProjectItemModel.Id), this);
+                    DteImplementation.DteProtocolModel.ProjectItem_get_Kind.Sync(new(ProjectItemModel)) ==
+                    ProjectItemKindModel.PhysicalFile
+                        ? null
+                        : new(DteImplementation, new ProjectItemModel(ProjectItemModel.Id), this);
             }
+
             return _subProjectImplementation;
         }
     }

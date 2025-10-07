@@ -26,4 +26,14 @@ public static class RdExtensions
         Constants.vsProjectItemKindUnknown => ProjectItemKindModel.Unknown,
         _ => throw new ArgumentException($"Invalid project item kind: {kind}")
     };
+
+    [CanBeNull]
+    public static string FromRdLanguageModel(this LanguageModel model) => model switch
+    {
+        LanguageModel.CSharp => CodeModelLanguageConstants.vsCMLanguageCSharp,
+        LanguageModel.VB => CodeModelLanguageConstants.vsCMLanguageVB,
+        _ => null
+    };
+
+    public static bool IsSupportedLanguage(this LanguageModel language) => language == LanguageModel.CSharp;
 }

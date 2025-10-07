@@ -6,6 +6,7 @@ using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Util;
+using JetBrains.Lifetimes;
 using JetBrains.Rd.Tasks;
 using JetBrains.Rider.Model;
 
@@ -15,7 +16,8 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         [NotNull] DteImplementation dte,
         [NotNull] List<ProjectItemModel> projectItemModels,
         [NotNull] ProjectImplementation containingProject,
-        [NotNull] object parent)
+        [NotNull] object parent,
+        [NotNull] ProjectItemModel parentItemModel)
         : ProjectItems
     {
         protected DteImplementation DteImplementation => dte;
@@ -33,7 +35,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             int? intIndex;
             if (index is string name)
                 intIndex = dte.DteProtocolModel.ProjectItem_get_SubItemIndex.Sync(
-                    new(name, GetParentItemModel()));
+                    new(name, parentItemModel));
             else
                 intIndex = ImplementationUtil.GetValidIndexOrThrow(index, projectItemModels.Count);
 
@@ -62,7 +64,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             if (kindModel != ProjectItemKindModel.PhysicalFolder) throw new ArgumentException(nameof(kind));
 
             var id = dte.DteProtocolModel.ProjectItems_addFolder.Sync(
-                new(name, GetParentItemModel()));
+                new(name, parentItemModel));
             return id is null ? null : CreateProjectItem(id);
         }
 
@@ -76,23 +78,11 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             bool isDirectory = false)
         {
             var fullPath = Path.GetFullPath(path);
-            // Max timeout because of dialog for external files and long operation in case of directories
-            // TODO: Figure out if a better approach is possible
-            var id = addCall.Sync(
-                new(fullPath, isDirectory, GetParentItemModel()), RpcTimeouts.Maximal);
+            // This operation could take a long time, so call it asynchronously to avoid the timeout
+            // TODO: Figure out if its possible to enable cancellation
+            var id = addCall.Start(dte.DteLifetime,
+                new(fullPath, isDirectory, parentItemModel)).GetAwaiter().GetResult();
             return id is null ? null : CreateProjectItem(id);
-        }
-
-        private ProjectItemModel GetParentItemModel()
-        {
-            var id = parent switch
-            {
-                ProjectImplementation project => project.ProjectModel.Id,
-                ProjectItemImplementation projectItem => projectItem.ProjectItemModel.Id,
-                _ => throw new InvalidOperationException("Invalid ProjectItems parent")
-            };
-
-            return new ProjectItemModel(id);
         }
 
         #region NotImplemented

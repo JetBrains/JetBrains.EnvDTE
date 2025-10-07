@@ -9,26 +9,27 @@ namespace JetBrains.EnvDTE.Client.Impl.ConfigurationImpl;
 
 public class ConfigurationManagerImplementation(
     [NotNull] DteImplementation dte,
-    [NotNull] ProjectItemModel project)
+    [NotNull] ProjectItemModel parentItemModel)
     : ConfigurationManager
 {
     [CanBeNull] private Configuration _activeConfiguration;
-    public DTE DTE => dte;
-    public object Parent => project;
 
-    public int Count => dte.DteProtocolModel.Project_get_ConfigurationCount.Sync(new (project));
-    public object ConfigurationRowNames => dte.DteProtocolModel.Project_get_ConfigurationNames.Sync(new (project));
-    public object PlatformNames => dte.DteProtocolModel.Project_get_PlatformNames.Sync(new (project));
+    public DTE DTE => dte;
+    public object Parent => parentItemModel;
+
+    public int Count => dte.DteProtocolModel.Project_get_ConfigurationCount.Sync(new (parentItemModel));
+    public object ConfigurationRowNames => dte.DteProtocolModel.Project_get_ConfigurationNames.Sync(new (parentItemModel));
+    public object PlatformNames => dte.DteProtocolModel.Project_get_PlatformNames.Sync(new (parentItemModel));
 
     public Configuration ActiveConfiguration {
         get
         {
-            _activeConfiguration ??= new ProjectActiveConfigurationImplementation(dte, this, project);
+            _activeConfiguration ??= new ProjectActiveConfigurationImplementation(dte, this, parentItemModel);
             return _activeConfiguration;
         }
     }
 
-    // TODO: This should enumerate all configurations, not just active one
+    // TODO: This should enumerate all configurations, not just the active one
     public IEnumerator GetEnumerator() => new List<Configuration>([ActiveConfiguration]).GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

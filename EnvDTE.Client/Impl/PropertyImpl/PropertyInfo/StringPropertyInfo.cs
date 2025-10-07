@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertiesImpl.PropertyInfo;
+namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl.PropertyInfo;
 
 // By default, treat every property as a string property
 public class StringPropertyInfo(

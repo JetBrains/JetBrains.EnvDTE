@@ -4,6 +4,7 @@ using EnvDTE80;
 using JetBrains.Annotations;
 using JetBrains.Core;
 using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl;
+using JetBrains.Lifetimes;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl
@@ -11,33 +12,29 @@ namespace JetBrains.EnvDTE.Client.Impl
     [PublicAPI]
     public sealed class DteImplementation : DTE, DTE2
     {
-        public DteImplementation([NotNull] DteProtocolModel dteProtocolModel)
-        {
-            DteProtocolModel = dteProtocolModel;
-            Solution = new SolutionImplementation(this);
-        }
+        internal Lifetime DteLifetime { get; }
+        [NotNull] internal DteProtocolModel DteProtocolModel { get; }
 
-        [NotNull]
-        internal DteProtocolModel DteProtocolModel { get; }
+        [NotNull] public DTE DTE => this;
 
-        [NotNull]
-        public DTE DTE => this;
+        [NotNull] public string Name => DteProtocolModel.DTE_Name.Sync(Unit.Instance);
 
-        [NotNull]
-        public string Name => DteProtocolModel.DTE_Name.Sync(Unit.Instance);
+        [NotNull] public string FileName => DteProtocolModel.DTE_FileName.Sync(Unit.Instance);
 
-        [NotNull]
-        public string FileName => DteProtocolModel.DTE_FileName.Sync(Unit.Instance);
-
-        [NotNull]
-        public string FullName => FileName;
+        [NotNull] public string FullName => FileName;
 
         public vsIDEMode Mode => vsIDEMode.vsIDEModeDesign;
 
-        [NotNull]
-        public Solution Solution { get; } // Initialized in constructor
+        [NotNull] public Solution Solution { get; }
 
         public string CommandLineArguments => DteProtocolModel.DTE_CommandLineArgs.Sync(Unit.Instance);
+
+        public DteImplementation([NotNull] DteProtocolModel dteProtocolModel, Lifetime? lifetime = null)
+        {
+            DteProtocolModel = dteProtocolModel;
+            Solution = new SolutionImplementation(this);
+            DteLifetime = lifetime ?? Lifetime.Eternal;
+        }
 
         #region NotImplemented
 
