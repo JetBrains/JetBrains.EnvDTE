@@ -1,6 +1,7 @@
 ﻿using System;
 using JetBrains.ProjectModel.Features.SolutionBuilders;
 using JetBrains.ProjectModel.Properties;
+using JetBrains.ProjectModel.SolutionStructure.SolutionConfigurations;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Host.Callback.Util;
@@ -30,4 +31,7 @@ public static class RdExtensions
         RdBuildSessionTarget.Clean => BuildSessionTarget.Clean,
         _ => throw new ArgumentOutOfRangeException(nameof(target))
     };
+
+    public static RdSolutionConfiguration ToRdSolutionConfiguration(this SolutionConfigurationAndPlatform config) =>
+        new(config.Configuration, config.Platform);
 }
