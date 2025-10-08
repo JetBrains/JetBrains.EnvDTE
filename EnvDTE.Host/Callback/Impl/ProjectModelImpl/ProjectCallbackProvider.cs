@@ -60,7 +60,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
 
             model.Project_get_Kind.SetWithProjectSync(host, (_, project) =>
             {
-                if (project.ProjectProperties.ProjectKind == ProjectKind.SOLUTION_FOLDER) return SolutionFolderProjectGuid;
+                if (project.IsSolutionFolder()) return SolutionFolderProjectGuid;
 
                 var guid = project.ProjectProperties.ProjectTypeGuids.FirstOrDefault();
                 return guid.ToString("B").ToUpperInvariant();
@@ -131,6 +131,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
 
         private static string CalculateProjectUniqueName([NotNull] IProject project)
         {
+            if (project.IsSolutionFolder()) return $"{project.Name}{project.Guid.ToString("B").ToUpperInvariant()}";
+
             var solutionDirPath = project.GetSolution().SolutionDirectory;
             var projectFilePath = project.ProjectFileLocation;
 
