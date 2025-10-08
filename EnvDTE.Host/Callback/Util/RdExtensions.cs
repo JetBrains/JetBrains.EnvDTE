@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.ProjectModel.Features.SolutionBuilders;
 using JetBrains.ProjectModel.Properties;
 using JetBrains.Rider.Model;
 
@@ -22,4 +23,11 @@ public static class RdExtensions
             ? LanguageModel.Cpp
             : LanguageModel.Unknown;
     }
+
+    public static IBuildSessionTarget FromRdBuildSessionTarget(this RdBuildSessionTarget target) => target switch
+    {
+        RdBuildSessionTarget.Build => BuildSessionTarget.Build,
+        RdBuildSessionTarget.Clean => BuildSessionTarget.Clean,
+        _ => throw new ArgumentOutOfRangeException(nameof(target))
+    };
 }

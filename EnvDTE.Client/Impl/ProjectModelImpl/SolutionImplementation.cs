@@ -14,6 +14,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 {
     public sealed class SolutionImplementation([NotNull] DteImplementation dte) : Solution, Solution4
     {
+        [CanBeNull] private SolutionBuildImplementation _solutionBuild;
         [NotNull, ItemNotNull]
         private List<ProjectItemModel> ProjectModels => dte.DteProtocolModel.Solution_get_Projects.Sync(Unit.Instance);
 
@@ -21,6 +22,19 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         public DTE Parent => dte;
         public string FileName => dte.DteProtocolModel.Solution_FileName.Sync(Unit.Instance);
         public string FullName => FileName;
+        public int Count => dte.DteProtocolModel.Solution_Count.Sync(Unit.Instance);
+        public Projects Projects => new ProjectsImplementation(dte, ProjectModels);
+
+        public SolutionBuild SolutionBuild
+        {
+            get
+            {
+                _solutionBuild ??= new SolutionBuildImplementation(dte, this);
+                return _solutionBuild;
+            }
+        }
+
+        public IEnumerator GetEnumerator() => Projects.GetEnumerator();
 
         public Project Item(object index)
         {
@@ -30,10 +44,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
                 ? throw new ArgumentOutOfRangeException()
                 : new ProjectImplementation(dte, item);
         }
-
-        public int Count => dte.DteProtocolModel.Solution_Count.Sync(Unit.Instance);
-        public Projects Projects => new ProjectsImplementation(dte, ProjectModels);
-        public IEnumerator GetEnumerator() => Projects.GetEnumerator();
 
         #region NotImplemented
 
@@ -62,7 +72,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
         public bool IsOpen => throw new NotImplementedException();
-        public SolutionBuild SolutionBuild => throw new NotImplementedException();
         public void Create(string Destination, string Name) => throw new NotImplementedException();
         public ProjectItem FindProjectItem(string FileName) => throw new NotImplementedException();
         public string ProjectItemsTemplatePath(string ProjectKind) => throw new NotImplementedException();
