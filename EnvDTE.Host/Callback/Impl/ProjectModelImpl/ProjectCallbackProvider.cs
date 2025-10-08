@@ -3,13 +3,13 @@ using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
-using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.Lifetimes;
 using JetBrains.Platform.MsBuildHost.Models;
+using JetBrains.Platform.MsBuildHost.ProjectModel;
 using JetBrains.Platform.MsBuildHost.Utils;
 using JetBrains.ProjectModel;
-using JetBrains.ProjectModel.ProjectsHost.Impl;
+using JetBrains.ProjectModel.ProjectsHost;
 using JetBrains.ProjectModel.ProjectsHost.MsBuild;
 using JetBrains.ProjectModel.ProjectsHost.SolutionHost;
 using JetBrains.ProjectModel.Properties;
@@ -70,19 +70,45 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 project.ProjectProperties.DefaultLanguage.ToRdLanguageModel());
 
             model.Project_get_Property.SetWithProjectAsync(host, async (lifetime, req, project) =>
-                await lifetime.StartReadActionAsync(() =>
-                    project.GetRequestedProjectProperty(project.GetCurrentTargetFrameworkId(), req.Name)));
+            {
+                var value = await lifetime.StartReadActionAsync(() =>
+                    project.GetRequestedProjectProperty(project.GetCurrentTargetFrameworkId(), req.Name));
+
+                if (value is not null) return value;
+
+                logger.Info($"Property '{req.Name}' not found in configuration's properties collection. Falling back to MSBuild.");
+
+                var projectHostContainer = solution.ProjectsHostContainer();
+                var solutionHost = projectHostContainer.GetComponent<ISolutionHost>();
+                var projectMark = project.GetProjectMark();
+                if (projectMark is null)
+                {
+                    logger.Warn($"Project mark not found for project: {project.Name}.");
+                    return null;
+                }
+
+                if (solutionHost.GetProjectHost(projectMark) is MsBuildProjectHost projectHost)
+                {
+                    value = await lifetime.StartMainRead(() => projectHost.Session.GetProjectProperty(projectMark, req.Name, project.GetCurrentTargetFrameworkId(),
+                        MsBuildEvaluationMode.Expand));
+                }
+                else
+                {
+                    logger.Warn($"Project '{project.Name}' is not hosted on {nameof(MsBuildProjectHost)}.");
+                }
+
+                return value;
+            });
 
             model.Project_set_Property.SetWithProjectMarkVoidAsync(host, async (lifetime, args, mark) =>
             {
-                logger.Assert(!mark.IsVCXProject(), "Properties of C++ projects cannot be changed this way");
-
                 var projectHostContainer = solution.ProjectsHostContainer();
                 var projectHost = projectHostContainer.GetComponent<MsBuildProjectHost>();
                 var solutionHost = projectHostContainer.GetComponent<ISolutionHost>();
 
                 var rdSaveProperties = new List<RdSaveProperty>
                 {
+                    // Even though we use `null` for configuration, the property will be set at the right place
                     MsBuildModelHelper.CreateSimpleSaveProperty(args.Name, args.Value, null)
                 };
                 await lifetime.StartMainWrite(() => projectHost.SaveProperties(mark, rdSaveProperties));
