@@ -45,7 +45,7 @@ Both regular and configuration project properties are implemented based on Visua
 
 **Property Sources**
 
-Regular project properties are sourced from Visual Studio's [GeneralBrowseObject.xaml](https://github.com/dotnet/project-system/blob/9475b6468a9f9b1b627f62d9d9225d23c02e5a49/src/Microsoft.VisualStudio.ProjectSystem.Managed/ProjectSystem/Rules/GeneralBrowseObject.xaml). The mapping in `VisualStudioProjectProperties.cs` is based on this file.
+Regular project properties are sourced from Visual Studio's [GeneralBrowseObject.xaml](https://github.com/dotnet/project-system/blob/9475b6468a9f9b1b627f62d9d9225d23c02e5a49/src/Microsoft.VisualStudio.ProjectSystem.Managed/ProjectSystem/Rules/GeneralBrowseObject.xaml). The mapping in `VisualStudioProjectProperties.cs` is based on this file and the MSBuild documentation.
 
 Configuration properties are sourced from [AbstractProjectConfigurationProperties.cs](https://github.com/dotnet/project-system/blob/abeccf3f0693bff5e1edc8dc3120a8d8748069a5/src/Microsoft.VisualStudio.ProjectSystem.Managed.VS/ProjectSystem/VS/Properties/AbstractProjectConfigurationProperties.cs) and language-specific derived classes.
 EnvDTE in VS does not support configuration properties for C++ projects, and has only one property for F# projects.

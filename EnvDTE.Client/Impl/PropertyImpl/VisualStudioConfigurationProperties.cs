@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.EnvDTE.Client.Impl.PropertyImpl.PropertyInfo;
-using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl;
@@ -14,7 +13,6 @@ internal static class VisualStudioConfigurationProperties
     internal static readonly IReadOnlyDictionary<string, StringPropertyInfo> CSharpMapSpecificMap =
         new Dictionary<string, StringPropertyInfo>
         {
-            // Treated as a string property, even though it should be an enum
             ["ErrorReport"] = new ("ErrorReport", "ErrorReport", false),
         };
 
@@ -25,11 +23,10 @@ internal static class VisualStudioConfigurationProperties
             ["LanguageVersion"] = new ("LanguageVersion", "LangVersion", false),
             ["CodeAnalysisRuleSet"] = new("CodeAnalysisRuleSet", "CodeAnalysisRuleSet", false),
             ["OutputPath"] = new("OutputPath", "OutputPath", false),
-            // Treated as a string property, even though it should be an enum
             ["PlatformTarget"] = new ("PlatformTarget", "PlatformTarget", false),
             ["IntermediatePath"] = new("IntermediatePath", "IntermediateOutputPath", false),
             ["RunCodeAnalysis"] = new BoolPropertyInfo("RunCodeAnalysis", "RunCodeAnalysis", false),
-            ["DebugSymbols"] = new("DebugSymbols", "DebugSymbols", false),
+            ["DebugSymbols"] = new BoolPropertyInfo("DebugSymbols", "DebugSymbols", false),
             ["DefineDebug"] = new BoolPropertyInfo("DefineDebug", "DefineDebug", false),
             ["DefineTrace"] = new BoolPropertyInfo("DefineTrace", "DefineTrace", false),
             ["DefineConstants"] = new("DefineConstants", "DefineConstants", false),
@@ -49,12 +46,10 @@ internal static class VisualStudioConfigurationProperties
             ["EnableASPDebugging"] = new BoolPropertyInfo("EnableASPDebugging", "EnableASPDebugging", false),
             ["EnableASPXDebugging"] = new BoolPropertyInfo("EnableASPXDebugging", "EnableASPXDebugging", false),
             ["EnableUnmanagedDebugging"] = new BoolPropertyInfo("EnableUnmanagedDebugging", "EnableUnmanagedDebugging", false),
-            ["StartAction"] = new EnumPropertyInfo("StartAction", "StartAction", false, new ReadOnlyIndexedCanonicalSet<string>(["Project", "Program", "URL", "None"], StringComparer.OrdinalIgnoreCase)),
-            // TODO: Implement value provider, see: https://github.com/dotnet/project-system/blob/c616b06472c97e5dbb54f7a92076b69df69d0f76/src/Microsoft.VisualStudio.ProjectSystem.Managed.VS/ProjectSystem/VS/Properties/VisualBasic/WarningLevelEnumProvider.cs
-            ["WarningLevel"] = new DynamicEnumPropertyInfo("WarningLevel", "WarningLevel", false),
+            ["StartAction"] = new EnumPropertyInfo("StartAction", "StartAction", false, new (["Project", "Program", "URL", "None"], StringComparer.OrdinalIgnoreCase)),
+            ["WarningLevel"] = new UIntPropertyInfo("WarningLevel", "WarningLevel", false),
             ["TreatWarningsAsErrors"] = new BoolPropertyInfo("TreatWarningsAsErrors", "TreatWarningsAsErrors", false),
             ["EnableSQLServerDebugging"] = new BoolPropertyInfo("EnableSQLServerDebugging", "EnableSQLServerDebugging", false),
-            // Treated as an Uint32 property, even though it should be an enum
             ["FileAlignment"] = new UIntPropertyInfo("FileAlignment", "FileAlignment", false),
             ["RegisterForComInterop"] = new BoolPropertyInfo("RegisterForComInterop", "RegisterForComInterop", false),
             ["ConfigurationOverrideFile"] = new ("ConfigurationOverrideFile", "ConfigurationOverrideFile", false),
@@ -62,7 +57,6 @@ internal static class VisualStudioConfigurationProperties
             ["RemoteDebugMachine"] = new ("RemoteDebugMachine", "RemoteDebugMachine", false),
             ["NoWarn"] = new("NoWarn", "NoWarn", false),
             ["NoStdLib"] = new BoolPropertyInfo("NoStdLib", "NoStdLib", false),
-            // Treated as a string property, even though it should be an enum
             ["DebugInfo"] = new ("DebugInfo", "DebugType", false),
             ["TreatSpecificWarningsAsErrors"] = new("TreatSpecificWarningsAsErrors", "WarningsAsErrors", false),
             ["CodeAnalysisLogFile"] = new("CodeAnalysisLogFile", "CodeAnalysisLogFile", false),
@@ -73,7 +67,7 @@ internal static class VisualStudioConfigurationProperties
             ["CodeAnalysisUseTypeNameInSuppression"] = new BoolPropertyInfo("CodeAnalysisUseTypeNameInSuppression", "CodeAnalysisUseTypeNameInSuppression", false),
             ["CodeAnalysisModuleSuppressionsFile"] = new("CodeAnalysisModuleSuppressionsFile", "CodeAnalysisModuleSuppressionsFile", false),
             ["UseVSHostingProcess"] = new BoolPropertyInfo("UseVSHostingProcess", "UseVSHostingProcess", false),
-            ["GenerateSerializationAssemblies"] = new EnumPropertyInfo("GenerateSerializationAssemblies", "GenerateSerializationAssemblies", false, new ReadOnlyIndexedCanonicalSet<string>(["Auto", "On", "Off"], StringComparer.OrdinalIgnoreCase)),
+            ["GenerateSerializationAssemblies"] = new EnumPropertyInfo("GenerateSerializationAssemblies", "GenerateSerializationAssemblies", false, new (["Auto", "On", "Off"], StringComparer.OrdinalIgnoreCase)),
             ["CodeAnalysisIgnoreGeneratedCode"] = new BoolPropertyInfo("CodeAnalysisIgnoreGeneratedCode", "CodeAnalysisIgnoreGeneratedCode", false),
             ["CodeAnalysisOverrideRuleVisibilities"] = new BoolPropertyInfo("CodeAnalysisOverrideRuleVisibilities", "CodeAnalysisOverrideRuleVisibilities", false),
             ["CodeAnalysisDictionaries"] = new("CodeAnalysisDictionaries", "CodeAnalysisDictionaries", false),

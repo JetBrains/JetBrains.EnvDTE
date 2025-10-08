@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.EnvDTE.Client.Impl.PropertyImpl.PropertyInfo;
-using JetBrains.EnvDTE.Client.Util;
 
 namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl;
 
+// TODO: Improve support for C++ project properties
 internal static class VisualStudioProjectProperties
 {
     internal static readonly IReadOnlyDictionary<string, StringPropertyInfo> Map =
@@ -17,7 +17,7 @@ internal static class VisualStudioProjectProperties
             ["AssemblyVersion"] = new("AssemblyVersion", "AssemblyVersion", false),
             ["Authors"] = new("Authors", "Authors", false),
             ["AutoGenerateBindingRedirects"] = new BoolPropertyInfo("AutoGenerateBindingRedirects", "AutoGenerateBindingRedirects", false),
-            ["AuthenticationMode"] = new EnumPropertyInfo("AuthenticationMode", "AuthenticationMode", false, new ReadOnlyIndexedCanonicalSet<string>(["None", "Windows"], StringComparer.OrdinalIgnoreCase)),
+            ["AuthenticationMode"] = new EnumPropertyInfo("AuthenticationMode", "AuthenticationMode", false, new (["None", "Windows"], StringComparer.OrdinalIgnoreCase)),
             ["CanUseTargetFSharpCoreVersion"] = new BoolPropertyInfo("CanUseTargetFSharpCoreVersion", "CanUseTargetFSharpCoreVersion", false),
             ["Company"] = new("Company", "Company", false),
             ["Copyright"] = new("Copyright", "Copyright", false),
@@ -26,7 +26,6 @@ internal static class VisualStudioProjectProperties
             ["Description"] = new("Description", "Description", false),
             ["FileName"] = new("FileName", "MSBuildProjectFile", true),
             ["FileVersion"] = new("FileVersion", "FileVersion", false),
-            // Should be 'ProjectDir' but 'MSBuildProjectDirectory' is more accurate
             ["FullPath"] = new("FullPath", "MSBuildProjectDirectory", true),
             ["FullProjectFileName"] = new("FullProjectFileName", "MSBuildProjectFullPath", true),
             ["GenerateAssemblyInfo"] = new BoolPropertyInfo("GenerateAssemblyInfo", "GenerateAssemblyInfo", false),
@@ -37,8 +36,8 @@ internal static class VisualStudioProjectProperties
             ["NeutralLanguage"] = new("NeutralLanguage", "NeutralLanguage", false),
             ["OutputFileName"] = new("OutputFileName", "TargetFileName", true),
             ["OutputName"] = new("OutputName", "OutputName", false),
-            ["OutputType"] = new IntPropertyInfo("OutputType", "OutputType", false),
-            ["OutputTypeEx"] = new IntPropertyInfo("OutputTypeEx", "OutputTypeEx", false),
+            ["OutputType"] = new EnumPropertyInfo("OutputType", "OutputType", false, new (["Library", "Exe", "Module", "Winexe"], StringComparer.OrdinalIgnoreCase)),
+            ["OutputTypeEx"] = new ("OutputTypeEx", "OutputTypeEx", false),
             ["PackageIconUrl"] = new("PackageIconUrl", "PackageIconUrl", false),
             ["PackageIcon"] = new("PackageIcon", "PackageIcon", false),
             ["PackageId"] = new("PackageId", "PackageId", false),
@@ -56,13 +55,11 @@ internal static class VisualStudioProjectProperties
             ["RepositoryType"] = new("RepositoryType", "RepositoryType", false),
             ["RepositoryUrl"] = new("RepositoryUrl", "RepositoryUrl", false),
             ["RootNamespace"] = new("RootNamespace", "RootNamespace", false),
-            ["RunPostBuildEvent"] = new EnumPropertyInfo("RunPostBuildEvent", "RunPostBuildEvent", false, new ReadOnlyIndexedCanonicalSet<string>(["Always", "OnBuildSuccess", "OnOutputUpdated"], StringComparer.OrdinalIgnoreCase)),
+            ["RunPostBuildEvent"] = new EnumPropertyInfo("RunPostBuildEvent", "RunPostBuildEvent", false, new (["Always", "OnBuildSuccess", "OnOutputUpdated"], StringComparer.OrdinalIgnoreCase)),
             ["SignAssembly"] = new BoolPropertyInfo("SignAssembly", "SignAssembly", false),
-            // TODO: Implement value provider, see: https://github.com/dotnet/project-system/blob/06bdf9281cee5a1ef69a3c1c6c3d47f1033291ce/src/Microsoft.VisualStudio.ProjectSystem.Managed.VS/ProjectSystem/VS/Properties/StartupObjectsEnumProvider.cs
-            ["StartupObject"] = new DynamicEnumPropertyInfo("StartupObject", "StartupObject", false),
-            // TODO: Implement value provider, see: https://github.com/dotnet/project-system/blob/06bdf9281cee5a1ef69a3c1c6c3d47f1033291ce/src/Microsoft.VisualStudio.ProjectSystem.Managed.VS/ProjectSystem/VS/Frameworks/SupportedTargetFrameworkAliasEnumProvider.cs
-            ["SupportedTargetFrameworks"] = new DynamicEnumPropertyInfo("SupportedTargetFrameworks", "SupportedTargetFrameworks", false),
-            ["TargetFramework"] = new IntPropertyInfo("TargetFramework", "TargetFramework", true),
+            ["StartupObject"] = new ("StartupObject", "StartupObject", false),
+            ["SupportedTargetFrameworks"] = new ("SupportedTargetFrameworks", "SupportedTargetFrameworks", false),
+            ["TargetFramework"] = new ("TargetFramework", "TargetFramework", true),
             ["FriendlyTargetFramework"] = new("FriendlyTargetFramework", "TargetFramework", false),
             ["TargetFrameworkMoniker"] = new("TargetFrameworkMoniker", "TargetFrameworkMoniker", false),
             ["TargetFrameworkMonikers"] = new("TargetFrameworkMonikers", "TargetFrameworkMonikers", true),
