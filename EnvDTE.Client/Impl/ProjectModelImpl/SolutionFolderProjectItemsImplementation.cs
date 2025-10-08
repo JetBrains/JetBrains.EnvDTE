@@ -7,11 +7,10 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl;
 
 public class SolutionFolderProjectItemsImplementation(
     [NotNull] DteImplementation dte,
-    [NotNull] List<ProjectItemModel> projectItemModels,
     [NotNull] ProjectImplementation containingProject,
     [NotNull] object parent,
     [NotNull] ProjectItemModel parentItemModel)
-    : ProjectItemsImplementation(dte, projectItemModels, containingProject, parent, parentItemModel)
+    : ProjectItemsImplementation(dte, containingProject, parent, parentItemModel)
 {
     public override string Kind => Constants.vsProjectItemsKindSolutionItems;
 

@@ -39,15 +39,14 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             get
             {
                 if (Kind != Constants.vsProjectItemKindPhysicalFile) return null;
-                var language = dte.DteProtocolModel.ProjectItem_get_Language.Sync(new (projectItemModel));
+                var language = dte.DteProtocolModel.ProjectItem_get_Language.Sync(new(projectItemModel));
                 return !language.IsSupportedLanguage() ? null : new FileCodeModelImpl(dte, this);
             }
         }
 
         [NotNull]
-        public virtual ProjectItems ProjectItems =>  new ProjectItemsImplementation(dte,
-            dte.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(
-                new(projectItemModel)), containingProject, this, projectItemModel);
+        public virtual ProjectItems ProjectItems =>
+            new ProjectItemsImplementation(dte, containingProject, this, projectItemModel);
 
         public ProjectItems Collection => containingProject.ProjectItems;
 

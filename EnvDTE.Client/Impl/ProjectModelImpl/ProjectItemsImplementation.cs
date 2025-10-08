@@ -14,19 +14,21 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 {
     public class ProjectItemsImplementation(
         [NotNull] DteImplementation dte,
-        [NotNull] List<ProjectItemModel> projectItemModels,
         [NotNull] ProjectImplementation containingProject,
         [NotNull] object parent,
         [NotNull] ProjectItemModel parentItemModel)
         : ProjectItems
     {
+        private IEnumerable<ProjectItemModel> ProjectItemModels =>
+            dte.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(new(parentItemModel));
+
         protected DteImplementation DteImplementation => dte;
         protected ProjectImplementation ContainingProjectImplementation => containingProject;
 
         public DTE DTE => dte;
         public object Parent => parent;
         public Project ContainingProject => containingProject;
-        public int Count => projectItemModels.Count;
+        public int Count => dte.DteProtocolModel.ProjectItem_get_ProjectItemCount.Sync(new(parentItemModel));
         public virtual string Kind => Constants.vsProjectItemKindPhysicalFolder;
 
         [CanBeNull]
@@ -37,15 +39,15 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
                 intIndex = dte.DteProtocolModel.ProjectItem_get_SubItemIndex.Sync(
                     new(name, parentItemModel));
             else
-                intIndex = ImplementationUtil.GetValidIndexOrThrow(index, projectItemModels.Count);
+                intIndex = ImplementationUtil.GetValidIndexOrThrow(index, Count);
 
             if (intIndex is null) return null;
 
-            var itemModel = projectItemModels.ElementAtOrDefault(intIndex.Value);
+            var itemModel = ProjectItemModels.ElementAtOrDefault(intIndex.Value);
             return itemModel is null ? null : CreateProjectItem(itemModel);
         }
 
-        public IEnumerator GetEnumerator() => projectItemModels.Select(CreateProjectItem).GetEnumerator();
+        public IEnumerator GetEnumerator() => ProjectItemModels.Select(CreateProjectItem).GetEnumerator();
 
         [CanBeNull] public ProjectItem AddFromFile([NotNull] string fileName) =>
             AddExistingItem(fileName, dte.DteProtocolModel.ProjectItems_addFromFile);

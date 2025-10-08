@@ -134,6 +134,7 @@ object DteProtocolModel : Ext(DteRoot) {
         }, void)
         call("ProjectItem_get_Kind", projectItemRequest, projectItemKindModel)
         call("ProjectItem_get_ProjectItems", projectItemRequest, immutableList(projectItemModel))
+        call("ProjectItem_get_ProjectItemCount", projectItemRequest, int)
         call("ProjectItem_get_Language", projectItemRequest, languageModel)
         call("ProjectItem_remove", projectItemRequest, void)
         call("ProjectItem_get_SubItemIndex", structdef("ProjectItem_getSubItemIndexRequest") extends projectItemRequest {

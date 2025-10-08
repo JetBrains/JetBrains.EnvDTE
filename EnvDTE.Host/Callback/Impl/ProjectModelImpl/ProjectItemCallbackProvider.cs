@@ -50,6 +50,9 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                     .Select(item => new ProjectItemModel(host.GetIdByItem(item)))
                     .AsList()));
 
+            model.ProjectItem_get_ProjectItemCount.SetWithProjectItemAsync(host, (lifetime, _, projectItem) =>
+                lifetime.StartReadActionAsync(() => GetFilteredProjectItems(projectItem).Count()));
+
             model.ProjectItem_get_Language.SetWithProjectItemAsync(host, async (lifetime, _, projectItem) =>
             {
                 if (projectItem is not IProjectFile projectFile)
