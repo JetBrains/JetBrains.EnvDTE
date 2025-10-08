@@ -60,6 +60,11 @@ object DteProtocolModel : Ext(DteRoot) {
         field("isDirectory", bool)
     }
 
+    private val rdSolutionConfiguration = structdef {
+        field("name", string)
+        field("platform", string)
+    }
+
     init {
         createDteCallbacks()
         createSolutionCallbacks()
@@ -108,6 +113,10 @@ object DteProtocolModel : Ext(DteRoot) {
                 +"Clean"
             })
         }, void)
+        call("Solution_get_ConfigurationCount", void, int)
+        call("Solution_get_ActiveConfiguration", void, rdSolutionConfiguration.nullable)
+        call("Solution_get_ConfigurationByIndex", int, rdSolutionConfiguration.nullable)
+        call("Solution_get_ConfigurationByName", string, rdSolutionConfiguration.nullable)
     }
 
     private fun createProjectCallbacks() {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Application.Parts;
@@ -7,6 +8,8 @@ using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Features.SolutionBuilders;
+using JetBrains.ProjectModel.Features.SolutionBuilders.Prototype.Services.Execution;
+using JetBrains.ProjectModel.SolutionStructure.SolutionConfigurations;
 using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.ReSharper.Resources.Shell;
@@ -20,7 +23,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         Lifetime componentLifetime,
         ISolution solution,
         ProjectModelViewHost host,
-        ISolutionBuilder builder)
+        ISolutionBuilder builder,
+        ISolutionConfigurationHolder configurationHolder)
         : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(DteProtocolModel model)
@@ -66,6 +70,23 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             // Returns the number of projects that failed to build
             model.Solution_get_LastBuildInfo.SetSync(_ => builder.RunningRequest.Value?.GetAllBuildErrors()
                 .Select(e => e.ProjectId).Distinct().Count() ?? 0);
+
+            model.Solution_get_ActiveConfiguration.SetSync(_ => configurationHolder.GetSolutionActiveConfiguration() switch
+            {
+                SolutionConfigurationAndPlatform config => config.ToRdSolutionConfiguration(),
+                _ => null
+            });
+
+            model.Solution_get_ConfigurationCount.SetWithSolutionMarkSync(solution, (_, solutionMark) =>
+                solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms.Count);
+
+            model.Solution_get_ConfigurationByIndex.SetWithSolutionMarkSync(solution, (index, solutionMark) =>
+                solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms.ElementAt(index).ToRdSolutionConfiguration());
+
+            model.Solution_get_ConfigurationByName.SetWithSolutionMarkSync(solution, (name, solutionMark) =>
+                solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms
+                    .FirstOrDefault(cp => cp.Configuration.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    ?.ToRdSolutionConfiguration());
         }
 
         // Misc project is also displayed in VS and our approach of using item id does not allow that because it doesn't
