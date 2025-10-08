@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using EnvDTE;
 using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Impl.ConfigurationImpl;
-using JetBrains.EnvDTE.Client.Impl.PropertyImpl;
+using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.ConfigurationImpl;
+using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl

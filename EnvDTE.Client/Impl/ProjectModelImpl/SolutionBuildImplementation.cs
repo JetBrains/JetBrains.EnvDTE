@@ -3,7 +3,7 @@ using EnvDTE;
 using EnvDTE80;
 using JetBrains.Annotations;
 using JetBrains.Core;
-using JetBrains.EnvDTE.Client.Impl.ConfigurationImpl;
+using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.ConfigurationImpl;
 using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rd.Tasks;
 using JetBrains.Rider.Model;

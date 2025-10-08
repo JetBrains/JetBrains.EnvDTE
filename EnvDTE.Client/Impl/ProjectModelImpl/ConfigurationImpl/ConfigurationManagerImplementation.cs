@@ -5,7 +5,7 @@ using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Impl.ConfigurationImpl;
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.ConfigurationImpl;
 
 public class ConfigurationManagerImplementation(
     [NotNull] DteImplementation dte,

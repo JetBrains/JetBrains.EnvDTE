@@ -1,9 +1,9 @@
 ﻿using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Impl.PropertyImpl.Exceptions;
-using JetBrains.EnvDTE.Client.Impl.PropertyImpl.PropertyInfo;
+using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl.Exceptions;
+using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl.PropertyInfo;
 using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl;
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
 
 // Doesn't work for CPP projects
 public class ProjectPropertyImplementation(

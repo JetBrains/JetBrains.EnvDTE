@@ -2,7 +2,7 @@
 using EnvDTE;
 using JetBrains.Annotations;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl;
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
 
 public abstract class PropertiesImplementation(
     [NotNull] DteImplementation dte,
