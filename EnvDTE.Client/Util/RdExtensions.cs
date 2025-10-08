@@ -36,4 +36,12 @@ public static class RdExtensions
     };
 
     public static bool IsSupportedLanguage(this LanguageModel language) => language == LanguageModel.CSharp;
+
+    public static vsBuildState FromRdBuildState(this RdBuildState buildState) => buildState switch
+    {
+        RdBuildState.Done => vsBuildState.vsBuildStateDone,
+        RdBuildState.InProgress => vsBuildState.vsBuildStateInProgress,
+        RdBuildState.NotStarted => vsBuildState.vsBuildStateNotStarted,
+        _ => throw new ArgumentException($"Invalid build state: {buildState}")
+    };
 }

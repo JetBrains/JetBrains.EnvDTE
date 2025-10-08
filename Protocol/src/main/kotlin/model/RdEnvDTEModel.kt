@@ -93,6 +93,21 @@ object DteProtocolModel : Ext(DteRoot) {
         call("Solution_Count", void, int)
         call("Solution_Item", int, projectItemModel.nullable)
         call("Solution_get_Projects", void, immutableList(projectItemModel))
+
+        // SolutionBuild
+        call("Solution_get_BuildState", void, enum("RdBuildState") {
+            +"NotStarted"
+            +"InProgress"
+            +"Done"
+        })
+        call("Solution_get_LastBuildInfo", void, int)
+        call("Solution_build", structdef("Solution_buildRequest") {
+            field("waitForBuild", bool)
+            field("buildSessionTarget", enum("RdBuildSessionTarget") {
+                +"Build"
+                +"Clean"
+            })
+        }, void)
     }
 
     private fun createProjectCallbacks() {
