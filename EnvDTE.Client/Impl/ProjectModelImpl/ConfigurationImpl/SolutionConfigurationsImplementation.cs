@@ -4,10 +4,9 @@ using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.Core;
-using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl;
 using JetBrains.EnvDTE.Client.Util;
 
-namespace JetBrains.EnvDTE.Client.Impl.ConfigurationImpl;
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.ConfigurationImpl;
 
 public class SolutionConfigurationsImplementation(
     [NotNull] DteImplementation dte,

@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl.Exceptions;
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl.Exceptions;
 
 [Serializable]
 public class InvalidPropertyValueException : Exception

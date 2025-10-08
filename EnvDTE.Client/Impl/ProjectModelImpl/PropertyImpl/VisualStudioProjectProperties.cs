@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.EnvDTE.Client.Impl.PropertyImpl.PropertyInfo;
+using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl.PropertyInfo;
+using JetBrains.EnvDTE.Client.Util;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl;
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
 
 // TODO: Improve support for C++ project properties
 internal static class VisualStudioProjectProperties

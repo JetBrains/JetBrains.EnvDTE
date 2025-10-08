@@ -40,7 +40,8 @@ public class ProjectItemsCallbackProvider(
     {
         logger.Trace($"Adding folder '{request.Name}' to '{parentFolder.Location}'");
 
-        var result = await lifetime.StartMainWrite(() => projectModelEditor.Value.AddFolder(parentFolder, request.Name));
+        var result = await lifetime.StartMainWrite(() =>
+            projectModelEditor.Value.AddFolder(parentFolder, request.Name));
 
         return result is null
             ? null

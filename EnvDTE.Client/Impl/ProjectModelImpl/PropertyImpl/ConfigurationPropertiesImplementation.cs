@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
-using JetBrains.EnvDTE.Client.Impl.PropertyImpl.PropertyInfo;
+using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl.PropertyInfo;
 using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl;
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
 
 public class ConfigurationPropertiesImplementation(
     [NotNull] DteImplementation dte,

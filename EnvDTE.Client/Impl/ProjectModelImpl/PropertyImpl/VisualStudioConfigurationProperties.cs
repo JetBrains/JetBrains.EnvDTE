@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl.PropertyInfo;
 using JetBrains.EnvDTE.Client.Impl.PropertyImpl.PropertyInfo;
 using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl;
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
 
 internal static class VisualStudioConfigurationProperties
 {
