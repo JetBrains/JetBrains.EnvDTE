@@ -36,8 +36,8 @@ internal static class VisualStudioProjectProperties
             ["NeutralLanguage"] = new("NeutralLanguage", "NeutralLanguage", false),
             ["OutputFileName"] = new("OutputFileName", "TargetFileName", true),
             ["OutputName"] = new("OutputName", "OutputName", false),
-            ["OutputType"] = new EnumPropertyInfo("OutputType", "OutputType", false, new (["Library", "Exe", "Module", "Winexe"], StringComparer.OrdinalIgnoreCase)),
-            ["OutputTypeEx"] = new ("OutputTypeEx", "OutputTypeEx", false),
+            ["OutputType"] = new MappedPropertyInfo<int>("OutputType", "OutputType", false, [(0, "WinExe"), (1, "Exe"), (2, "Library")]),
+            ["OutputTypeEx"] = new MappedPropertyInfo<int>("OutputTypeEx", "OutputType", false, [(0, "WinExe"), (1, "Exe"), (2, "Library"), (3, "WinMDObj"), (4, "AppContainerExe")]),
             ["PackageIconUrl"] = new("PackageIconUrl", "PackageIconUrl", false),
             ["PackageIcon"] = new("PackageIcon", "PackageIcon", false),
             ["PackageId"] = new("PackageId", "PackageId", false),
@@ -59,6 +59,7 @@ internal static class VisualStudioProjectProperties
             ["SignAssembly"] = new BoolPropertyInfo("SignAssembly", "SignAssembly", false),
             ["StartupObject"] = new ("StartupObject", "StartupObject", false),
             ["SupportedTargetFrameworks"] = new ("SupportedTargetFrameworks", "SupportedTargetFrameworks", false),
+            // TODO: Figure out how they calculate this property
             ["TargetFramework"] = new ("TargetFramework", "TargetFramework", true),
             ["FriendlyTargetFramework"] = new("FriendlyTargetFramework", "TargetFramework", false),
             ["TargetFrameworkMoniker"] = new("TargetFrameworkMoniker", "TargetFrameworkMoniker", false),
