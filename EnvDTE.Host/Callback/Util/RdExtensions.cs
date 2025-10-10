@@ -34,4 +34,7 @@ public static class RdExtensions
 
     public static RdSolutionConfiguration ToRdSolutionConfiguration(this SolutionConfigurationAndPlatform config) =>
         new(config.Configuration, config.Platform);
+
+    public static SolutionConfigurationAndPlatform FromRdSolutionConfiguration(this RdSolutionConfiguration config) =>
+        new(config.Name, config.Platform);
 }

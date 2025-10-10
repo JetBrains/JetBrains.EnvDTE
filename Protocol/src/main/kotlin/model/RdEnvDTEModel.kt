@@ -120,6 +120,7 @@ object DteProtocolModel : Ext(DteRoot) {
         }, void)
         call("Solution_get_ConfigurationCount", void, int)
         call("Solution_get_ActiveConfiguration", void, rdSolutionConfiguration.nullable)
+        call("Solution_set_ActiveConfiguration", rdSolutionConfiguration, void)
         call("Solution_get_ConfigurationByIndex", int, rdSolutionConfiguration.nullable)
         call("Solution_get_ConfigurationByName", string, rdSolutionConfiguration.nullable)
     }
