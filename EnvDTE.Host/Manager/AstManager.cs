@@ -1,5 +1,7 @@
 using System;
 using JetBrains.Annotations;
+using JetBrains.Application.Parts;
+using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
 
@@ -8,6 +10,7 @@ namespace JetBrains.EnvDTE.Host.Manager
     /// <summary>
     /// Maintains the ids to be used in protocol AST
     /// </summary>
+    [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
     public sealed class AstManager
     {
         [NotNull]

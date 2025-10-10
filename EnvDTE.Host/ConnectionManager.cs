@@ -2,18 +2,15 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using JetBrains.Collections.Viewable;
 using JetBrains.EnvDTE.Host.Callback;
-using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.Rd;
 using JetBrains.Rd.Impl;
-using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Host
 {
     [PublicAPI]
-
     public sealed class ConnectionManager
     {
         private const string Host = "EnvDTE Communication Host";
@@ -38,19 +35,11 @@ namespace JetBrains.EnvDTE.Host
             });
         }
 
-        private void RegisterCallbacks(
-            [NotNull] DteProtocolModel model,
-            [NotNull] ISolution solution
-        )
+        private void RegisterCallbacks([NotNull] DteProtocolModel model, [NotNull] ISolution solution)
         {
-            var host = solution.GetComponent<ProjectModelViewHost>();
-            // This manager will be stored in closures of callbacks.
-            // Since the entire protocol will be deleted on file execution end,
-            // this shouldn't cause memory leaks
-            var astManager = new AstManager();
             foreach (var provider in solution.GetComponents2<IEnvDteCallbackProvider>())
             {
-                provider.RegisterCallbacks(astManager, solution, host, model);
+                provider.RegisterCallbacks(model);
             }
         }
     }
