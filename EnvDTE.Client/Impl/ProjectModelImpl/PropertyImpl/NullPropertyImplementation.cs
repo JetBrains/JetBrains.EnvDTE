@@ -12,6 +12,6 @@ public class NullPropertyImplementation(
     public override object Value
     {
         get => null;
-        set => throw new InvalidOperationException();
+        set => throw new NotSupportedException();
     }
 }

@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.EnvDTE.Client.Impl.PropertyImpl.PropertyInfo;
-using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl.PropertyInfo;
-using JetBrains.EnvDTE.Client.Util;
 
-namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl.PropertyInfo;
 
 // TODO: Improve support for C++ project properties
-internal static class VisualStudioProjectProperties
+internal static partial class VisualStudioProperties
 {
-    internal static readonly IReadOnlyDictionary<string, StringPropertyInfo> Map =
+    internal static readonly IReadOnlyDictionary<string, StringPropertyInfo> ProjectPropertiesMap =
         new Dictionary<string, StringPropertyInfo>
         {
             ["ApplicationIcon"] = new("ApplicationIcon", "ApplicationIcon", false),

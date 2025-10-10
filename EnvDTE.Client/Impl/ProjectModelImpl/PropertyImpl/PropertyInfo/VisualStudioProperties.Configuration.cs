@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl.PropertyInfo;
-using JetBrains.EnvDTE.Client.Impl.PropertyImpl.PropertyInfo;
 using JetBrains.Rider.Model;
 
-namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl.PropertyInfo;
 
-internal static class VisualStudioConfigurationProperties
+internal static partial class VisualStudioProperties
 {
     // There are two FSharp specific properties mentioned in the files, but they are not present in the actual implementation
 
     // .NET Framework projects have two additional properties: 'PreferNativeArm64' and 'AuthenticationMode'
-    internal static readonly IReadOnlyDictionary<string, StringPropertyInfo> CSharpMapSpecificMap =
+    internal static readonly IReadOnlyDictionary<string, StringPropertyInfo> CSharpConfigurationPropertiesMap =
         new Dictionary<string, StringPropertyInfo>
         {
             ["ErrorReport"] = new ("ErrorReport", "ErrorReport", false),
         };
 
     // '__id', 'ExtenderCATID' and 'ExtenderNames' are not included
-    internal static readonly IReadOnlyDictionary<string, StringPropertyInfo> Map =
+    internal static readonly IReadOnlyDictionary<string, StringPropertyInfo> ConfigurationPropertiesMap =
         new Dictionary<string, StringPropertyInfo>
         {
             ["LanguageVersion"] = new ("LanguageVersion", "LangVersion", false),
@@ -81,10 +79,10 @@ internal static class VisualStudioConfigurationProperties
             ["Prefer32Bit"] = new BoolPropertyInfo("Prefer32Bit", "Prefer32Bit", false),
         };
 
-    internal static IReadOnlyDictionary<string, StringPropertyInfo> GetLanguageSpecificMap(LanguageModel languageModel) =>
+    internal static IReadOnlyDictionary<string, StringPropertyInfo> GetLanguageSpecificConfigurationMap(LanguageModel languageModel) =>
         languageModel switch
         {
-            LanguageModel.CSharp => CSharpMapSpecificMap,
+            LanguageModel.CSharp => CSharpConfigurationPropertiesMap,
             _ => new Dictionary<string, StringPropertyInfo>()
         };
 }

@@ -27,6 +27,13 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         ISolutionConfigurationHolder configurationHolder)
         : IEnvDteCallbackProvider
     {
+        private const string ActiveConfigProperty = "ActiveConfig";
+        private const string PathProperty = "Path";
+        private const string NameProperty = "Name";
+        private const string StartupProjectProperty = "StartupProject";
+        private const string DescriptionProperty = "Description";
+        private const string ProjectDependenciesProperty = "ProjectDependencies";
+
         public void RegisterCallbacks(DteProtocolModel model)
         {
             model.Solution_FileName.SetAsync((lifetime, _) =>
@@ -44,17 +51,52 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             model.Solution_get_Projects.SetAsync((lifetime, _) =>
                 lifetime.StartReadActionAsync(() => GetFilteredProjects().AsList()));
 
-            model.Solution_build.SetSync((lifetime, args) =>
+            model.Solution_get_Property.SetWithSolutionMarkSync(solution, (name, solutionMark) => name switch
+            {
+                ActiveConfigProperty => solutionMark.ActiveConfigurationAndPlatform switch
+                {
+                  SolutionConfigurationAndPlatform config => $"{config.Configuration}|{config.Platform}",
+                  _ => null
+                },
+                PathProperty => solution.SolutionFilePath.FullPath,
+                NameProperty => solution.Name,
+                StartupProjectProperty => null, // TODO
+                DescriptionProperty => solutionMark.GetSolutionDescription(),
+                ProjectDependenciesProperty => null, // In VS always returns null
+                _ => throw new ArgumentOutOfRangeException(nameof(name))
+            });
+
+            model.Solution_set_Property.SetVoidAsync(async (lifetime, req) =>
+            {
+                switch (req.Name)
+                {
+                    case ActiveConfigProperty:
+                        await lifetime.StartMainRead(() => solution.SetActiveConfigurationAndPlatform(req.Value));
+                        break;
+                    case NameProperty:
+                        await lifetime.StartMainWrite(() => solution.RenameSolution(req.Value));
+                        break;
+                    case DescriptionProperty:
+                        await lifetime.StartMainWrite(() => solution.SetSolutionDescription(req.Value));
+                        break;
+                    case StartupProjectProperty:
+                        break; // TODO
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(req.Name));
+                }
+            });
+
+            model.Solution_build.SetSync((lifetime, req) =>
             {
                 var request = builder.CreateBuildRequest(
-                    args.BuildSessionTarget.FromRdBuildSessionTarget(),
+                    req.BuildSessionTarget.FromRdBuildSessionTarget(),
                     null,
                     SolutionBuilderRequestSilentMode.Default);
 
                 componentLifetime.OnTermination(() => request.Abort());
                 builder.ExecuteBuildRequest(request);
 
-                if (args.WaitForBuild)
+                if (req.WaitForBuild)
                     request.State.WaitForValue(lifetime, state => state.HasFlag(BuildRunState.Completed));
 
                 return Unit.Instance;
@@ -71,17 +113,19 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             model.Solution_get_LastBuildInfo.SetSync(_ => builder.RunningRequest.Value?.GetAllBuildErrors()
                 .Select(e => e.ProjectId).Distinct().Count() ?? 0);
 
-            model.Solution_get_ActiveConfiguration.SetSync(_ => configurationHolder.GetSolutionActiveConfiguration() switch
-            {
-                SolutionConfigurationAndPlatform config => config.ToRdSolutionConfiguration(),
-                _ => null
-            });
+            model.Solution_get_ActiveConfiguration.SetSync(_ =>
+                configurationHolder.GetSolutionActiveConfiguration() switch
+                {
+                    SolutionConfigurationAndPlatform config => config.ToRdSolutionConfiguration(),
+                    _ => null
+                });
 
             model.Solution_get_ConfigurationCount.SetWithSolutionMarkSync(solution, (_, solutionMark) =>
                 solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms.Count);
 
             model.Solution_get_ConfigurationByIndex.SetWithSolutionMarkSync(solution, (index, solutionMark) =>
-                solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms.ElementAt(index).ToRdSolutionConfiguration());
+                solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms.ElementAt(index)
+                    .ToRdSolutionConfiguration());
 
             model.Solution_get_ConfigurationByName.SetWithSolutionMarkSync(solution, (name, solutionMark) =>
                 solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms

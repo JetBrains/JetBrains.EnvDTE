@@ -7,6 +7,7 @@ using EnvDTE80;
 using EnvDTE90;
 using JetBrains.Annotations;
 using JetBrains.Core;
+using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
 using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
@@ -15,6 +16,8 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
     public sealed class SolutionImplementation([NotNull] DteImplementation dte) : Solution, Solution4
     {
         [CanBeNull] private SolutionBuildImplementation _solutionBuild;
+        [CanBeNull] private SolutionPropertiesImplementation _solutionProperties;
+
         [NotNull, ItemNotNull]
         private List<ProjectItemModel> ProjectModels => dte.DteProtocolModel.Solution_get_Projects.Sync(Unit.Instance);
 
@@ -24,6 +27,15 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         public string FullName => FileName;
         public int Count => dte.DteProtocolModel.Solution_Count.Sync(Unit.Instance);
         public Projects Projects => new ProjectsImplementation(dte, ProjectModels);
+
+        public Properties Properties
+        {
+            get
+            {
+                _solutionProperties ??= new SolutionPropertiesImplementation(dte, this);
+                return _solutionProperties;
+            }
+        }
 
         public SolutionBuild SolutionBuild
         {
@@ -61,7 +73,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 
         public void Open(string FileName) => throw new NotImplementedException();
         public void Close(bool SaveFirst = false) => throw new NotImplementedException();
-        public Properties Properties => throw new NotImplementedException();
         public bool IsDirty { get; set; }
         public void Remove(Project proj) => throw new NotImplementedException();
         public string get_TemplatePath(string ProjectType) => throw new NotImplementedException();
