@@ -120,6 +120,9 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                     _ => null
                 });
 
+            model.Solution_set_ActiveConfiguration.SetVoidAsync((lifetime, config) =>
+                lifetime.StartMainRead(() => solution.SetActiveConfigurationAndPlatform(config.FromRdSolutionConfiguration())));
+
             model.Solution_get_ConfigurationCount.SetWithSolutionMarkSync(solution, (_, solutionMark) =>
                 solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms.Count);
 

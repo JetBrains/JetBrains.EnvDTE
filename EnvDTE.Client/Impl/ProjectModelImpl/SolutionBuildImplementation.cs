@@ -53,15 +53,15 @@ public class SolutionBuildImplementation(
         .GetAwaiter()
         .GetResult();
 
+    public object StartupProjects
+    {
+        get => null; // TODO
+        set => throw new NotImplementedException();
+    }
+
     #region NotImplemented
 
     public BuildDependencies BuildDependencies => throw new NotImplementedException();
-
-    public object StartupProjects
-    {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
-    }
 
     public int LastPublishInfo => throw new NotImplementedException();
     public vsPublishState PublishState => throw new NotImplementedException();

@@ -20,6 +20,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Util;
 
 public static class SolutionExtensions
 {
+    const string InvalidSolutionConfigurationMessage = "Invalid solution configuration";
     private const string SolutionDescriptionPropertyName = "Description";
 
     [CanBeNull]
@@ -77,33 +78,30 @@ public static class SolutionExtensions
         });
     }
 
-    public static void SetActiveConfigurationAndPlatform([NotNull] this ISolution solution, [CanBeNull] string value)
+    public static void SetActiveConfigurationAndPlatform([NotNull] this ISolution solution,
+        [NotNull] SolutionConfigurationAndPlatform configuration)
     {
-        const string invalidSolutionConfigurationMessage = "Invalid solution configuration";
-
-        var configuration = ParseConfiguration(value);
-
         var solutionMark = solution.GetSolutionMark();
         if (solutionMark is null) return;
 
         if (!solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms.Contains(configuration))
-            throw new ArgumentException(invalidSolutionConfigurationMessage);
+            throw new ArgumentException(InvalidSolutionConfigurationMessage);
 
         var activeConfigurationManager = solution.GetComponent<IActiveConfigurationManager>();
         activeConfigurationManager.ActiveConfigurationAndPlatform.SetValue(configuration);
-        return;
+    }
 
-        SolutionConfigurationAndPlatform ParseConfiguration([CanBeNull] string config)
-        {
-            if (string.IsNullOrWhiteSpace(config))
-                throw new ArgumentException(invalidSolutionConfigurationMessage);
+    public static void SetActiveConfigurationAndPlatform([NotNull] this ISolution solution, [CanBeNull] string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            throw new ArgumentException(InvalidSolutionConfigurationMessage);
 
-            var parts = config.Split('|');
-            if (parts.Length != 2 || string.IsNullOrWhiteSpace(parts[0]) || string.IsNullOrWhiteSpace(parts[1]))
-                throw new ArgumentException(invalidSolutionConfigurationMessage);
+        var parts = value.Split('|');
+        if (parts.Length != 2 || string.IsNullOrWhiteSpace(parts[0]) || string.IsNullOrWhiteSpace(parts[1]))
+            throw new ArgumentException(InvalidSolutionConfigurationMessage);
 
-            return new SolutionConfigurationAndPlatform(parts[0], parts[1]);
-        }
+        var config = new SolutionConfigurationAndPlatform(parts[0], parts[1]);
+        solution.SetActiveConfigurationAndPlatform(config);
     }
 
     private static bool TryGetOrCreateSolutionDescriptionSection(ISolutionMark solutionMark, out SectionDefinition section,
