@@ -21,46 +21,46 @@ public class ConfigurationPropertiesImplementation(
         get
         {
             var projectLanguage = DteImplementation.DteProtocolModel.Project_get_Language.Sync(new(projectModel));
-            return VisualStudioConfigurationProperties.GetLanguageSpecificMap(projectLanguage);
+            return VisualStudioProperties.GetLanguageSpecificConfigurationMap(projectLanguage);
         }
     }
 
     public override Property Item(object index)
     {
+        var baseMap = VisualStudioProperties.ConfigurationPropertiesMap;
         var languageSpecificMap = LanguageSpecificMap;
-        var baseMap = VisualStudioConfigurationProperties.Map;
 
-        StringPropertyInfo propertyInfo;
-        switch (index)
+        if (index is int intIndex)
         {
-            case int intIndex:
-            {
-                var i = ImplementationUtil.GetValidIndexOrThrow(intIndex, baseMap.Count + languageSpecificMap.Count);
-                propertyInfo = i >= baseMap.Count
-                    ? languageSpecificMap.ElementAt(i - baseMap.Count).Value
-                    : baseMap.ElementAt(i).Value;
-                break;
-            }
-            case string stringIndex:
-            {
-                if (!baseMap.TryGetValue(stringIndex, out propertyInfo) && !languageSpecificMap.TryGetValue(stringIndex, out propertyInfo))
-                    return new NullPropertyImplementation(DteImplementation, this, stringIndex);
-                break;
-            }
-            default:
-                throw new ArgumentException();
+            var total = baseMap.Count + languageSpecificMap.Count;
+            var i = ImplementationUtil.GetValidIndexOrThrow(intIndex, total);
+
+            var propertyInfoAtIndex = i >= baseMap.Count
+                ? languageSpecificMap.ElementAt(i - baseMap.Count).Value
+                : baseMap.ElementAt(i).Value;
+
+            return new ProjectPropertyImplementation(DteImplementation, this, projectModel, propertyInfoAtIndex);
         }
 
-        return new ProjectPropertyImplementation(DteImplementation, this, projectModel, propertyInfo);
+        if (index is string stringIndex)
+        {
+            if (baseMap.TryGetValue(stringIndex, out var baseInfo))
+                return new ProjectPropertyImplementation(DteImplementation, this, projectModel, baseInfo);
+
+            if (languageSpecificMap.TryGetValue(stringIndex, out var langInfo))
+                return new ProjectPropertyImplementation(DteImplementation, this, projectModel, langInfo);
+        }
+
+        throw new ArgumentException(nameof(index));
     }
 
-    public override int Count => VisualStudioConfigurationProperties.Map.Count + LanguageSpecificMap.Count;
+    public override int Count => VisualStudioProperties.ConfigurationPropertiesMap.Count + LanguageSpecificMap.Count;
 
     public override IEnumerator GetEnumerator()
     {
         var projectLanguage = DteImplementation.DteProtocolModel.Project_get_Language.Sync(new(projectModel));
-        return VisualStudioConfigurationProperties.Map.Values
-            .Concat(VisualStudioConfigurationProperties.GetLanguageSpecificMap(projectLanguage).Values)
+        return VisualStudioProperties.ConfigurationPropertiesMap.Values
+            .Concat(VisualStudioProperties.GetLanguageSpecificConfigurationMap(projectLanguage).Values)
             .Select(info => new ProjectPropertyImplementation(DteImplementation, this, projectModel, info))
             .GetEnumerator();
     }

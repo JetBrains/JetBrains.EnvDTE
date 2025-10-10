@@ -98,6 +98,11 @@ object DteProtocolModel : Ext(DteRoot) {
         call("Solution_Count", void, int)
         call("Solution_Item", int, projectItemModel.nullable)
         call("Solution_get_Projects", void, immutableList(projectItemModel))
+        call("Solution_get_Property", string, string.nullable)
+        call("Solution_set_Property", structdef("Solution_setPropertyRequest") {
+            field("name", string)
+            field("value", string.nullable)
+        }, void)
 
         // SolutionBuild
         call("Solution_get_BuildState", void, enum("RdBuildState") {

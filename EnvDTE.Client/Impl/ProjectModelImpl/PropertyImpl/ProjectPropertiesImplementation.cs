@@ -17,32 +17,29 @@ public class ProjectPropertiesImplementation(
 {
     public override Property Item(object index)
     {
-        var map = VisualStudioProjectProperties.Map;
+        // In VS behavior of this method for Project properties differs from other implementations of the same method.
+        // If an integer index is out of range, an exception is thrown, but if a string index is invalid, a null property is returned
+        var map = VisualStudioProperties.ProjectPropertiesMap;
 
-        StringPropertyInfo propertyInfo;
-        switch (index)
+        if (index is int intIndex)
         {
-            case int intIndex:
-            {
-                var i = ImplementationUtil.GetValidIndexOrThrow(intIndex, map.Count);
-                propertyInfo = map.ElementAt(i).Value;
-                break;
-            }
-            case string stringIndex:
-            {
-                if (!map.TryGetValue(stringIndex, out propertyInfo))
-                    return new NullPropertyImplementation(DteImplementation, this, stringIndex);
-                break;
-            }
-            default:
-                throw new ArgumentException();
+            var i = ImplementationUtil.GetValidIndexOrThrow(intIndex, map.Count);
+            var propertyInfoAtIndex = map.ElementAt(i).Value;
+            return new ProjectPropertyImplementation(DteImplementation, this, projectModel, propertyInfoAtIndex);
         }
 
-        return new ProjectPropertyImplementation(DteImplementation, this, projectModel, propertyInfo);
+        if (index is string stringIndex)
+        {
+            return map.TryGetValue(stringIndex, out var propertyInfoByName)
+                ? new ProjectPropertyImplementation(DteImplementation, this, projectModel, propertyInfoByName)
+                : new NullPropertyImplementation(DteImplementation, this, stringIndex);
+        }
+
+        throw new ArgumentException(nameof(index));
     }
 
-    public override int Count => VisualStudioProjectProperties.Map.Count;
+    public override int Count => VisualStudioProperties.ProjectPropertiesMap.Count;
 
-    public override IEnumerator GetEnumerator() => VisualStudioProjectProperties.Map.Values.Select(info =>
+    public override IEnumerator GetEnumerator() => VisualStudioProperties.ProjectPropertiesMap.Values.Select(info =>
         new ProjectPropertyImplementation(DteImplementation, this, projectModel, info)).GetEnumerator();
 }
