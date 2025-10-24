@@ -116,6 +116,7 @@ object DteProtocolModel : Ext(DteRoot) {
             field("name", string)
             field("value", string.nullable)
         }, void)
+        call("Solution_get_StartupProjects", void, immutableList(string))
 
         // SolutionBuild
         call("Solution_get_BuildState", void, enum("RdBuildState") {

@@ -23,6 +23,7 @@ public static class SolutionExtensions
     const string InvalidSolutionConfigurationMessage = "Invalid solution configuration";
     private const string SolutionDescriptionPropertyName = "Description";
 
+    // TODO: Get/Set Description doesn't work for slnx solutions
     [CanBeNull]
     public static string GetSolutionDescription([NotNull] this ISolutionMark solutionMark)
     {

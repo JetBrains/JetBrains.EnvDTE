@@ -55,7 +55,7 @@ public class SolutionBuildImplementation(
 
     public object StartupProjects
     {
-        get => null; // TODO
+        get => dte.DteProtocolModel.Solution_get_StartupProjects.Sync(Unit.Instance);
         set => throw new NotImplementedException();
     }
 

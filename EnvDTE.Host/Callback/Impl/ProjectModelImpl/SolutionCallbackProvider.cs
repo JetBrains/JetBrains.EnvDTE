@@ -1,19 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using JetBrains.Application.Parts;
 using JetBrains.Core;
 using JetBrains.DataFlow;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.Lifetimes;
+using JetBrains.Platform.RdFramework.Impl;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Features.SolutionBuilders;
 using JetBrains.ProjectModel.Features.SolutionBuilders.Prototype.Services.Execution;
 using JetBrains.ProjectModel.SolutionStructure.SolutionConfigurations;
 using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
+using JetBrains.ReSharper.Feature.Services.Protocol;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Rider.Model;
+using JetBrains.Threading;
 using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
@@ -24,7 +28,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         ISolution solution,
         ProjectModelViewHost host,
         ISolutionBuilder builder,
-        ISolutionConfigurationHolder configurationHolder)
+        ISolutionConfigurationHolder configurationHolder,
+        ShellRdDispatcher rdDispatcher)
         : IEnvDteCallbackProvider
     {
         private const string ActiveConfigProperty = "ActiveConfig";
@@ -34,8 +39,21 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         private const string DescriptionProperty = "Description";
         private const string ProjectDependenciesProperty = "ProjectDependencies";
 
+        private IProject[] _startupProjects = [];
+
         public void RegisterCallbacks(DteProtocolModel model)
         {
+            rdDispatcher.Queue(() =>
+                solution.GetProtocolSolution().GetRunConfigurationModel().SelectedRunConfigurationProjectPaths.Advise(
+                    componentLifetime, paths => componentLifetime.StartReadActionAsync(() =>
+                    {
+                        var pathSet = paths.ToSet();
+                        _startupProjects = solution.GetAllProjects()
+                            .Where(p => pathSet.Contains(
+                                p.ProjectFileLocation.NormalizeSeparators(FileSystemPathEx.SeparatorStyle.Unix)))
+                            .ToArray();
+                    }).NoAwait()));
+
             model.Solution_FileName.SetAsync((lifetime, _) =>
                 lifetime.StartReadActionAsync(() => solution.SolutionFilePath.FullPath));
 
@@ -51,16 +69,16 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             model.Solution_get_Projects.SetAsync((lifetime, _) =>
                 lifetime.StartReadActionAsync(() => GetFilteredProjects().AsList()));
 
-            model.Solution_get_Property.SetWithSolutionMarkSync(solution, (name, solutionMark) => name switch
+            model.Solution_get_Property.SetWithSolutionMarkAsync(solution, async (lifetime, name, solutionMark) => name switch
             {
                 ActiveConfigProperty => solutionMark.ActiveConfigurationAndPlatform switch
                 {
-                  SolutionConfigurationAndPlatform config => $"{config.Configuration}|{config.Platform}",
-                  _ => null
+                    SolutionConfigurationAndPlatform config => $"{config.Configuration}|{config.Platform}",
+                    _ => null
                 },
                 PathProperty => solution.SolutionFilePath.FullPath,
                 NameProperty => solution.Name,
-                StartupProjectProperty => null, // TODO
+                StartupProjectProperty => await GetStartupProjectPropertyValueAsync(lifetime),
                 DescriptionProperty => solutionMark.GetSolutionDescription(),
                 ProjectDependenciesProperty => null, // In VS always returns null
                 _ => throw new ArgumentOutOfRangeException(nameof(name))
@@ -80,10 +98,18 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                         await lifetime.StartMainWrite(() => solution.SetSolutionDescription(req.Value));
                         break;
                     case StartupProjectProperty:
-                        break; // TODO
+                        throw new NotImplementedException();
                     default:
                         throw new ArgumentOutOfRangeException(nameof(req.Name));
                 }
+            });
+
+            model.Solution_get_StartupProjects.SetAsync(async (lifetime, _) =>
+            {
+                var namesTask = await lifetime.StartReadActionAsync(() =>
+                    Task.WhenAll(_startupProjects.Select(p => p.GetVSUniqueNameAsync(lifetime)))
+                );
+                return (await namesTask).ToList();
             });
 
             model.Solution_build.SetSync((lifetime, req) =>
@@ -134,6 +160,31 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms
                     .FirstOrDefault(cp => cp.Configuration.Equals(name, StringComparison.OrdinalIgnoreCase))
                     ?.ToRdSolutionConfiguration());
+        }
+
+        private async Task<string> GetStartupProjectPropertyValueAsync(Lifetime lifetime)
+        {
+            /*
+             * The `StartupProject` solution property can have different values:
+             *  - If there are multiple startup projects, the value is "<Multiple Projects>"
+             *  - If there is a single startup project and the name is unambiguous, the value is the project's (short) name
+             *  - If there is a single startup project and the name is ambiguous
+             *    - For the top level projects, the value is the project's (short) name
+             *    - For projects inside solution folders, the value is "<project-name> (<project-path-chain>)"
+             */
+
+            if (_startupProjects.Length == 0) return string.Empty;
+            if (_startupProjects.Length > 1) return "<Multiple Projects>";
+
+            var project = _startupProjects[0];
+            return await lifetime.StartReadActionAsync(() =>
+            {
+                if (solution.GetProjectsByName(project.Name).Count() == 1 || project.ParentFolder is null)
+                    return project.Name;
+
+                var pathChain = string.Join('\\', project.GetPathChain().Reverse().Select(f => f.Name));
+                return $"{project.Name} ({pathChain})";
+            });
         }
 
         // Misc project is also displayed in VS and our approach of using item id does not allow that because it doesn't
