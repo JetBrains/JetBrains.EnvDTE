@@ -10,19 +10,13 @@ public static class RdExtensions
 {
     public static LanguageModel ToRdLanguageModel(this ProjectLanguage language)
     {
-        if (string.Equals(language.PresentableName, ProjectLanguage.CSHARP.PresentableName, StringComparison.Ordinal))
-            return LanguageModel.CSharp;
-        if (string.Equals(language.PresentableName, ProjectLanguage.VBASIC.PresentableName, StringComparison.Ordinal))
-            return LanguageModel.VB;
-        if (string.Equals(language.PresentableName, ProjectLanguage.JAVASCRIPT.PresentableName, StringComparison.Ordinal))
-            return LanguageModel.JS;
-        if (string.Equals(language.PresentableName, ProjectLanguage.JSON.PresentableName, StringComparison.Ordinal))
-            return LanguageModel.JSON;
-        if (string.Equals(language.PresentableName, ProjectLanguage.JSX.PresentableName, StringComparison.Ordinal))
-            return LanguageModel.JSX;
-        return string.Equals(language.PresentableName, ProjectLanguage.CPP.PresentableName, StringComparison.Ordinal)
-            ? LanguageModel.Cpp
-            : LanguageModel.Unknown;
+        if (language == ProjectLanguage.CSHARP) return LanguageModel.CSharp;
+        if (language == ProjectLanguage.VBASIC) return LanguageModel.VB;
+        if (language == ProjectLanguage.JAVASCRIPT) return LanguageModel.JS;
+        if (language == ProjectLanguage.JSON) return LanguageModel.JSON;
+        if (language == ProjectLanguage.JSX) return LanguageModel.JSX;
+        if (language == ProjectLanguage.CPP) return LanguageModel.Cpp;
+        return LanguageModel.Unknown;
     }
 
     public static IBuildSessionTarget FromRdBuildSessionTarget(this RdBuildSessionTarget target) => target switch
