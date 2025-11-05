@@ -26,8 +26,6 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
     public sealed class ProjectCallbackProvider(
-        Lifetime componentLifetime,
-        ILogger logger,
         ISolution solution,
         ProjectModelViewHost host,
         MsBuildProjectsConfigurationsStore configurationsStore)
@@ -35,7 +33,6 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
     {
         private const string PlatformProperty = "Platform";
         private const string SolutionFolderProjectGuid = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
-        private readonly Key _uniqueNameKey = new("EnvDTE.UniqueName");
 
         public void RegisterCallbacks(DteProtocolModel model)
         {
@@ -47,16 +44,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
 
             model.Project_get_FileName.SetWithProjectSync(host, (_, project) => project.ProjectFileLocation.FullPath);
 
-            model.Project_get_UniqueName.SetWithProjectAsync(host, async (lifetime, _, project) =>
-            {
-                var uniqueName = await lifetime.StartReadActionAsync(() => project.GetProperty(_uniqueNameKey) as string);
-                if (uniqueName is not null) return uniqueName;
-
-                uniqueName = CalculateProjectUniqueName(project);
-                // Save the unique name to the project properties so we don't have to calculate it every time
-                await lifetime.StartMainWrite(() => project.SetProperty(_uniqueNameKey, uniqueName));
-                return uniqueName;
-            });
+            model.Project_get_UniqueName.SetWithProjectAsync(host, (lifetime, _, project) =>
+                project.GetVSUniqueNameAsync(lifetime));
 
             model.Project_get_Kind.SetWithProjectSync(host, (_, project) =>
             {
@@ -69,52 +58,11 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             model.Project_get_Language.SetWithProjectSync(host, (_, project) =>
                 project.ProjectProperties.DefaultLanguage.ToRdLanguageModel());
 
-            model.Project_get_Property.SetWithProjectAsync(host, async (lifetime, req, project) =>
-            {
-                var value = await lifetime.StartReadActionAsync(() =>
-                    project.GetRequestedProjectProperty(project.GetCurrentTargetFrameworkId(), req.Name));
+            model.Project_get_Property.SetWithProjectAsync(host, (lifetime, req, project) =>
+                project.GetPropertyAsync(lifetime, req.Name));
 
-                if (value is not null) return value;
-
-                logger.Info($"Property '{req.Name}' not found in configuration's properties collection. Falling back to MSBuild.");
-
-                var projectHostContainer = solution.ProjectsHostContainer();
-                var solutionHost = projectHostContainer.GetComponent<ISolutionHost>();
-                var projectMark = project.GetProjectMark();
-                if (projectMark is null)
-                {
-                    logger.Warn($"Project mark not found for project: {project.Name}.");
-                    return null;
-                }
-
-                if (solutionHost.GetProjectHost(projectMark) is MsBuildProjectHost projectHost)
-                {
-                    value = await lifetime.StartMainRead(() => projectHost.Session.GetProjectProperty(projectMark, req.Name, project.GetCurrentTargetFrameworkId(),
-                        MsBuildEvaluationMode.Expand));
-                }
-                else
-                {
-                    logger.Warn($"Project '{project.Name}' is not hosted on {nameof(MsBuildProjectHost)}.");
-                }
-
-                return value;
-            });
-
-            model.Project_set_Property.SetWithProjectMarkVoidAsync(host, async (lifetime, args, mark) =>
-            {
-                var projectHostContainer = solution.ProjectsHostContainer();
-                var projectHost = projectHostContainer.GetComponent<MsBuildProjectHost>();
-                var solutionHost = projectHostContainer.GetComponent<ISolutionHost>();
-
-                var rdSaveProperties = new List<RdSaveProperty>
-                {
-                    // Even though we use `null` for configuration, the property will be set at the right place
-                    MsBuildModelHelper.CreateSimpleSaveProperty(args.Name, args.Value, null)
-                };
-                await lifetime.StartMainWrite(() => projectHost.SaveProperties(mark, rdSaveProperties));
-
-                componentLifetime.StartMainWrite(() => solutionHost.ReloadProjectAsync(mark)).NoAwait();
-            });
+            model.Project_set_Property.SetWithProjectVoidAsync(host, (lifetime, args, project) =>
+                project.SetPropertyAsync(lifetime, args.Name, args.Value));
 
             model.Project_Delete.SetWithProjectVoidAsync(host, (lifetime, _, project) =>
                 lifetime.StartReadActionAsync(() => solution.InvokeUnderTransaction(cookie => cookie.Remove(project))));
@@ -153,16 +101,6 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                     ? platform
                     : null;
             });
-        }
-
-        private static string CalculateProjectUniqueName([NotNull] IProject project)
-        {
-            if (project.IsSolutionFolder()) return $"{project.Name}{project.Guid.ToString("B").ToUpperInvariant()}";
-
-            var solutionDirPath = project.GetSolution().SolutionDirectory;
-            var projectFilePath = project.ProjectFileLocation;
-
-            return projectFilePath.MakeRelativeTo(solutionDirPath).FullPath;
         }
     }
 }
