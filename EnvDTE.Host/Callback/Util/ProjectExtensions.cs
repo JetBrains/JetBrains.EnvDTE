@@ -94,6 +94,12 @@ public static class ProjectExtensions
     [PublicAPI]
     public static async Task<string> GetVSUniqueNameAsync([NotNull] this IProject project, Lifetime lifetime)
     {
+        if (project.IsSolutionProject())
+        {
+            Log.Warn("Visual Studio does not have the project for the solution, returning empty string.");
+            return string.Empty;
+        }
+
         var uniqueName = await lifetime.StartReadActionAsync(() => project.GetProperty(UniqueNameKey) as string);
         if (uniqueName is not null) return uniqueName;
 
@@ -105,6 +111,7 @@ public static class ProjectExtensions
 
     private static string CalculateProjectUniqueName([NotNull] IProject project)
     {
+        if (project.IsMiscFilesProject()) return "<MiscFiles>";
         if (project.IsSolutionFolder()) return $"{project.Name}{project.Guid.ToString("B").ToUpperInvariant()}";
 
         var solutionDirPath = project.GetSolution().SolutionDirectory;
