@@ -7,24 +7,18 @@ using JetBrains.ProjectModel.ProjectsHost;
 using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.Rider.Model;
-using JetBrains.Util;
-using JetBrains.Util.Logging;
 
 namespace JetBrains.EnvDTE.Host.Callback.Util
 {
     public static class EnvDteCallbackProviderExtensions
     {
-        private static readonly ILogger Log = Logger.GetLogger("EnvDTE.Host.Callback");
-
         public static void SetWithProjectSync<TReq, TRes>(
             this IRdEndpoint<TReq, TRes> endpoint,
             ProjectModelViewHost host,
             Func<TReq, IProject, TRes> func) where TReq : ProjectItemRequest =>
             endpoint.SetSync(req =>
             {
-                if (!TryGetProjectItem<TReq, IProject>(host, req, out var project))
-                    return default;
-
+                var project = GetProjectItemOrThrow<TReq, IProject>(host, req);
                 return func(req, project);
             });
 
@@ -34,9 +28,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Util
             Func<Lifetime, TReq, IProject, Task<TRes>> func) where TReq : ProjectItemRequest =>
             endpoint.SetAsync(async (lifetime, req) =>
             {
-                if (!TryGetProjectItem<TReq, IProject>(host, req, out var project))
-                    return default;
-
+                var project = GetProjectItemOrThrow<TReq, IProject>(host, req);
                 return await func(lifetime, req, project);
             });
 
@@ -46,9 +38,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Util
             Func<Lifetime, TReq, IProjectItem, Task<TRes>> func) where TReq : ProjectItemRequest =>
             endpoint.SetAsync(async (lifetime, req) =>
             {
-                if (!TryGetProjectItem<TReq, IProjectItem>(host, req, out var projectItem))
-                    return default;
-
+                var projectItem = GetProjectItemOrThrow<TReq, IProjectItem>(host, req);
                 return await func(lifetime, req, projectItem);
             });
 
@@ -58,9 +48,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Util
             Func<Lifetime, TReq, IProjectFolder, Task<TRes>> func) where TReq : ProjectItemRequest =>
             endpoint.SetAsync(async (lifetime, req) =>
             {
-                if (!TryGetProjectItem<TReq, IProjectFolder>(host, req, out var projectFolder))
-                    return default;
-
+                var projectFolder = GetProjectItemOrThrow<TReq, IProjectFolder>(host, req);
                 return await func(lifetime, req, projectFolder);
             });
 
@@ -70,9 +58,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Util
             Func<Lifetime, TReq, IProjectFile, Task<TRes>> func) where TReq : ProjectItemRequest =>
             endpoint.SetAsync(async (lifetime, req) =>
             {
-                if (!TryGetProjectItem<TReq, IProjectFile>(host, req, out var projectFile))
-                    return default;
-
+                var projectFile = GetProjectItemOrThrow<TReq, IProjectFile>(host, req);
                 return await func(lifetime, req, projectFile);
             });
 
@@ -82,9 +68,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Util
             Func<Lifetime, TReq, IProject, Task> func) where TReq : ProjectItemRequest =>
             endpoint.SetVoidAsync(async (lifetime, req) =>
             {
-                if (!TryGetProjectItem<TReq, IProject>(host, req, out var project))
-                    return;
-
+                var project = GetProjectItemOrThrow<TReq, IProject>(host, req);
                 await func(lifetime, req, project);
             });
 
@@ -94,9 +78,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Util
             Func<Lifetime, TReq, IProjectItem, Task> func) where TReq : ProjectItemRequest =>
             endpoint.SetVoidAsync(async (lifetime, req) =>
             {
-                if (!TryGetProjectItem<TReq, IProjectItem>(host, req, out var projectItem))
-                    return;
-
+                var projectItem = GetProjectItemOrThrow<TReq, IProjectItem>(host, req);
                 await func(lifetime, req, projectItem);
             });
 
@@ -106,56 +88,31 @@ namespace JetBrains.EnvDTE.Host.Callback.Util
             Func<TReq, IProjectMark, TRes> func) where TReq : ProjectItemRequest =>
             endpoint.SetSync(req =>
             {
-                if (!TryGetProjectMark(host, req, out var projectMark))
-                    return default;
-
+                var projectMark = GetProjectMarkOrThrow(host, req);
                 return func(req, projectMark);
             });
 
-        public static void SetWithProjectMarkVoidAsync<TReq>(
-            this IRdEndpoint<TReq, Unit> endpoint,
-            ProjectModelViewHost host,
-            Func<Lifetime, TReq, IProjectMark, Task> func) where TReq : ProjectItemRequest =>
-            endpoint.SetVoidAsync(async (lifetime, req) =>
-            {
-                if (!TryGetProjectMark(host, req, out var projectMark))
-                    return;
-
-                await func(lifetime, req, projectMark);
-            });
-
-        private static bool TryGetProjectItem<TReq, TItem>(
-            ProjectModelViewHost host,
-            TReq req,
-            out TItem projectItem)
+        private static TItem GetProjectItemOrThrow<TReq, TItem>(ProjectModelViewHost host, TReq req)
             where TReq : ProjectItemRequest where TItem : class, IProjectItem
         {
-            projectItem = host.GetItemById<TItem>(req.ProjectItemModel.Id);
+            var projectItem = host.GetItemById<TItem>(req.ProjectItemModel.Id);
             if (projectItem is null) throw new InvalidOperationException(
                 $"{nameof(TItem)} not found for id: {req.ProjectItemModel.Id}." +
                 " Project model probably changed, and id on the client side is outdated.");
 
-            return true;
+            return projectItem;
         }
 
-        private static bool TryGetProjectMark<TReq>(
-            ProjectModelViewHost host,
-            TReq req,
-            out IProjectMark projectMark) where TReq : ProjectItemRequest
+        private static IProjectMark GetProjectMarkOrThrow<TReq>(ProjectModelViewHost host, TReq req)
+            where TReq : ProjectItemRequest
         {
-            projectMark = null;
+            var project = GetProjectItemOrThrow<TReq, IProject>(host, req);
 
-            if (!TryGetProjectItem<TReq, IProject>(host, req, out var project))
-                return false;
-
-            projectMark = project.GetProjectMark();
+            var projectMark = project.GetProjectMark();
             if (projectMark is null)
-            {
-                Log.Warn($"Project mark not found for project: {project.Name}.");
-                return false;
-            }
+                throw new InvalidOperationException($"Project mark not found for project: {project.Name}.");
 
-            return true;
+            return projectMark;
         }
     }
 }
