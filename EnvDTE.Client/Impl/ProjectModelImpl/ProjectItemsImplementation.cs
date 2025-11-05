@@ -6,7 +6,6 @@ using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Util;
-using JetBrains.Lifetimes;
 using JetBrains.Rd.Tasks;
 using JetBrains.Rider.Model;
 
@@ -72,6 +71,8 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 
         protected virtual ProjectItemImplementation CreateProjectItem([NotNull] ProjectItemModel projectItemModel) =>
             new(dte, projectItemModel, containingProject);
+
+        internal ProjectItemImplementation Item(ProjectItemModel projectItemModel) => CreateProjectItem(projectItemModel);
 
         [CanBeNull]
         private ProjectItem AddExistingItem(

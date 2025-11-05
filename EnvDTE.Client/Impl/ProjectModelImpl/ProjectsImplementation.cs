@@ -36,7 +36,13 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             return new ProjectImplementation(dte, projectModels[i]);
         }
 
+        internal ProjectImplementation Item(ProjectItemModel projectModel) => new (dte, projectModel);
+
+        #region NotImplemented
+
         public Properties Properties => throw new NotImplementedException();
         public string Kind => throw new NotImplementedException();
+
+        #endregion
     }
 }
