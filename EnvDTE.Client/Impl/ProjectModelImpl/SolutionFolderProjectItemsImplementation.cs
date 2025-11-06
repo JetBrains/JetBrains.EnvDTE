@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using EnvDTE;
+﻿using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.Rider.Model;
 

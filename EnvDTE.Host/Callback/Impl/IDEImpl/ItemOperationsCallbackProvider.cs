@@ -2,20 +2,17 @@
 using JetBrains.Annotations;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
-using JetBrains.Core;
-using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.IDE;
 using JetBrains.IDE.Common;
 using JetBrains.ProjectModel;
 using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.Documents;
-using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.RdBackend.Common.Features.TextControls;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Rider.Model;
 using JetBrains.Util;
 
-namespace JetBrains.EnvDTE.Host.Callback.Impl.IDE;
+namespace JetBrains.EnvDTE.Host.Callback.Impl.IDEImpl;
 
 [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
 public class ItemOperationsCallbackProvider(

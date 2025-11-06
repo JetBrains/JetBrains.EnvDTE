@@ -3,10 +3,9 @@ using System.IO;
 using EnvDTE;
 using JetBrains.Annotations;
 
-namespace JetBrains.EnvDTE.Client.Impl.IDE;
+namespace JetBrains.EnvDTE.Client.Impl.IDEImpl;
 
-public class ItemOperationsImplementation(
-    [NotNull] DteImplementation dte) : ItemOperations
+public class ItemOperationsImplementation([NotNull] DteImplementation dte) : ItemOperations
 {
     public DTE DTE => dte;
     public DTE Parent => dte;
