@@ -1,26 +1,13 @@
-using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
-using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
 using JetBrains.EnvDTE.Host.Callback.Util;
-using JetBrains.Lifetimes;
-using JetBrains.Platform.MsBuildHost.Models;
-using JetBrains.Platform.MsBuildHost.ProjectModel;
-using JetBrains.Platform.MsBuildHost.Utils;
 using JetBrains.ProjectModel;
-using JetBrains.ProjectModel.ProjectsHost;
-using JetBrains.ProjectModel.ProjectsHost.MsBuild;
-using JetBrains.ProjectModel.ProjectsHost.SolutionHost;
 using JetBrains.ProjectModel.Properties;
 using JetBrains.RdBackend.Common.Features.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View.EditProperties.Solutions;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Rider.Model;
-using JetBrains.Threading;
-using JetBrains.Util;
-using Key = JetBrains.Util.Key;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
 {
@@ -51,7 +38,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             {
                 if (project.IsSolutionFolder()) return SolutionFolderProjectGuid;
 
-                var guid = project.ProjectProperties.ProjectTypeGuids.FirstOrDefault();
+                // Last Guid is always the one we want displayed
+                var guid = project.ProjectProperties.ProjectTypeGuids.LastOrDefault();
                 return guid.ToString("B").ToUpperInvariant();
             });
 
