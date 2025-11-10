@@ -67,7 +67,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         /// </summary>
         /// <param name="dte">The DTE instance.</param>
         /// <param name="pathItems">The project item path, starting with the top-level project.</param>
-        public static Project GetFromPath(
+        public static ProjectImplementation GetFromPath(
             [NotNull] DteImplementation dte,
             [NotNull] IReadOnlyList<ProjectItemModel> pathItems)
         {
