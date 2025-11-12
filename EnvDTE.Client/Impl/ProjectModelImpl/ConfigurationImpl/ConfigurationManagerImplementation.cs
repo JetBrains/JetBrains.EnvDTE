@@ -18,8 +18,10 @@ public class ConfigurationManagerImplementation(
     public object Parent => parentItemModel;
 
     public int Count => dte.DteProtocolModel.Project_get_ConfigurationCount.Sync(new (parentItemModel));
-    public object ConfigurationRowNames => dte.DteProtocolModel.Project_get_ConfigurationNames.Sync(new (parentItemModel));
-    public object PlatformNames => dte.DteProtocolModel.Project_get_PlatformNames.Sync(new (parentItemModel));
+    public object ConfigurationRowNames =>
+        dte.DteProtocolModel.Project_get_ConfigurationNames.Sync(new (parentItemModel)).ToArray();
+    public object PlatformNames =>
+        dte.DteProtocolModel.Project_get_PlatformNames.Sync(new (parentItemModel)).ToArray();
 
     public Configuration ActiveConfiguration {
         get
