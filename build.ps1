@@ -68,6 +68,7 @@ Build-Project -Project 'Shell.Interop'
 Build-Project -Project 'Designer.Interfaces'
 Build-Project -Project 'EnvDTE.Host'
 Build-Project -Project 'EnvDTE.Client'
+Build-Project -Project 'VisualStudio.Interop.Interfaces'
 
 Write-Host "Packing interfaces"
 

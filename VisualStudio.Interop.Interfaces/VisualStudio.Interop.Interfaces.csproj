@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <AssemblyName>JetBrains.VisualStudio.Interop.Interfaces</AssemblyName>
+        <ApplicationVersion>1.0.0</ApplicationVersion>
+<!--        <SignAssembly>true</SignAssembly>-->
+<!--        <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>-->
+<!--        <PublicSign>true</PublicSign>-->
+        <IsPackable>false</IsPackable>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj" />
+        <ProjectReference Include="..\EnvDTE100.Interfaces\EnvDTE100.Interfaces.csproj" />
+        <ProjectReference Include="..\EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj" />
+        <ProjectReference Include="..\EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj" />
+        <ProjectReference Include="..\EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj" />
+    </ItemGroup>
+</Project>
