@@ -25,6 +25,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
     public sealed class SolutionCallbackProvider(
         Lifetime componentLifetime,
+        ILogger logger,
         ISolution solution,
         ProjectModelViewHost host,
         ISolutionBuilder builder,
@@ -44,15 +45,25 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         public void RegisterCallbacks(DteProtocolModel model)
         {
             rdDispatcher.Queue(() =>
-                solution.GetProtocolSolution().GetRunConfigurationModel().SelectedRunConfigurationProjectPaths.Advise(
-                    componentLifetime, paths => componentLifetime.StartReadActionAsync(() =>
+            {
+                var runConfigurationModel = solution.GetProtocolSolution().GetRunConfigurationModel();
+                runConfigurationModel.SelectedRunConfigurationProjectPaths
+                    .Advise(componentLifetime, paths => componentLifetime.StartReadActionAsync(() =>
                     {
                         var pathSet = paths.ToSet();
                         _startupProjects = solution.GetAllProjects()
-                            .Where(p => pathSet.Contains(
-                                p.ProjectFileLocation.NormalizeSeparators(FileSystemPathEx.SeparatorStyle.Unix)))
+                            .Where(p => pathSet
+                                .Contains(p.ProjectFileLocation.NormalizeSeparators(FileSystemPathEx.SeparatorStyle.Unix)))
                             .ToArray();
-                    }).NoAwait()));
+
+                        if (_startupProjects.Length < paths.Count)
+                        {
+                            logger.Warn(
+                                "Not all run configuration projects were able to be resolved by startup projects listener. " +
+                                "Run configuration might contain deleted projects.");
+                        }
+                    }).NoAwait());
+            });
 
             model.Solution_FileName.SetAsync((lifetime, _) =>
                 lifetime.StartReadActionAsync(() => solution.SolutionFilePath.FullPath));
