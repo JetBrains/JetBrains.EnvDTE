@@ -3,9 +3,9 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <AssemblyName>JetBrains.VisualStudio.Interop.Interfaces</AssemblyName>
         <ApplicationVersion>1.0.0</ApplicationVersion>
-<!--        <SignAssembly>true</SignAssembly>-->
-<!--        <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>-->
-<!--        <PublicSign>true</PublicSign>-->
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>
+        <PublicSign>true</PublicSign>
         <IsPackable>false</IsPackable>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>

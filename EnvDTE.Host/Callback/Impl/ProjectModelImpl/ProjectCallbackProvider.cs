@@ -52,6 +52,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             model.Project_set_Property.SetWithProjectVoidAsync(host, (lifetime, args, project) =>
                 project.SetPropertyAsync(lifetime, args.Name, args.Value));
 
+            model.Project_is_CPS.SetWithProjectSync(host, (_, project) => project.IsCPSProject());
+
             model.Project_Delete.SetWithProjectVoidAsync(host, (lifetime, _, project) =>
                 lifetime.StartReadActionAsync(() => solution.InvokeUnderTransaction(cookie => cookie.Remove(project))));
 

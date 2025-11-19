@@ -111,6 +111,10 @@ public static class ProjectExtensions
         return uniqueName;
     }
 
+    // Per documentation, VS uses CPS only for SDK-style .NET projects and Shared projects
+    [PublicAPI]
+    public static bool IsCPSProject([NotNull] this IProject project) => project.IsDotNetCoreProject() || project.IsSharedProject();
+
     /// <summary>
     /// Returns the hierarchical path of the project as a list of project model item IDs.
     /// This path is meant to be used with <c>ProjectImplementation.GetFromPath</c> on the client side to retrieve the project.

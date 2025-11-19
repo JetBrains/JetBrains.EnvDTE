@@ -4,39 +4,38 @@ using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
+using JetBrains.Core;
 using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 {
-    public sealed class ProjectsImplementation(
-        [NotNull] DteImplementation dte,
-        [NotNull, ItemNotNull] IReadOnlyList<ProjectItemModel> projectModels)
-        : Projects
+    public sealed class ProjectsImplementation([NotNull] DteImplementation dte) : Projects
     {
-        [NotNull]
-        public DTE Parent => dte;
+        private List<ProjectItemModel> ProjectModels => dte.DteProtocolModel.Solution_get_Projects.Sync(Unit.Instance);
 
-        public int Count => projectModels.Count;
+        [NotNull] public DTE Parent => dte;
+
+        public int Count => dte.DteProtocolModel.Solution_Count.Sync(Unit.Instance);
+
+        [NotNull] public DTE DTE => dte;
 
         [NotNull]
-        public DTE DTE => dte;
-
-        [NotNull]
-        IEnumerator Projects.GetEnumerator() => projectModels
-            .Select(model => new ProjectImplementation(dte, model))
-            .GetEnumerator();
+        IEnumerator Projects.GetEnumerator() => ProjectModels.Select(CreateProject).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => (this as Projects).GetEnumerator();
 
         [NotNull]
         public Project Item(object index)
         {
-            var i = ImplementationUtil.GetValidIndexOrThrow(index, projectModels.Count);
-            return new ProjectImplementation(dte, projectModels[i]);
+            var i = ImplementationUtil.GetValidIndexOrThrow(index, Count);
+            return CreateProject(ProjectModels[i]);
         }
 
-        internal ProjectImplementation Item(ProjectItemModel projectModel) => new (dte, projectModel);
+        internal ProjectImplementation Item(ProjectItemModel projectModel) => CreateProject(projectModel);
+
+        private ProjectImplementation CreateProject(ProjectItemModel projectModel) =>
+            ImplementationUtil.GetProjectImplementation(dte, projectModel);
 
         #region NotImplemented
 

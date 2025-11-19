@@ -9,7 +9,6 @@ using JetBrains.Annotations;
 using JetBrains.Core;
 using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
 using JetBrains.EnvDTE.Client.Util;
-using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 {
@@ -18,15 +17,12 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         [CanBeNull] private SolutionBuildImplementation _solutionBuild;
         [CanBeNull] private SolutionPropertiesImplementation _solutionProperties;
 
-        [NotNull, ItemNotNull]
-        private List<ProjectItemModel> ProjectModels => dte.DteProtocolModel.Solution_get_Projects.Sync(Unit.Instance);
-
         public DTE DTE => dte;
         public DTE Parent => dte;
         public string FileName => dte.DteProtocolModel.Solution_FileName.Sync(Unit.Instance);
         public string FullName => FileName;
         public int Count => dte.DteProtocolModel.Solution_Count.Sync(Unit.Instance);
-        public Projects Projects => new ProjectsImplementation(dte, ProjectModels);
+        public Projects Projects => new ProjectsImplementation(dte);
 
         public Properties Properties
         {
