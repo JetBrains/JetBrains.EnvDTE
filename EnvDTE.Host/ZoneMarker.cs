@@ -1,8 +1,7 @@
 ﻿using JetBrains.Application.BuildScript.Application.Zones;
-using JetBrains.Rider.Backend.Env;
-using JetBrains.Rider.Backend.Product;
+using JetBrains.ProjectModel.ProjectsHost.SolutionHost;
 
 namespace JetBrains.EnvDTE.Host;
 
 [ZoneMarker]
-public class ZoneMarker : IRequire<IRiderBackendFeatureZone>, IRequire<IProductWithRiderBackendEnvironmentZone>;
+public class ZoneMarker : IRequire<IHostSolutionZone>;
