@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Linq;
+using JetBrains.Annotations;
+using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Features.SolutionBuilders;
 using JetBrains.ProjectModel.Properties;
 using JetBrains.ProjectModel.SolutionStructure.SolutionConfigurations;
+using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Host.Callback.Util;
@@ -31,4 +35,18 @@ public static class RdExtensions
 
     public static SolutionConfigurationAndPlatform FromRdSolutionConfiguration(this RdSolutionConfiguration config) =>
         new(config.Name, config.Platform);
+
+    [CanBeNull]
+    public static Solution_find_ProjectItemResponse ToRdFindProjectItemResponse(
+        this IProjectItem projectItem,
+        IProject containingProject,
+        ProjectModelViewHost viewHost)
+    {
+        var id = viewHost.GetIdByItem(projectItem);
+        if (id == 0) return null;
+
+        return new Solution_find_ProjectItemResponse(
+            new ProjectItemModel(id),
+            containingProject.GetProjectPath(viewHost).Select(item => new ProjectItemModel(item)).ToList());
+    }
 }

@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using JetBrains.Application.Parts;
 using JetBrains.Core;
 using JetBrains.DataFlow;
+using JetBrains.Diagnostics;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.Lifetimes;
 using JetBrains.Platform.RdFramework.Impl;
@@ -27,7 +29,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         Lifetime componentLifetime,
         ILogger logger,
         ISolution solution,
-        ProjectModelViewHost host,
+        ProjectModelViewHost viewHost,
         ISolutionBuilder builder,
         ISolutionConfigurationHolder configurationHolder,
         ShellRdDispatcher rdDispatcher)
@@ -113,6 +115,39 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                     default:
                         throw new ArgumentOutOfRangeException(nameof(req.Name));
                 }
+            });
+
+            // Only visible items can be queried with this method.
+            // The argument can either be a full path or an item name
+            model.Solution_find_ProjectItem.SetAsync(async (lifetime, arg) =>
+            {
+                var path = VirtualFileSystemPath.TryParse(arg, InteractionContext.SolutionContext);
+
+                var (projectItem, containingProject) = await lifetime.StartReadActionAsync(() =>
+                {
+                    if (path.IsNotEmpty && path.IsAbsolute)
+                    {
+                        var item = solution.FindProjectItemsByLocation(path).FirstOrDefault();
+                        return (item, item?.GetProject());
+                    }
+
+                    foreach (var project in solution.GetTopLevelProjects()
+                                 .Where(p => p.IsSolutionFolder() || p.IsProjectFromUserView()))
+                    {
+                        var visitor = new FindProjectItemVisitor(arg);
+                        project.Accept(visitor);
+
+                        if (visitor.ProjectItem is not null)
+                        {
+                            logger.Assert(visitor.ContainingProject is not null, "Containing project should not be null.");
+                            return (visitor.ProjectItem, visitor.ContainingProject);
+                        }
+                    }
+
+                    return (null, null);
+                });
+
+                return projectItem?.ToRdFindProjectItemResponse(containingProject, viewHost);
             });
 
             model.Solution_get_StartupProjects.SetAsync(async (lifetime, _) =>
@@ -203,8 +238,45 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         // the client side, I'm not going to do it now.
         private IEnumerable<ProjectItemModel> GetFilteredProjects() => solution.GetAllProjects()
             .Where(p => p.ParentFolder is null)
-            .Select(host.GetIdByItem)
+            .Select(viewHost.GetIdByItem)
             .Where(id => id != 0)
             .Select(id => new ProjectItemModel(id));
+
+        private class FindProjectItemVisitor(string name) : RecursiveProjectVisitor
+        {
+            private bool _projectItemFound;
+
+            public override bool ProcessingIsFinished => _projectItemFound;
+
+            [CanBeNull] public IProject ContainingProject { get; private set; }
+            [CanBeNull] public IProjectItem ProjectItem { get; private set; }
+
+            public override void VisitProjectItem(IProjectItem projectItem)
+            {
+                var isHidden = projectItem switch
+                {
+                    IProjectFile file => file.Properties.IsHidden,
+                    ProjectImpl => false, // Ignore project folders
+                    ProjectFolderImpl folder => folder.IsHidden,
+                    _ => true
+                };
+
+                if (!isHidden && projectItem.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    ProjectItem = projectItem;
+                    _projectItemFound = true;
+                }
+            }
+
+            public override void VisitProject(IProject project)
+            {
+                if (!ProcessingIsFinished)
+                {
+                    ContainingProject = project;
+                }
+
+                base.VisitProject(project);
+            }
+        }
     }
 }

@@ -57,6 +57,13 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
                 : new ProjectImplementation(dte, item);
         }
 
+        public ProjectItem FindProjectItem(string fileName)
+        {
+            var response = dte.DteProtocolModel.Solution_find_ProjectItem.Sync(fileName);
+            return response is null ? null : new ProjectItemImplementation(dte, response.ProjectItem,
+                ProjectImplementation.GetFromPath(dte, response.ProjectPath));
+        }
+
         #region NotImplemented
 
         public void SaveAs(string FileName) => throw new NotImplementedException();
@@ -84,7 +91,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         public string ExtenderCATID => throw new NotImplementedException();
         public bool IsOpen => throw new NotImplementedException();
         public void Create(string Destination, string Name) => throw new NotImplementedException();
-        public ProjectItem FindProjectItem(string FileName) => throw new NotImplementedException();
         public string ProjectItemsTemplatePath(string ProjectKind) => throw new NotImplementedException();
         Project Solution2.AddSolutionFolder(string Name) => throw new NotImplementedException();
 
