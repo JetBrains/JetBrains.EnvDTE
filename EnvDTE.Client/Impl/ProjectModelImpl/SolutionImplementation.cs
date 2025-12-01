@@ -56,8 +56,10 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         public ProjectItem FindProjectItem(string fileName)
         {
             var response = dte.DteProtocolModel.Solution_find_ProjectItem.Sync(fileName);
-            return response is null ? null : new ProjectItemImplementation(dte, response.ProjectItem,
-                ProjectImplementation.GetFromPath(dte, response.ProjectPath));
+            // `SolutionFolderProjectItem` cannot be queried using this method
+            return response is null
+                ? null
+                : new ProjectItemImplementation(dte, response.ProjectItem, ProjectImplementation.GetFromPath(dte, response.ProjectPath));
         }
 
         #region NotImplemented
