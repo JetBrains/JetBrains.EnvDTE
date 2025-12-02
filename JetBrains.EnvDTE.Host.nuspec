@@ -17,7 +17,7 @@
         <summary>JetBrains host for EnvDTE</summary>
     </metadata>
     <files>
-        <file src="EnvDTE.Host\bin\EnvDTE.Host\Release\JetBrains.EnvDTE.Host.dll" target="lib\net8.0"/>
+        <file src="EnvDTE.Host\bin\EnvDTE.Host\Release\JetBrains.EnvDTE.Host.dll" target="lib\net472"/>
         <file src="Icons\JetBrains.EnvDTE.png" target=""/>
     </files>
 </package>

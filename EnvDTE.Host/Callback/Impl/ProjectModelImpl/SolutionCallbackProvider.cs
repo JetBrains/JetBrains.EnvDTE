@@ -229,7 +229,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 if (solution.GetProjectsByName(project.Name).Count() == 1 || project.ParentFolder is null)
                     return project.Name;
 
-                var pathChain = string.Join('\\', project.GetPathChain().Reverse().Select(f => f.Name));
+                var pathChain = string.Join("\\", project.GetPathChain().Reverse().Select(f => f.Name));
                 return $"{project.Name} ({pathChain})";
             });
         }
