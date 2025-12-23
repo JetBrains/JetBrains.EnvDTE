@@ -1,31 +1,24 @@
 using System;
 using JetBrains.Application.Parts;
-using JetBrains.EnvDTE.Host.Callback.Util;
-using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
-using JetBrains.RdBackend.Common.Features.ProjectModel.View;
+using JetBrains.Rd.Tasks;
 using JetBrains.Rider.Model;
 using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl
 {
-    [SolutionComponent(InstantiationEx.LegacyDefault)]
+    [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
     public sealed class DteCallbackProvider : IEnvDteCallbackProvider
     {
-        public void RegisterCallbacks(
-            AstManager astManager,
-            ISolution solution,
-            ProjectModelViewHost host,
-            DteProtocolModel model
-        )
+        public void RegisterCallbacks(DteProtocolModel model)
         {
-            model.DTE_Name.SetWithReadLock(() => "JetBrains Rider");
-            model.DTE_FileName.SetWithReadLock(() => FileSystemPath
+            model.DTE_Name.SetSync(_ => "JetBrains Rider");
+            model.DTE_FileName.SetSync(_ => FileSystemPath
                 .Parse(AppDomain.CurrentDomain.BaseDirectory)
                 .Combine(AppDomain.CurrentDomain.FriendlyName)
                 .FullPath
             );
-            model.DTE_CommandLineArgs.SetWithReadLock(() => Environment.GetCommandLineArgs().AggregateString(" "));
+            model.DTE_CommandLineArgs.SetSync(_ => Environment.GetCommandLineArgs().AggregateString(" "));
         }
     }
 }
