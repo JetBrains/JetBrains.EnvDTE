@@ -1,5 +1,6 @@
 ﻿using EnvDTE;
 using JetBrains.Annotations;
+using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl;
@@ -18,12 +19,23 @@ public class SolutionFolderProjectItemImplementation(
         {
             if (_subProjectImplementation is null)
             {
-                // See documentation
-                _subProjectImplementation =
-                    DteImplementation.DteProtocolModel.ProjectItem_get_Kind.Sync(new(ProjectItemModel)) ==
-                    ProjectItemKindModel.PhysicalFile
-                        ? null
-                        : new(DteImplementation, new ProjectItemModel(ProjectItemModel.Id), this);
+                switch (DteImplementation.DteProtocolModel.ProjectItem_get_Kind.Sync(new ProjectItemRequest(ProjectItemModel)))
+                {
+                    case ProjectItemKindModel.PhysicalFile:
+                        _subProjectImplementation = null;
+                        break;
+                    case ProjectItemKindModel.Project:
+                        _subProjectImplementation = ImplementationUtil.GetProjectImplementation(
+                            DteImplementation, new ProjectItemModel(ProjectItemModel.Id), this);
+                        break;
+                    case ProjectItemKindModel.PhysicalFolder:
+                        _subProjectImplementation = new ProjectImplementation(DteImplementation, new ProjectItemModel(ProjectItemModel.Id), this);
+                        break;
+                    case ProjectItemKindModel.Unknown:
+                    case ProjectItemKindModel.VirtualDirectory:
+                    default:
+                        return null;
+                }
             }
 
             return _subProjectImplementation;

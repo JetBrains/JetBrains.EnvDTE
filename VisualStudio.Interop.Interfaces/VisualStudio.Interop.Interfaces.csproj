@@ -1,10 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <LangVersion>latest</LangVersion>
-        <AssemblyName>JetBrains.EnvDTE.Client</AssemblyName>
-        <RootNamespace>JetBrains.EnvDTE.Client</RootNamespace>
+        <AssemblyName>JetBrains.VisualStudio.Interop.Interfaces</AssemblyName>
+        <ApplicationVersion>1.0.0</ApplicationVersion>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>
+        <PublicSign>true</PublicSign>
         <IsPackable>false</IsPackable>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\EnvDTE.Interfaces\EnvDTE.Interfaces.csproj" />
@@ -12,11 +15,5 @@
         <ProjectReference Include="..\EnvDTE80.Interfaces\EnvDTE80.Interfaces.csproj" />
         <ProjectReference Include="..\EnvDTE90.Interfaces\EnvDTE90.Interfaces.csproj" />
         <ProjectReference Include="..\EnvDTE90a.Interfaces\EnvDTE90a.Interfaces.csproj" />
-        <ProjectReference Include="..\VisualStudio.Interop.Interfaces\VisualStudio.Interop.Interfaces.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-      <PackageReference Include="JetBrains.Annotations.Sources" Version="2025.2.2"/>
-      <PackageReference Include="JetBrains.Lifetimes" Version="2025.3.0" />
-      <PackageReference Include="JetBrains.RdFramework" Version="2025.3.0" />
     </ItemGroup>
 </Project>

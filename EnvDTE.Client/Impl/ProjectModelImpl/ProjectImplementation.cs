@@ -4,11 +4,12 @@ using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.ConfigurationImpl;
 using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
+using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 {
-    public sealed class ProjectImplementation(
+    public class ProjectImplementation(
         [NotNull] DteImplementation dte,
         [NotNull] ProjectItemModel projectModel,
         [CanBeNull] ProjectItemImplementation parentProjectItem = null)
@@ -72,7 +73,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             [NotNull] IReadOnlyList<ProjectItemModel> pathItems)
         {
             if (pathItems.Count == 0) throw new ArgumentException("Path must contain at least one item", nameof(pathItems));
-            if (pathItems.Count == 1) return new ProjectImplementation(dte, pathItems[0]);
+            if (pathItems.Count == 1) return ImplementationUtil.GetProjectImplementation(dte, pathItems[0]);
 
             var currentProject = ((ProjectsImplementation)dte.Solution.Projects).Item(pathItems[0]);
             for (var i = 1; i < pathItems.Count; i++)

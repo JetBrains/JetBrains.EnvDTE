@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.Interop", "Shell.Inte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvDTE.Processor", "EnvDTE.Processor\EnvDTE.Processor.csproj", "{8DF10E2E-CF7E-405F-B1D8-E77E7FBBFFD4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudio.Interop.Interfaces", "VisualStudio.Interop.Interfaces\VisualStudio.Interop.Interfaces.csproj", "{ECDFE789-D227-47CB-BB91-E16EB409BC4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{8DF10E2E-CF7E-405F-B1D8-E77E7FBBFFD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DF10E2E-CF7E-405F-B1D8-E77E7FBBFFD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DF10E2E-CF7E-405F-B1D8-E77E7FBBFFD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECDFE789-D227-47CB-BB91-E16EB409BC4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECDFE789-D227-47CB-BB91-E16EB409BC4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECDFE789-D227-47CB-BB91-E16EB409BC4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECDFE789-D227-47CB-BB91-E16EB409BC4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

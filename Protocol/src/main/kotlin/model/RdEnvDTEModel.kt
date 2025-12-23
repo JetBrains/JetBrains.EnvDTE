@@ -162,6 +162,7 @@ object DteProtocolModel : Ext(DteRoot) {
             field("value", string.nullable)
         }, void)
 
+        call("Project_is_CPS", projectItemRequest, bool)
         call("Project_Delete", projectItemRequest, void)
 
         // Configuration

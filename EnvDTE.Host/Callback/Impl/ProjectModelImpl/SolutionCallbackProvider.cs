@@ -75,12 +75,14 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
 
             model.Solution_Item.SetAsync(async (lifetime, index) =>
             {
-                var projects = await lifetime.StartReadActionAsync(() => GetFilteredProjects().ToArray());
+                var projects = await lifetime.StartReadActionAsync(() =>
+                    GetFilteredProjects().Select(p => new ProjectItemModel(viewHost.GetIdByItem(p))).ToArray());
                 return index >= projects.Length ? null : projects.ElementAt(index);
             });
 
             model.Solution_get_Projects.SetAsync((lifetime, _) =>
-                lifetime.StartReadActionAsync(() => GetFilteredProjects().AsList()));
+                lifetime.StartReadActionAsync(() => GetFilteredProjects()
+                    .Select(p => new ProjectItemModel(viewHost.GetIdByItem(p))).AsList()));
 
             model.Solution_get_Property.SetWithSolutionMarkAsync(solution, async (lifetime, name, solutionMark) => name switch
             {
@@ -131,8 +133,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                         return (item, item?.GetProject());
                     }
 
-                    foreach (var project in solution.GetTopLevelProjects()
-                                 .Where(p => p.IsSolutionFolder() || p.IsProjectFromUserView()))
+                    foreach (var project in GetFilteredProjects())
                     {
                         var visitor = new FindProjectItemVisitor(arg);
                         project.Accept(visitor);
@@ -233,14 +234,11 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             });
         }
 
-        // Misc project is also displayed in VS and our approach of using item id does not allow that because it doesn't
+        // Misc project is also displayed in VS, but our approach of using item id does not allow that because it doesn't
         // have a unique id. In the future it would be better to start using project guids instead, but since that complicates
         // the client side, I'm not going to do it now.
-        private IEnumerable<ProjectItemModel> GetFilteredProjects() => solution.GetAllProjects()
-            .Where(p => p.ParentFolder is null)
-            .Select(viewHost.GetIdByItem)
-            .Where(id => id != 0)
-            .Select(id => new ProjectItemModel(id));
+        private IEnumerable<IProject> GetFilteredProjects() => solution.GetTopLevelProjects()
+            .Where(p => p.IsProjectFromUserView() || p.IsSolutionFolder());
 
         private class FindProjectItemVisitor(string name) : RecursiveProjectVisitor
         {
