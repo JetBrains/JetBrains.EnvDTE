@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl.PropertyInfo;
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl.PropertyInfo;
 
 internal class UIntPropertyInfo([NotNull] string visualStudioName, [NotNull] string riderName, bool isReadOnly)
     : StringPropertyInfo(visualStudioName, riderName, isReadOnly)

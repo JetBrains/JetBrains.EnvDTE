@@ -7,6 +7,7 @@ using EnvDTE80;
 using EnvDTE90;
 using JetBrains.Annotations;
 using JetBrains.Core;
+using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
 using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
@@ -14,6 +15,9 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 {
     public sealed class SolutionImplementation([NotNull] DteImplementation dte) : Solution, Solution4
     {
+        [CanBeNull] private SolutionBuildImplementation _solutionBuild;
+        [CanBeNull] private SolutionPropertiesImplementation _solutionProperties;
+
         [NotNull, ItemNotNull]
         private List<ProjectItemModel> ProjectModels => dte.DteProtocolModel.Solution_get_Projects.Sync(Unit.Instance);
 
@@ -21,6 +25,28 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         public DTE Parent => dte;
         public string FileName => dte.DteProtocolModel.Solution_FileName.Sync(Unit.Instance);
         public string FullName => FileName;
+        public int Count => dte.DteProtocolModel.Solution_Count.Sync(Unit.Instance);
+        public Projects Projects => new ProjectsImplementation(dte, ProjectModels);
+
+        public Properties Properties
+        {
+            get
+            {
+                _solutionProperties ??= new SolutionPropertiesImplementation(dte, this);
+                return _solutionProperties;
+            }
+        }
+
+        public SolutionBuild SolutionBuild
+        {
+            get
+            {
+                _solutionBuild ??= new SolutionBuildImplementation(dte, this);
+                return _solutionBuild;
+            }
+        }
+
+        public IEnumerator GetEnumerator() => Projects.GetEnumerator();
 
         public Project Item(object index)
         {
@@ -31,9 +57,12 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
                 : new ProjectImplementation(dte, item);
         }
 
-        public int Count => dte.DteProtocolModel.Solution_Count.Sync(Unit.Instance);
-        public Projects Projects => new ProjectsImplementation(dte, ProjectModels);
-        public IEnumerator GetEnumerator() => Projects.GetEnumerator();
+        public ProjectItem FindProjectItem(string fileName)
+        {
+            var response = dte.DteProtocolModel.Solution_find_ProjectItem.Sync(fileName);
+            return response is null ? null : new ProjectItemImplementation(dte, response.ProjectItem,
+                ProjectImplementation.GetFromPath(dte, response.ProjectPath));
+        }
 
         #region NotImplemented
 
@@ -51,7 +80,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 
         public void Open(string FileName) => throw new NotImplementedException();
         public void Close(bool SaveFirst = false) => throw new NotImplementedException();
-        public Properties Properties => throw new NotImplementedException();
         public bool IsDirty { get; set; }
         public void Remove(Project proj) => throw new NotImplementedException();
         public string get_TemplatePath(string ProjectType) => throw new NotImplementedException();
@@ -62,9 +90,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
         public bool IsOpen => throw new NotImplementedException();
-        public SolutionBuild SolutionBuild => throw new NotImplementedException();
         public void Create(string Destination, string Name) => throw new NotImplementedException();
-        public ProjectItem FindProjectItem(string FileName) => throw new NotImplementedException();
         public string ProjectItemsTemplatePath(string ProjectKind) => throw new NotImplementedException();
         Project Solution2.AddSolutionFolder(string Name) => throw new NotImplementedException();
 

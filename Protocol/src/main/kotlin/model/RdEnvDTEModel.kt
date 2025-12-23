@@ -60,6 +60,20 @@ object DteProtocolModel : Ext(DteRoot) {
         field("isDirectory", bool)
     }
 
+    private val rdSolutionConfiguration = structdef {
+        field("name", string)
+        field("platform", string)
+    }
+
+    val ItemOperations_open_FileRequest = structdef {
+        field("fileName", string)
+        field("viewKind", string)
+    }
+
+    val ideWindow = structdef {
+        // TODO
+    }
+
     init {
         createDteCallbacks()
         createSolutionCallbacks()
@@ -85,6 +99,10 @@ object DteProtocolModel : Ext(DteRoot) {
         call("DTE_Name", void, string)
         call("DTE_FileName", void, string)
         call("DTE_CommandLineArgs", void, string)
+
+        // See ItemOperationsProvider
+        call("ItemOperations_open_File", ItemOperations_open_FileRequest, ideWindow)
+        call("ItemOperations_isOpen_File", ItemOperations_open_FileRequest, bool)
     }
 
     private fun createSolutionCallbacks() {
@@ -93,6 +111,36 @@ object DteProtocolModel : Ext(DteRoot) {
         call("Solution_Count", void, int)
         call("Solution_Item", int, projectItemModel.nullable)
         call("Solution_get_Projects", void, immutableList(projectItemModel))
+        call("Solution_get_Property", string, string.nullable)
+        call("Solution_set_Property", structdef("Solution_setPropertyRequest") {
+            field("name", string)
+            field("value", string.nullable)
+        }, void)
+        call("Solution_find_ProjectItem", string, structdef("Solution_find_ProjectItemResponse") {
+            field("projectItem", projectItemModel)
+            field("projectPath", immutableList(projectItemModel))
+        }.nullable)
+        call("Solution_get_StartupProjects", void, immutableList(string))
+
+        // SolutionBuild
+        call("Solution_get_BuildState", void, enum("RdBuildState") {
+            +"NotStarted"
+            +"InProgress"
+            +"Done"
+        })
+        call("Solution_get_LastBuildInfo", void, int)
+        call("Solution_build", structdef("Solution_buildRequest") {
+            field("waitForBuild", bool)
+            field("buildSessionTarget", enum("RdBuildSessionTarget") {
+                +"Build"
+                +"Clean"
+            })
+        }, void)
+        call("Solution_get_ConfigurationCount", void, int)
+        call("Solution_get_ActiveConfiguration", void, rdSolutionConfiguration.nullable)
+        call("Solution_set_ActiveConfiguration", rdSolutionConfiguration, void)
+        call("Solution_get_ConfigurationByIndex", int, rdSolutionConfiguration.nullable)
+        call("Solution_get_ConfigurationByName", string, rdSolutionConfiguration.nullable)
     }
 
     private fun createProjectCallbacks() {

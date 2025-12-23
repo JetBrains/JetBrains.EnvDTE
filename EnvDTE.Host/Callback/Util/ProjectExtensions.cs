@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using JetBrains.Application.Components;
@@ -11,6 +12,7 @@ using JetBrains.ProjectModel.ProjectsHost;
 using JetBrains.ProjectModel.ProjectsHost.MsBuild;
 using JetBrains.ProjectModel.ProjectsHost.SolutionHost;
 using JetBrains.ProjectModel.Properties;
+using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Threading;
 using JetBrains.Util;
@@ -108,6 +110,14 @@ public static class ProjectExtensions
         await lifetime.StartMainWrite(() => project.SetProperty(UniqueNameKey, uniqueName));
         return uniqueName;
     }
+
+    /// <summary>
+    /// Returns the hierarchical path of the project as a list of project model item IDs.
+    /// This path is meant to be used with <c>ProjectImplementation.GetFromPath</c> on the client side to retrieve the project.
+    /// </summary>
+    [PublicAPI]
+    public static List<int> GetProjectPath([NotNull] this IProject project, ProjectModelViewHost viewHost) =>
+        project.GetPathChain().Select(viewHost.GetIdByItem).Reverse().ToList();
 
     private static string CalculateProjectUniqueName([NotNull] IProject project)
     {

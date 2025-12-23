@@ -92,6 +92,32 @@ namespace JetBrains.EnvDTE.Host.Callback.Util
                 return func(req, projectMark);
             });
 
+        public static void SetWithSolutionMarkAsync<TReq, TRes>(
+            this IRdEndpoint<TReq, TRes> endpoint,
+            ISolution solution,
+            Func<Lifetime, TReq, ISolutionMark, Task<TRes>> func) =>
+            endpoint.SetAsync(async (lifetime, req) =>
+            {
+                var solutionMark = solution.GetSolutionMark();
+                if (solutionMark is null)
+                    throw new InvalidOperationException("Unable to get the solution mark.");
+
+                return await func(lifetime, req, solutionMark);
+            });
+
+        public static void SetWithSolutionMarkSync<TReq, TRes>(
+            this IRdEndpoint<TReq, TRes> endpoint,
+            ISolution solution,
+            Func<TReq, ISolutionMark, TRes> func) =>
+            endpoint.SetSync(req =>
+            {
+                var solutionMark = solution.GetSolutionMark();
+                if (solutionMark is null)
+                    throw new InvalidOperationException("Unable to get the solution mark.");
+
+                return func(req, solutionMark);
+            });
+
         private static TItem GetProjectItemOrThrow<TReq, TItem>(ProjectModelViewHost host, TReq req)
             where TReq : ProjectItemRequest where TItem : class, IProjectItem
         {

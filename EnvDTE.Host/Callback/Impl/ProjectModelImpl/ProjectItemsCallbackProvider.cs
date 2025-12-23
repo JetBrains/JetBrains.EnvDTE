@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
 using JetBrains.DocumentManagers.Transactions;
@@ -40,7 +39,8 @@ public class ProjectItemsCallbackProvider(
     {
         logger.Trace($"Adding folder '{request.Name}' to '{parentFolder.Location}'");
 
-        var result = await lifetime.StartMainWrite(() => projectModelEditor.Value.AddFolder(parentFolder, request.Name));
+        var result = await lifetime.StartMainWrite(() =>
+            projectModelEditor.Value.AddFolder(parentFolder, request.Name));
 
         return result is null
             ? null

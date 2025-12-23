@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace JetBrains.EnvDTE.Client.Impl.PropertyImpl;
+namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
 
 public class NullPropertyImplementation(
     [NotNull] DteImplementation dte,
@@ -12,6 +12,6 @@ public class NullPropertyImplementation(
     public override object Value
     {
         get => null;
-        set => throw new InvalidOperationException();
+        set => throw new NotSupportedException();
     }
 }
