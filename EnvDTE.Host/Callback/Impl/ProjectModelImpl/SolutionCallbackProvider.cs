@@ -163,7 +163,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             {
                 var request = builder.CreateBuildRequest(
                     req.BuildSessionTarget.FromRdBuildSessionTarget(),
-                    null,
+                    [],
                     SolutionBuilderRequestSilentMode.Default);
 
                 componentLifetime.OnTermination(() => request.Abort());

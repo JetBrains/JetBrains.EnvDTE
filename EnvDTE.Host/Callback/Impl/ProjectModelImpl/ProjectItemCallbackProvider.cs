@@ -58,7 +58,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 if (projectItem is not IProjectFile projectFile)
                 {
                     logger.Warn($"Project item '{projectItem.Name}' is not a file.");
-                    return LanguageModel.Unknown;;
+                    return LanguageModel.Unknown;
                 }
 
                 return await lifetime.StartReadActionAsync(() =>

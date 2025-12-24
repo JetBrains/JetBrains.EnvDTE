@@ -10,6 +10,7 @@ using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Host.Callback.Util
 {
+#pragma warning disable VSTHRD200
     public static class EnvDteCallbackProviderExtensions
     {
         public static void SetWithProjectSync<TReq, TRes>(
@@ -141,4 +142,5 @@ namespace JetBrains.EnvDTE.Host.Callback.Util
             return projectMark;
         }
     }
+#pragma warning restore VSTHRD200
 }
