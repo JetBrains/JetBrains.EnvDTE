@@ -4,8 +4,7 @@
         <AssemblyName>JetBrains.VisualStudio.Interop.Interfaces</AssemblyName>
         <ApplicationVersion>1.0.0</ApplicationVersion>
         <SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>..\MSFT.snk</AssemblyOriginatorKeyFile>
-        <PublicSign>true</PublicSign>
+        <AssemblyOriginatorKeyFile>..\Subplatform.snk</AssemblyOriginatorKeyFile>
         <IsPackable>false</IsPackable>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>

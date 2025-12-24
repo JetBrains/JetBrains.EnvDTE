@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net472</TargetFramework>
         <LangVersion>latest</LangVersion>
         <AssemblyName>JetBrains.EnvDTE.Host</AssemblyName>
         <RootNamespace>JetBrains.EnvDTE.Host</RootNamespace>
@@ -11,12 +11,11 @@
         <NoWarn>NU1701</NoWarn>
 
         <NoPackageAnalysis>true</NoPackageAnalysis>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
 
         <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
         <DefaultItemExcludes>$(DefaultItemExcludes);obj\**</DefaultItemExcludes>
-        <OutputPath>bin\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
+        <OutputPath>bin\$(Configuration)\</OutputPath>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)'=='Debug'">
