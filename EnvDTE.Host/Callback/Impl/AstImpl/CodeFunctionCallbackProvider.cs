@@ -11,7 +11,7 @@ using JetBrains.Rider.Model;
 namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-    public sealed class CodeFunctionCallbackProvider(AstManager astManager, ProjectModelViewHost host)
+    public class CodeFunctionCallbackProvider(AstManager astManager, ProjectModelViewHost host)
         : CodeElementCallbackProviderBase(astManager, host)
     {
         protected override void DoRegisterCallbacks(ProjectModelViewHost host, DteProtocolModel model)

@@ -11,7 +11,7 @@ namespace JetBrains.EnvDTE.Host.Manager
     /// Maintains the ids to be used in protocol AST
     /// </summary>
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-    public sealed class AstManager
+    public class AstManager
     {
         [NotNull]
         private AstContainer<IDeclaredElement> DetachedAstContainer { get; }

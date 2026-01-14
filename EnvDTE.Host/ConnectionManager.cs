@@ -11,7 +11,7 @@ using JetBrains.Rider.Model;
 namespace JetBrains.EnvDTE.Host
 {
     [PublicAPI]
-    public sealed class ConnectionManager
+    public class ConnectionManager
     {
         private const string Host = "EnvDTE Communication Host";
         private const string Protocol = "EnvDTE Communication Protocol";

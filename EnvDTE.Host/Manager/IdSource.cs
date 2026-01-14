@@ -1,6 +1,6 @@
 namespace JetBrains.EnvDTE.Host.Manager
 {
-	public sealed class IdSource
+	public class IdSource
 	{
 		private int CurrentId { get; set; }
 

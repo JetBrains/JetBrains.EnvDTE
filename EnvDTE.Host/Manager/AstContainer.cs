@@ -4,7 +4,7 @@ using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Manager
 {
-    public sealed class AstContainer<TNode>
+    public class AstContainer<TNode>
     {
         [NotNull]
         private IdSource IdSource { get; }

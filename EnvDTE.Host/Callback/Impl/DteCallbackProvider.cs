@@ -8,7 +8,7 @@ using JetBrains.Util;
 namespace JetBrains.EnvDTE.Host.Callback.Impl
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-    public sealed class DteCallbackProvider : IEnvDteCallbackProvider
+    public class DteCallbackProvider : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(DteProtocolModel model)
         {
