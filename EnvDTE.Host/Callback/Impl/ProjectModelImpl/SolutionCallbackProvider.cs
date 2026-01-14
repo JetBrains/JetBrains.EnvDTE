@@ -25,7 +25,7 @@ using JetBrains.Util;
 namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-    public sealed class SolutionCallbackProvider(
+    public class SolutionCallbackProvider(
         Lifetime componentLifetime,
         ILogger logger,
         ISolution solution,

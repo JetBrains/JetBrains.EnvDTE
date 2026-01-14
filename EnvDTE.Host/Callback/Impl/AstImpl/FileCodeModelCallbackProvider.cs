@@ -13,7 +13,7 @@ using JetBrains.Rider.Model;
 namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-    public sealed class FileCodeModelCallbackProvider( ProjectModelViewHost host, AstManager astManager)
+    public class FileCodeModelCallbackProvider( ProjectModelViewHost host, AstManager astManager)
         : IEnvDteCallbackProvider
     {
         public void RegisterCallbacks(DteProtocolModel model)

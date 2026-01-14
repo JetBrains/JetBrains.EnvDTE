@@ -18,7 +18,7 @@ using JetBrains.Util;
 namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-    public sealed class ProjectItemCallbackProvider(
+    public class ProjectItemCallbackProvider(
         ILogger logger,
         ISolution solution,
         ProjectModelViewHost host,

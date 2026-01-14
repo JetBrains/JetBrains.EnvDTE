@@ -12,7 +12,7 @@ using JetBrains.Rider.Model;
 namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-    public sealed class ProjectCallbackProvider(
+    public class ProjectCallbackProvider(
         ISolution solution,
         ProjectModelViewHost host,
         MsBuildProjectsConfigurationsStore configurationsStore)
