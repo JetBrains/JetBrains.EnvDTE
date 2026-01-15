@@ -73,6 +73,12 @@ object DteProtocolModel : Ext(DteRoot) {
     val ideWindow = structdef {
         // TODO
     }
+    
+    val projectHierarchyCacheEventArgs = structdef {
+        field("project", projectItemModel)
+        field("isCPS", bool)
+        field("parentProject", projectItemModel.nullable)
+    }
 
     init {
         createDteCallbacks()
@@ -103,6 +109,12 @@ object DteProtocolModel : Ext(DteRoot) {
         // See ItemOperationsProvider
         call("ItemOperations_open_File", ItemOperations_open_FileRequest, ideWindow)
         call("ItemOperations_isOpen_File", ItemOperations_open_FileRequest, bool)
+        
+        // ProjectHierarchyCache
+        sink("ProjectHierarchyCache_add_Project", projectHierarchyCacheEventArgs)
+        sink("ProjectHierarchyCache_remove_Project", projectHierarchyCacheEventArgs)
+        sink("ProjectHierarchyCache_update_Project", projectHierarchyCacheEventArgs)
+        call("ProjectHierarchyCache_requestInitialization", void, immutableList(projectHierarchyCacheEventArgs))
     }
 
     private fun createSolutionCallbacks() {
@@ -118,7 +130,7 @@ object DteProtocolModel : Ext(DteRoot) {
         }, void)
         call("Solution_find_ProjectItem", string, structdef("Solution_find_ProjectItemResponse") {
             field("projectItem", projectItemModel)
-            field("projectPath", immutableList(projectItemModel))
+            field("project", projectItemModel)
         }.nullable)
         call("Solution_get_StartupProjects", void, immutableList(string))
 

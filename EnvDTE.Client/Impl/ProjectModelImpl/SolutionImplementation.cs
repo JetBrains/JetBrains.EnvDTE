@@ -59,7 +59,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             // `SolutionFolderProjectItem` cannot be queried using this method
             return response is null
                 ? null
-                : new ProjectItemImplementation(dte, response.ProjectItem, ProjectImplementation.GetFromPath(dte, response.ProjectPath));
+                : new ProjectItemImplementation(dte, response.ProjectItem, dte.GetProject(response.Project));
         }
 
         #region NotImplemented

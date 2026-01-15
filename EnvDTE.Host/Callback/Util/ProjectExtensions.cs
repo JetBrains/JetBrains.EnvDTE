@@ -110,11 +110,12 @@ public static class ProjectExtensions
             solutionHost.ReloadProjectAsync(projectMark)).NoAwait();
     }
 
+    // TODO: Move the methpds that use property for caching into a separate component so that they can get their own lifetime, without asking the user to provide one
     /// <summary>
     /// Asynchronously retrieves the unique Visual Studio name for the specified project.
     /// </summary>
     [PublicAPI]
-    public static async Task<string> GetVSUniqueNameAsync([NotNull] this IProject project, Lifetime lifetime)
+    public static string GetVSUniqueName([NotNull] this IProject project, Lifetime propertyWriteLifetime)
     {
         if (project.IsSolutionProject())
         {
@@ -123,7 +124,7 @@ public static class ProjectExtensions
         }
 
         // Save the unique name to the project properties so we don't have to calculate it every time
-        return await project.GetOrCreatePropertyAsync(lifetime, UniqueNamePropertyKey, CalculateProjectUniqueName);
+        return project.GetOrCreateProperty(propertyWriteLifetime, UniqueNamePropertyKey, CalculateProjectUniqueName);
     }
 
     /// <summary>
@@ -147,8 +148,8 @@ public static class ProjectExtensions
     /// </para>
     /// </remarks>
     [PublicAPI]
-    public static Task<bool> IsCPSProjectAsync([NotNull] this IProject project, Lifetime lifetime) =>
-        project.GetOrCreatePropertyAsync(lifetime, IsCPSPropertyKey, p =>
+    public static bool IsCPSProject([NotNull] this IProject project, Lifetime propertyWriteLifetime) =>
+        project.GetOrCreateProperty(propertyWriteLifetime, IsCPSPropertyKey, p =>
             p.IsProjectFromUserView() && !p.IsSolutionFolder() &&
             (p.IsDotNetCoreProject() || (p.IsSharedProject() && !IsCppProject(p)) || p.IsDockerComposeProject()
              || p.IsEcmaScriptProject() || IsFSharpProject(p) || IsServiceFabricProject(p)));
@@ -183,14 +184,17 @@ public static class ProjectExtensions
         return projectFilePath.MakeRelativeTo(solutionDirPath).FullPath;
     }
 
-    private static async Task<T> GetOrCreatePropertyAsync<T>([NotNull] this IProject project, Lifetime lifetime,
-        Key key, Func<IProject, T> calculateValue)
+    private static T GetOrCreateProperty<T>([NotNull] this IProject project, Lifetime lifetime, Key key, Func<IProject, T> calculateValue)
     {
-        var value = await lifetime.StartReadActionAsync(() => project.GetProperty(key));
-        if (value is not null) return value.GetType() == typeof(T) ? (T)value : default;
+        using (ReadLockCookie.Create())
+        {
+            var curr = project.GetProperty(key);
+            if (curr is not null) return curr.GetType() == typeof(T) ? (T)curr : default;
+        }
 
         var newValue = calculateValue(project);
-        await lifetime.StartMainWrite(() => project.SetProperty(key, newValue));
+        lifetime.StartMainWrite(() => project.SetProperty(key, newValue)).NoAwait();
+
         return newValue;
     }
 }
