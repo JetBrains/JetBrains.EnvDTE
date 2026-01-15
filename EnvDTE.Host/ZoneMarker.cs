@@ -1,7 +1,7 @@
 ﻿using JetBrains.Application.BuildScript.Application.Zones;
-using JetBrains.ProjectModel.ProjectsHost.SolutionHost;
+using JetBrains.RdBackend.Common.Env;
 
 namespace JetBrains.EnvDTE.Host;
 
 [ZoneMarker]
-public class ZoneMarker : IRequire<IHostSolutionZone>;
+public class ZoneMarker : IRequire<IReSharperHostCoreSharedFeatureZone>;

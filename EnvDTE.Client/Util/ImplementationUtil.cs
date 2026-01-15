@@ -18,11 +18,14 @@ internal static class ImplementationUtil
     }
 
     internal static ProjectImplementation GetProjectImplementation(DteImplementation dte,
+        ProjectItemModel projectItemModel, bool isCPS, [CanBeNull] ProjectItemImplementation parent = null) => isCPS
+            ? new OAProject(dte, projectItemModel, parent)
+            : new ProjectImplementation(dte, projectItemModel, parent);
+
+    internal static ProjectImplementation GetProjectImplementation(DteImplementation dte,
         ProjectItemModel projectItemModel, [CanBeNull] ProjectItemImplementation parent = null)
     {
         var isCPS = dte.DteProtocolModel.Project_is_CPS.Sync(new ProjectItemRequest(projectItemModel));
-        return isCPS
-            ? new OAProject(dte, projectItemModel, parent)
-            : new ProjectImplementation(dte, projectItemModel, parent);
+        return GetProjectImplementation(dte, projectItemModel, isCPS, parent);
     }
 }

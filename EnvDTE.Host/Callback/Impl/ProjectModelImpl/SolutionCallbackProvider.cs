@@ -151,13 +151,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 return projectItem?.ToRdFindProjectItemResponse(containingProject, viewHost);
             });
 
-            model.Solution_get_StartupProjects.SetAsync(async (lifetime, _) =>
-            {
-                var namesTask = await lifetime.StartReadActionAsync(() =>
-                    Task.WhenAll(_startupProjects.Select(p => p.GetVSUniqueNameAsync(lifetime)))
-                );
-                return (await namesTask).ToList();
-            });
+            model.Solution_get_StartupProjects.SetSync(_ =>
+                _startupProjects.Select(p => p.GetVSUniqueName(componentLifetime)).ToList());
 
             model.Solution_build.SetSync((lifetime, req) =>
             {

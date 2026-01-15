@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Features.SolutionBuilders;
@@ -47,6 +46,6 @@ public static class RdExtensions
 
         return new Solution_find_ProjectItemResponse(
             new ProjectItemModel(id),
-            containingProject.GetProjectPath(viewHost).Select(item => new ProjectItemModel(item)).ToList());
+            new ProjectItemModel(viewHost.GetIdByItem(containingProject)));
     }
 }

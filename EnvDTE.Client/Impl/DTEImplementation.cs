@@ -13,6 +13,8 @@ namespace JetBrains.EnvDTE.Client.Impl
     [PublicAPI]
     public sealed class DteImplementation : DTE, DTE2
     {
+        private readonly ProjectHierarchyCache _projectHierarchyCache;
+
         internal Lifetime DteLifetime { get; }
         [NotNull] internal DteProtocolModel DteProtocolModel { get; }
 
@@ -38,7 +40,10 @@ namespace JetBrains.EnvDTE.Client.Impl
             Solution = new SolutionImplementation(this);
             DteLifetime = lifetime ?? Lifetime.Eternal;
             ItemOperations = new ItemOperationsImplementation(this);
+            _projectHierarchyCache = new ProjectHierarchyCache(this);
         }
+
+        public ProjectImplementation GetProject(ProjectItemModel projectItemModel) => _projectHierarchyCache.GetProject(projectItemModel);
 
         #region NotImplemented
 

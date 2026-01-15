@@ -18,9 +18,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         [CanBeNull] private ProjectPropertiesImplementation _properties;
         private readonly DteImplementation _dte = dte;
 
-        [NotNull, ItemNotNull]
-        private List<ProjectItemModel> ProjectItemModels =>
-            _dte.DteProtocolModel.ProjectItem_get_ProjectItems.Sync(new(projectModel));
+        [CanBeNull] internal ProjectItemImplementation parentProjectItemImplementation = parentProjectItem;
 
         public string Name
         {
@@ -41,11 +39,12 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 
         public string UniqueName => _dte.DteProtocolModel.Project_get_UniqueName.Sync(new(projectModel));
 
+        // TODO: Fix - this only works for top level projects
         public Projects Collection => _dte.Solution.Projects;
 
         public void Delete() => _dte.DteProtocolModel.Project_Delete.Sync(new(projectModel));
 
-        [CanBeNull] public ProjectItem ParentProjectItem { get; } = parentProjectItem;
+        [CanBeNull] public ProjectItem ParentProjectItem => parentProjectItemImplementation;
 
         public Properties Properties
         {
@@ -62,28 +61,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 
         public ConfigurationManager ConfigurationManager { get; } =
             new ConfigurationManagerImplementation(dte, projectModel);
-
-        /// <summary>
-        /// Retrieves a Project by traversing from root down through the item hierarchy.
-        /// </summary>
-        /// <param name="dte">The DTE instance.</param>
-        /// <param name="pathItems">The project item path, starting with the top-level project.</param>
-        public static ProjectImplementation GetFromPath(
-            [NotNull] DteImplementation dte,
-            [NotNull] IReadOnlyList<ProjectItemModel> pathItems)
-        {
-            if (pathItems.Count == 0) throw new ArgumentException("Path must contain at least one item", nameof(pathItems));
-            if (pathItems.Count == 1) return ImplementationUtil.GetProjectImplementation(dte, pathItems[0]);
-
-            var currentProject = ((ProjectsImplementation)dte.Solution.Projects).Item(pathItems[0]);
-            for (var i = 1; i < pathItems.Count; i++)
-            {
-                var projectItems = (ProjectItemsImplementation)currentProject.ProjectItems;
-                currentProject = (ProjectImplementation)projectItems.Item(pathItems[i]).SubProject;
-            }
-
-            return currentProject;
-        }
 
         #region NotImplemented
 
