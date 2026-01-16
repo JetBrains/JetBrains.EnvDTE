@@ -32,18 +32,18 @@ namespace JetBrains.EnvDTE.Host
                     scheduler.Queue(() =>
                     {
                         var model = new DteProtocolModel(connectionLifetime, protocol);
-                        RegisterCallbacks(model, solution);
+                        RegisterCallbacks(model, scheduler, solution);
                     });
                 });
 
             });
         }
 
-        private static void RegisterCallbacks([NotNull] DteProtocolModel model, [NotNull] ISolution solution)
+        private static void RegisterCallbacks([NotNull] DteProtocolModel model, [NotNull] IScheduler scheduler, [NotNull] ISolution solution)
         {
             foreach (var provider in solution.GetComponents2<IEnvDteCallbackProvider>())
             {
-                provider.RegisterCallbacks(model);
+                provider.RegisterCallbacks(model, scheduler);
             }
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Application.Parts;
+using JetBrains.Collections.Viewable;
 using JetBrains.ProjectModel;
 using JetBrains.Rd.Tasks;
 using JetBrains.Rider.Model;
@@ -10,7 +11,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
     public class DteCallbackProvider : IEnvDteCallbackProvider
     {
-        public void RegisterCallbacks(DteProtocolModel model)
+        public void RegisterCallbacks(DteProtocolModel model, IScheduler scheduler)
         {
             model.DTE_Name.SetSync(_ => "JetBrains Rider");
             model.DTE_FileName.SetSync(_ => FileSystemPath

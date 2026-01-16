@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
+using JetBrains.Collections.Viewable;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.ProjectModel;
@@ -25,7 +26,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         ISimpleLazy<IProjectModelEditor> projectModelEditor)
         : IEnvDteCallbackProvider
     {
-        public void RegisterCallbacks(DteProtocolModel model)
+        public void RegisterCallbacks(DteProtocolModel model, IScheduler scheduler)
         {
             model.ProjectItem_get_Name.SetWithProjectItemAsync(host, async (lifetime, _, projectItem) =>
                 await lifetime.StartReadActionAsync(() => projectItem.Name));

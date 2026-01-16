@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
+using JetBrains.Collections.Viewable;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.DocumentManagers.Transactions.ProjectHostActions.Modifications;
 using JetBrains.EnvDTE.Host.Callback.Util;
@@ -23,7 +24,7 @@ public class ProjectItemsCallbackProvider(
     ProjectModelViewHost host,
     ISimpleLazy<IProjectModelEditor> projectModelEditor) : IEnvDteCallbackProvider
 {
-    public void RegisterCallbacks(DteProtocolModel model)
+    public void RegisterCallbacks(DteProtocolModel model, IScheduler scheduler)
     {
         model.ProjectItems_addFolder.SetWithProjectFolderAsync(host, AddFolderAsync);
         model.ProjectItems_addFromFile.SetWithProjectFolderAsync(host, (lifetime, request, projectFolder) =>
