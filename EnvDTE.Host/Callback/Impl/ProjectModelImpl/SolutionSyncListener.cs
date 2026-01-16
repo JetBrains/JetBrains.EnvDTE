@@ -3,6 +3,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Application.Parts;
 using JetBrains.Application.Threading;
+using JetBrains.Collections.Viewable;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
@@ -25,10 +26,12 @@ public class SolutionSyncListener(
     : SolutionHostSyncListener, IEnvDteCallbackProvider
 {
     [CanBeNull] private DteProtocolModel _model;
+    [CanBeNull] private IScheduler _scheduler;
 
-    public void RegisterCallbacks(DteProtocolModel model)
+    public void RegisterCallbacks(DteProtocolModel model, IScheduler scheduler)
     {
         _model = model;
+        _scheduler = scheduler;
 
         /*
          * Project loading is delivered as a single “bulk add” update: once the IDE has finished loading, an update event
@@ -59,7 +62,7 @@ public class SolutionSyncListener(
 
     public override void BeforeUpdateProjects(ProjectStructureChange change)
     {
-        if (_model is null) return;
+        if (_model is null || _scheduler is null) return;
 
         // Renames are modeled as Remove + Add; We want to ignore them
         var addedProjectsSet = change.AddedProjects.ToHashSet(c => c.ProjectMark.Guid);
@@ -71,13 +74,13 @@ public class SolutionSyncListener(
             var args = GetArgsForRemoval(projectChange);
             if (args is null) continue;
 
-            _model.ProjectHierarchyCache_remove_Project(args);
+            _scheduler.Queue(() => _model.ProjectHierarchyCache_remove_Project(args));
         }
     }
 
     public override void AfterUpdateProjects(ProjectStructureChange change)
     {
-        if (_model is null) return;
+        if (_model is null || _scheduler is null) return;
 
         // Renames are modeled as Remove + Add; We want to ignore them
         var removedProjectSet = change.RemovedProjects.ToHashSet(c => c.ProjectMark.Guid);
@@ -92,7 +95,7 @@ public class SolutionSyncListener(
             var args = GetArgsForAddition(projectChange);
             if (args is null) continue;
 
-            _model.ProjectHierarchyCache_add_Project(args);
+            _scheduler.Queue(() => _model.ProjectHierarchyCache_add_Project(args));
         }
 
         foreach (var projectChange in change.UpdatedProjects)
@@ -100,7 +103,7 @@ public class SolutionSyncListener(
             var args = GetArgsForAddition(projectChange);
             if (args is null) continue;
 
-            _model.ProjectHierarchyCache_update_Project(args);
+            _scheduler.Queue(() => _model.ProjectHierarchyCache_update_Project(args));
         }
     }
 

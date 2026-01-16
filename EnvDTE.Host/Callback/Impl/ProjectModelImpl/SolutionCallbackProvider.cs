@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using JetBrains.Application.Parts;
+using JetBrains.Collections.Viewable;
 using JetBrains.Core;
 using JetBrains.DataFlow;
 using JetBrains.Diagnostics;
@@ -44,7 +45,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
 
         private IProject[] _startupProjects = [];
 
-        public void RegisterCallbacks(DteProtocolModel model)
+        public void RegisterCallbacks(DteProtocolModel model, IScheduler scheduler)
         {
             rdDispatcher.Queue(() =>
             {

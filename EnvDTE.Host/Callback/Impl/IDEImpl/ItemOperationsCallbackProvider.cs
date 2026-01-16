@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
+using JetBrains.Collections.Viewable;
 using JetBrains.IDE;
 using JetBrains.IDE.Common;
 using JetBrains.ProjectModel;
@@ -20,7 +21,7 @@ public class ItemOperationsCallbackProvider(
     ISimpleLazy<IEditorManager> editorManager)
     : IEnvDteCallbackProvider
 {
-    public void RegisterCallbacks(DteProtocolModel model)
+    public void RegisterCallbacks(DteProtocolModel model, IScheduler scheduler)
     {
         model.ItemOperations_open_File.SetAsync(async (lifetime, args) =>
         {

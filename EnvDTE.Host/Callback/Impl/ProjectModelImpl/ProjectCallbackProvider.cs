@@ -1,5 +1,6 @@
 using System.Linq;
 using JetBrains.Application.Parts;
+using JetBrains.Collections.Viewable;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
@@ -23,7 +24,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         private const string PlatformProperty = "Platform";
         private const string SolutionFolderProjectGuid = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
 
-        public void RegisterCallbacks(DteProtocolModel model)
+        public void RegisterCallbacks(DteProtocolModel model, IScheduler scheduler)
         {
             model.Project_get_Name.SetWithProjectSync(host, (_, project) => project.Name);
 

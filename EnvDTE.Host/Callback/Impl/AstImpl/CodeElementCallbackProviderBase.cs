@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using JetBrains.Annotations;
+using JetBrains.Collections.Viewable;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.Rd.Tasks;
@@ -23,7 +24,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
         [NotNull]
         private ILogger Logger { get; } = JetBrains.Util.Logging.Logger.GetLogger<CodeElementCallbackProvider>();
 
-        public void RegisterCallbacks(DteProtocolModel model)
+        public void RegisterCallbacks(DteProtocolModel model, IScheduler scheduler)
         {
             DoRegisterCallbacks(host, model);
         }

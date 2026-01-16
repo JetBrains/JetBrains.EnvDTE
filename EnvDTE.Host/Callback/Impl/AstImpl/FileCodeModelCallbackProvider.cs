@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Application.Parts;
+using JetBrains.Collections.Viewable;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.EnvDTE.Host.Manager;
 using JetBrains.ProjectModel;
@@ -16,7 +17,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.AstImpl
     public class FileCodeModelCallbackProvider( ProjectModelViewHost host, AstManager astManager)
         : IEnvDteCallbackProvider
     {
-        public void RegisterCallbacks(DteProtocolModel model)
+        public void RegisterCallbacks(DteProtocolModel model, IScheduler scheduler)
         {
             model.FileCodeModel_get_CodeElements.SetWithProjectFileAsync(host, (lifetime, _, projectFile) =>
                 lifetime.StartReadActionAsync(() =>
