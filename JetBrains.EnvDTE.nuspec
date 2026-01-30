@@ -38,6 +38,17 @@
         <file src="EnvDTE100.Interfaces\bin\Release\netcoreapp3.0\EnvDTE90a.pdb" target="lib\netcoreapp3.0"/>
         <file src="EnvDTE100.Interfaces\bin\Release\netcoreapp3.0\EnvDTE100.dll" target="lib\netcoreapp3.0"/>
         <file src="EnvDTE100.Interfaces\bin\Release\netcoreapp3.0\EnvDTE100.pdb" target="lib\netcoreapp3.0"/>
+
+        <file src="EnvDTE100.Interfaces\bin\Release\netstandard2.0\EnvDTE.dll" target="lib\netstandard2.0"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\netstandard2.0\EnvDTE.pdb" target="lib\netstandard2.0"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\netstandard2.0\EnvDTE80.dll" target="lib\netstandard2.0"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\netstandard2.0\EnvDTE80.pdb" target="lib\netstandard2.0"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\netstandard2.0\EnvDTE90.dll" target="lib\netstandard2.0"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\netstandard2.0\EnvDTE90.pdb" target="lib\netstandard2.0"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\netstandard2.0\EnvDTE90a.dll" target="lib\netstandard2.0"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\netstandard2.0\EnvDTE90a.pdb" target="lib\netstandard2.0"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\netstandard2.0\EnvDTE100.dll" target="lib\netstandard2.0"/>
+        <file src="EnvDTE100.Interfaces\bin\Release\netstandard2.0\EnvDTE100.pdb" target="lib\netstandard2.0"/>
         
         <file src="Icons\JetBrains.EnvDTE.png" target=""/>
     </files>
