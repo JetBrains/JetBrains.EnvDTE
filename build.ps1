@@ -37,26 +37,6 @@ function Build-Project {
     }
 }
 
-
-function Pack-Project {
-    param(
-        [Parameter(Mandatory)][string]$Project
-    )
-
-    if ($EnableBinLog) {
-        $binLogArg = "/bl:$($Project)_log.binlog"
-    }
-    else {
-        $binLogArg = $null
-    }
-
-    & .\dotnet.cmd pack $binLogArg "/p:Configuration=$Configuration" $Project
-
-    if ($LASTEXITCODE -ne 0) {
-        throw "Could not pack $Project (exit code $LASTEXITCODE)"
-    }
-}
-
 Write-Host "Building EnvDTE.Processor"
 
 Build-Project -Project 'EnvDTE.Processor'
@@ -69,7 +49,3 @@ Build-Project -Project 'Designer.Interfaces'
 Build-Project -Project 'EnvDTE.Host'
 Build-Project -Project 'EnvDTE.Client'
 Build-Project -Project 'VisualStudio.Interop.Interfaces'
-
-Write-Host "Packing interfaces"
-
-Pack-Project -Project 'EnvDTE100.Interfaces'
