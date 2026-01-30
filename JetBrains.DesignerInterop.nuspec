@@ -17,8 +17,8 @@
         <summary>JetBrains interop for designer</summary>
     </metadata>
     <files>
-        <file src="Shell.Interop\bin\Release\netstandard2.0\Microsoft.VisualStudio.Shell.Interop.8.0.dll" target="lib\netstandard2.0"/>
-        <file src="Designer.Interfaces\bin\Release\netstandard2.0\Microsoft.VisualStudio.Designer.Interfaces.dll" target="lib\netstandard2.0"/>
+        <file src="Shell.Interop\bin\Release\net472\Microsoft.VisualStudio.Shell.Interop.8.0.dll" target="lib\net472"/>
+        <file src="Designer.Interfaces\bin\Release\net472\Microsoft.VisualStudio.Designer.Interfaces.dll" target="lib\net472"/>
         <file src="Icons\JetBrains.EnvDTE.png" target=""/>
     </files>
 </package>
