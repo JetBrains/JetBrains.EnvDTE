@@ -5,6 +5,7 @@ using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Properties;
+using JetBrains.ProjectModel.Properties.WebSite;
 using JetBrains.RdBackend.Common.Features.ProjectModel;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View.EditProperties.Solutions;
@@ -32,16 +33,19 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 lifetime.StartReadActionAsync(() =>
                     solution.InvokeUnderTransaction(cookie => cookie.Rename(project, req.NewName))));
 
-            model.Project_get_FileName.SetWithProjectSync(host, (_, project) => project.ProjectFileLocation.FullPath);
+            model.Project_get_FileName.SetWithProjectSync(host, (_, project) =>
+                project.IsWebProject() ? project.Location.FullPath : project.ProjectFileLocation.FullPath);
 
             model.Project_get_UniqueName.SetWithProjectSync(host, (_, project) => project.GetVSUniqueName(componentLifetime));
 
             model.Project_get_Kind.SetWithProjectSync(host, (_, project) =>
             {
                 if (project.IsSolutionFolder()) return SolutionFolderProjectGuid;
+                // For some reason, website projects do not have their guid in `ProjectProperties.ProjectTypeGuids`
+                var guid = project.IsWebProject() ? WebSiteProjectPropertiesFactory.ProjectTypeGuid :
+                    // Last Guid is always the one we want displayed
+                    project.ProjectProperties.ProjectTypeGuids.LastOrDefault();
 
-                // Last Guid is always the one we want displayed
-                var guid = project.ProjectProperties.ProjectTypeGuids.LastOrDefault();
                 return guid.ToString("B").ToUpperInvariant();
             });
 
