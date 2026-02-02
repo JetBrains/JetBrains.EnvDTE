@@ -20,7 +20,7 @@ public class VsProjectCompatibilityService(ILogger logger, Lifetime lifetime)
     private static readonly Key IsCPSPropertyKey = new("EnvDTE.IsCPS");
 
     /// <summary>
-    /// Asynchronously retrieves the unique Visual Studio name for the specified project.
+    /// Retrieves the unique Visual Studio name for the specified project.
     /// </summary>
     [PublicAPI]
     public string GetVSUniqueName([NotNull] IProject project)
@@ -79,17 +79,25 @@ public class VsProjectCompatibilityService(ILogger logger, Lifetime lifetime)
         return projectFilePath.MakeRelativeTo(solutionDirPath).FullPath;
     }
 
+    // Currently, there is no need to invalidate values for any of the existing properties.
+    // For any of them to change, the project needs to be recreated (this happens even on renames), at which point it won't have any of the properties set.
     private T GetOrCreateProperty<T>([NotNull] IProject project, Key key, Func<IProject, T> calculateValue)
     {
         using (ReadLockCookie.Create())
         {
             var curr = project.GetProperty(key);
-            if (curr is not null) return curr.GetType() == typeof(T) ? (T)curr : default;
+            if (curr is T currValue) return currValue;
         }
 
-        var newValue = calculateValue(project);
-        lifetime.StartMainWrite(() => project.SetProperty(key, newValue)).NoAwait();
+        var value = calculateValue(project);
+        lifetime.StartMainWrite(() =>
+        {
+            // Double-check, another thread might have set the property while we were calculating
+            if (project.GetProperty(key) is T) return;
 
-        return newValue;
+            project.SetProperty(key, value);
+        }).NoAwait();
+
+        return value;
     }
 }
