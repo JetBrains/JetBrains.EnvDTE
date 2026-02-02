@@ -25,9 +25,6 @@ namespace JetBrains.EnvDTE.Host.Callback.Util;
 public static class ProjectExtensions
 {
     private const string FSharpProjectTypeGuid = "f2a71f9b-5d33-465a-a702-920d77279786";
-
-    private static readonly Key UniqueNamePropertyKey = new("EnvDTE.UniqueName");
-    private static readonly Key IsCPSPropertyKey = new("EnvDTE.IsCPS");
     private static readonly ILogger Log = Logger.GetLogger<IProject>();
 
     /// <summary>
@@ -110,58 +107,8 @@ public static class ProjectExtensions
             solutionHost.ReloadProjectAsync(projectMark)).NoAwait();
     }
 
-    // TODO: Move the methpds that use property for caching into a separate component so that they can get their own lifetime, without asking the user to provide one
-    /// <summary>
-    /// Asynchronously retrieves the unique Visual Studio name for the specified project.
-    /// </summary>
     [PublicAPI]
-    public static string GetVSUniqueName([NotNull] this IProject project, Lifetime propertyWriteLifetime)
-    {
-        if (project.IsSolutionProject())
-        {
-            Log.Warn("Visual Studio does not have the project for the solution, returning empty string.");
-            return string.Empty;
-        }
-
-        if (project.IsWebProject())
-        {
-            // Website projects do not have a project file, so their unique name is the path to the project directory
-            return project.Location.FullPath;
-        }
-
-        // Save the unique name to the project properties so we don't have to calculate it every time
-        return project.GetOrCreateProperty(propertyWriteLifetime, UniqueNamePropertyKey, CalculateProjectUniqueName);
-    }
-
-    /// <summary>
-    /// Determines whether the project is a CPS (Common Project System) project in Visual Studio.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// The official documentation for the Visual Studio’s CPS-based project system states that it is primarily used for
-    /// SDK-style .NET projects and .NET shared projects. In practice, there are additional project types that are implemented
-    /// on top of CPS and have the 'CPS' capability.
-    /// </para>
-    /// <para>
-    /// CPS is also used for FSharp, EcmaScript (JS, TS, ...), SDK-style SQL, Docker Compose, Service Fabric and
-    /// Windows Application Packaging projects.
-    /// CPS is not used for classic .NET, classic SQL, Python and C++ projects, as well as some niche project types like Hive,
-    /// Pig, Azure Stream Analytics, Azure Cloud Service and U-SQL projects.
-    /// </para>
-    /// <para>
-    /// Neither of the above lists is complete, but they cover the major, commonly encountered, project types.
-    /// Existing checks also have a high chance of covering other project types that are not explicitly listed here.
-    /// </para>
-    /// </remarks>
-    [PublicAPI]
-    public static bool IsCPSProject([NotNull] this IProject project, Lifetime propertyWriteLifetime) =>
-        project.GetOrCreateProperty(propertyWriteLifetime, IsCPSPropertyKey, p =>
-            p.IsProjectFromUserView() && !p.IsSolutionFolder() &&
-            (p.IsDotNetCoreProject() || (p.IsSharedProject() && !IsCppProject(p)) || p.IsDockerComposeProject()
-             || p.IsEcmaScriptProject() || IsFSharpProject(p) || IsServiceFabricProject(p)));
-
-    [PublicAPI]
-    private static bool IsFSharpProject([NotNull] this IProject project) =>
+    public static bool IsFSharpProject([NotNull] this IProject project) =>
         project.ProjectProperties.ProjectTypeGuids.LastOrDefault().ToString().Equals(FSharpProjectTypeGuid);
 
     [PublicAPI]
@@ -178,29 +125,4 @@ public static class ProjectExtensions
     [PublicAPI]
     public static List<int> GetProjectPath([NotNull] this IProject project, ProjectModelViewHost viewHost) =>
         project.GetPathChain().Select(viewHost.GetIdByItem).Reverse().ToList();
-
-    private static string CalculateProjectUniqueName([NotNull] IProject project)
-    {
-        if (project.IsMiscFilesProject()) return "<MiscFiles>";
-        if (project.IsSolutionFolder()) return $"{project.Name}{project.Guid.ToString("B").ToUpperInvariant()}";
-
-        var solutionDirPath = project.GetSolution().SolutionDirectory;
-        var projectFilePath = project.ProjectFileLocation;
-
-        return projectFilePath.MakeRelativeTo(solutionDirPath).FullPath;
-    }
-
-    private static T GetOrCreateProperty<T>([NotNull] this IProject project, Lifetime lifetime, Key key, Func<IProject, T> calculateValue)
-    {
-        using (ReadLockCookie.Create())
-        {
-            var curr = project.GetProperty(key);
-            if (curr is not null) return curr.GetType() == typeof(T) ? (T)curr : default;
-        }
-
-        var newValue = calculateValue(project);
-        lifetime.StartMainWrite(() => project.SetProperty(key, newValue)).NoAwait();
-
-        return newValue;
-    }
 }

@@ -33,7 +33,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         ProjectModelViewHost viewHost,
         ISolutionBuilder builder,
         ISolutionConfigurationHolder configurationHolder,
-        ShellRdDispatcher rdDispatcher)
+        ShellRdDispatcher rdDispatcher,
+        VsProjectCompatibilityService vsCompatibilityService)
         : IEnvDteCallbackProvider
     {
         private const string ActiveConfigProperty = "ActiveConfig";
@@ -153,7 +154,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             });
 
             model.Solution_get_StartupProjects.SetSync(_ =>
-                _startupProjects.Select(p => p.GetVSUniqueName(componentLifetime)).ToList());
+                _startupProjects.Select(p => vsCompatibilityService.GetVSUniqueName(p)).ToList());
 
             model.Solution_build.SetSync((lifetime, req) =>
             {

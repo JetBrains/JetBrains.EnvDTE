@@ -2,7 +2,6 @@ using System.Linq;
 using JetBrains.Application.Parts;
 using JetBrains.Collections.Viewable;
 using JetBrains.EnvDTE.Host.Callback.Util;
-using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Properties;
 using JetBrains.ProjectModel.Properties.WebSite;
@@ -16,10 +15,10 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
 {
     [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
     public class ProjectCallbackProvider(
-        Lifetime componentLifetime,
         ISolution solution,
         ProjectModelViewHost host,
-        MsBuildProjectsConfigurationsStore configurationsStore)
+        MsBuildProjectsConfigurationsStore configurationsStore,
+        VsProjectCompatibilityService vsCompatibilityService)
         : IEnvDteCallbackProvider
     {
         private const string PlatformProperty = "Platform";
@@ -36,7 +35,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             model.Project_get_FileName.SetWithProjectSync(host, (_, project) =>
                 project.IsWebProject() ? project.Location.FullPath : project.ProjectFileLocation.FullPath);
 
-            model.Project_get_UniqueName.SetWithProjectSync(host, (_, project) => project.GetVSUniqueName(componentLifetime));
+            model.Project_get_UniqueName.SetWithProjectSync(host, (_, project) => vsCompatibilityService.GetVSUniqueName(project));
 
             model.Project_get_Kind.SetWithProjectSync(host, (_, project) =>
             {
@@ -58,7 +57,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             model.Project_set_Property.SetWithProjectVoidAsync(host, (lifetime, args, project) =>
                 project.SetPropertyAsync(lifetime, args.Name, args.Value));
 
-            model.Project_is_CPS.SetWithProjectSync(host, (_, project) => project.IsCPSProject(componentLifetime));
+            model.Project_is_CPS.SetWithProjectSync(host, (_, project) => vsCompatibilityService.IsCPSProject(project));
 
             model.Project_Delete.SetWithProjectVoidAsync(host, (lifetime, _, project) =>
                 lifetime.StartReadActionAsync(() => solution.InvokeUnderTransaction(cookie => cookie.Remove(project))));
