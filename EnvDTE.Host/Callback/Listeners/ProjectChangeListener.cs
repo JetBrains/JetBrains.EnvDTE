@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using JetBrains.Application.Parts;
 using JetBrains.Collections.Viewable;
 using JetBrains.ProjectModel;
@@ -11,26 +11,20 @@ namespace JetBrains.EnvDTE.Host.Callback.Listeners;
 [SolutionInstanceComponent(Instantiation.DemandAnyThreadSafe)]
 public class ProjectChangeListener : SolutionHostSyncListener
 {
-    public readonly ISignal<ProjectHostChange[]> ProjectsRemoved = new Signal<ProjectHostChange[]>();
-    public readonly ISignal<ProjectHostChange[]> ProjectsAdded = new Signal<ProjectHostChange[]>();
-    public readonly ISignal<ProjectHostChange[]> ProjectsUpdated = new Signal<ProjectHostChange[]>();
+    public readonly ISignal<IEnumerable<ProjectHostChange>> ProjectsRemoved = new Signal<IEnumerable<ProjectHostChange>>();
+    public readonly ISignal<IEnumerable<ProjectHostChange>> ProjectsAdded = new Signal<IEnumerable<ProjectHostChange>>();
+    public readonly ISignal<IEnumerable<ProjectHostChange>> ProjectsUpdated = new Signal<IEnumerable<ProjectHostChange>>();
 
+    // Renames are modeled as Remove + Add
+    // Even though we could filter them and treat them as updates, we want to keep them separate because they change projects ID in the project model view host
     public override void BeforeUpdateProjects(ProjectStructureChange change)
     {
-        // Renames are modeled as Remove + Add; We want to ignore them
-        var addedProjectsSet = change.AddedProjects.ToHashSet(c => c.ProjectMark.Guid);
-        var removedProjectsSet = change.RemovedProjects.Where(c => !addedProjectsSet.Contains(c.ProjectMark.Guid));
-
-        ProjectsRemoved.Fire(removedProjectsSet.ToArray());
+        if (change.RemovedProjects.Any()) ProjectsRemoved.Fire(change.RemovedProjects);
     }
 
     public override void AfterUpdateProjects(ProjectStructureChange change)
     {
-        // Renames are modeled as Remove + Add; We want to ignore them
-        var removedProjectSet = change.RemovedProjects.ToHashSet(c => c.ProjectMark.Guid);
-        var addedProjects = change.AddedProjects.Where(c => !removedProjectSet.Contains(c.ProjectMark.Guid));
-
-        ProjectsAdded.Fire(addedProjects.ToArray());
-        ProjectsUpdated.Fire(change.UpdatedProjects.ToArray());
+        if (change.AddedProjects.Any()) ProjectsAdded.Fire(change.AddedProjects);
+        if (change.UpdatedProjects.Any()) ProjectsUpdated.Fire(change.UpdatedProjects);
     }
 }
