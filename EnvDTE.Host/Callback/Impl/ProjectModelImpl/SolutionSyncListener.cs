@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using JetBrains.Application.Parts;
 using JetBrains.Application.Threading;
 using JetBrains.Collections.Viewable;
-using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.ProjectsHost;
@@ -19,10 +18,10 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl;
 
 [SolutionInstanceComponent(Instantiation.DemandAnyThreadSafe)]
 public class SolutionSyncListener(
-    Lifetime componentLifetime,
     ILogger logger,
     ISolution solution,
-    ProjectModelViewHost modelViewHost)
+    ProjectModelViewHost modelViewHost,
+    VsProjectCompatibilityService vsCompatibilityService)
     : SolutionHostSyncListener, IEnvDteCallbackProvider
 {
     [CanBeNull] private DteProtocolModel _model;
@@ -148,7 +147,7 @@ public class SolutionSyncListener(
 
         return new ProjectHierarchyCacheEventArgs(
             GetProjectItemModel(project),
-            project.IsCPSProject(componentLifetime),
+            vsCompatibilityService.IsCPSProject(project),
             project.ParentFolder is null ? null : GetProjectItemModel(project.ParentFolder));
     }
 
@@ -164,13 +163,13 @@ public class SolutionSyncListener(
 
         return new ProjectHierarchyCacheEventArgs(
             GetProjectItemModel(change.ProjectMark),
-            project.IsCPSProject(componentLifetime),
+            vsCompatibilityService.IsCPSProject(project),
             change.ProjectMark.Parent is null ? null : GetProjectItemModel(change.ProjectMark.Parent));
     }
 
     private ProjectHierarchyCacheEventArgs GetArgs(IProject project) => new(
         GetProjectItemModel(project),
-        project.IsCPSProject(componentLifetime),
+        vsCompatibilityService.IsCPSProject(project),
         project.ParentFolder is null ? null : GetProjectItemModel(project.ParentFolder));
 
     private ProjectItemModel GetProjectItemModel<T>(T item) => new(modelViewHost.GetIdByItem(item));
