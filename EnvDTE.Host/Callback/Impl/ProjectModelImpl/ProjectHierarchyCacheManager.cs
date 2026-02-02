@@ -4,11 +4,11 @@ using JetBrains.Annotations;
 using JetBrains.Application.Parts;
 using JetBrains.Application.Threading;
 using JetBrains.Collections.Viewable;
+using JetBrains.EnvDTE.Host.Callback.Listeners;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.ProjectsHost;
 using JetBrains.ProjectModel.ProjectsHost.Impl;
-using JetBrains.ProjectModel.ProjectsHost.SolutionHost;
 using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.Rider.Model;
@@ -16,13 +16,15 @@ using JetBrains.Util;
 
 namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl;
 
-[SolutionInstanceComponent(Instantiation.DemandAnyThreadSafe)]
-public class SolutionSyncListener(
+[SolutionComponent(Instantiation.DemandAnyThreadSafe)]
+public class ProjectHierarchyCacheManager(
     ILogger logger,
+    Lifetime componentLifetime,
     ISolution solution,
     ProjectModelViewHost modelViewHost,
+    ProjectChangeListener projectChangeListener,
     VsProjectCompatibilityService vsCompatibilityService)
-    : SolutionHostSyncListener, IEnvDteCallbackProvider
+    : IEnvDteCallbackProvider
 {
     [CanBeNull] private DteProtocolModel _model;
     [CanBeNull] private IScheduler _scheduler;
@@ -57,19 +59,18 @@ public class SolutionSyncListener(
 
                     return visitor.Projects.Select(GetArgs).ToList();
                 }));
+
+        projectChangeListener.ProjectsRemoved.Advise(componentLifetime, OnProjectsRemoved);
+        projectChangeListener.ProjectsAdded.Advise(componentLifetime, OnProjectsAdded);
+        projectChangeListener.ProjectsUpdated.Advise(componentLifetime, OnProjectsUpdated);
     }
 
-    public override void BeforeUpdateProjects(ProjectStructureChange change)
+    private void OnProjectsRemoved(IEnumerable<ProjectHostChange> changes)
     {
         if (_model is null || _scheduler is null) return;
 
-        // Renames are modeled as Remove + Add; We want to ignore them
-        var addedProjectsSet = change.AddedProjects.ToHashSet(c => c.ProjectMark.Guid);
-
-        foreach (var projectChange in change.RemovedProjects)
+        foreach (var projectChange in changes)
         {
-            if (addedProjectsSet.Contains(projectChange.ProjectMark.Guid)) continue;
-
             var args = GetArgsForRemoval(projectChange);
             if (args is null) continue;
 
@@ -77,27 +78,27 @@ public class SolutionSyncListener(
         }
     }
 
-    public override void AfterUpdateProjects(ProjectStructureChange change)
+    private void OnProjectsAdded(IEnumerable<ProjectHostChange> changes)
     {
         if (_model is null || _scheduler is null) return;
 
-        // Renames are modeled as Remove + Add; We want to ignore them
-        var removedProjectSet = change.RemovedProjects.ToHashSet(c => c.ProjectMark.Guid);
-
         // Flatten the hierarchy - parents should be processed before children
-        var addedInOrder = FlattenHierarchy(change.AddedProjects.Where(c => c.Parent == null));
+        var addedInOrder = FlattenHierarchy(changes.Where(c => c.Parent is null));
 
         foreach (var projectChange in addedInOrder)
         {
-            if (removedProjectSet.Contains(projectChange.ProjectMark.Guid)) continue;
-
             var args = GetArgsForAddition(projectChange);
             if (args is null) continue;
 
             _scheduler.Queue(() => _model.ProjectHierarchyCache_add_Project(args));
         }
+    }
 
-        foreach (var projectChange in change.UpdatedProjects)
+    private void OnProjectsUpdated(IEnumerable<ProjectHostChange> changes)
+    {
+        if (_model is null || _scheduler is null) return;
+
+        foreach (var projectChange in changes)
         {
             var args = GetArgsForAddition(projectChange);
             if (args is null) continue;
