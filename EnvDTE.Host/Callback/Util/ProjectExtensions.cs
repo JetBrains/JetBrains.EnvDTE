@@ -123,6 +123,12 @@ public static class ProjectExtensions
             return string.Empty;
         }
 
+        if (project.IsWebProject())
+        {
+            // Website projects do not have a project file, so their unique name is the path to the project directory
+            return project.Location.FullPath;
+        }
+
         // Save the unique name to the project properties so we don't have to calculate it every time
         return project.GetOrCreateProperty(propertyWriteLifetime, UniqueNamePropertyKey, CalculateProjectUniqueName);
     }

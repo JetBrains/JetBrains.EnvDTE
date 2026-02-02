@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl.PropertyInfo;
 
-// TODO: Improve support for C++ project properties
+// TODO: Improve support for C++ project properties and Website project properties
 internal static partial class VisualStudioProperties
 {
     internal static readonly IReadOnlyDictionary<string, StringPropertyInfo> ProjectPropertiesMap =
