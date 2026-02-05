@@ -17,7 +17,7 @@
         <summary>JetBrains interop for Visual Studio</summary>
     </metadata>
     <files>
-        <file src="VisualStudio.Interop.Interfaces\bin\Release\net472\JetBrains.VisualStudio.Interop.Interfaces.dll" target="lib\net472"/>
+        <file src="VisualStudio.Interop.Interfaces\bin\Release\netstandard2.0\JetBrains.VisualStudio.Interop.Interfaces.dll" target="lib\netstandard2.0"/>
         <file src="Icons\JetBrains.EnvDTE.png" target=""/>
     </files>
 </package>
