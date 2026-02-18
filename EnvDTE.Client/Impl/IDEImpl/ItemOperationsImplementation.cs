@@ -10,31 +10,30 @@ public class ItemOperationsImplementation([NotNull] DteImplementation dte) : Ite
     public DTE DTE => dte;
     public DTE Parent => dte;
 
-    public Window OpenFile(string fileName, string viewKind = "{00000000-0000-0000-0000-000000000000}")
+    public Window OpenFile(string fileName, string viewKind = Constants.vsViewKindPrimary)
     {
         dte.DteProtocolModel.ItemOperations_open_File.Sync(new(Path.GetFullPath(fileName), viewKind));
         // TODO: Implement Window
         return null;
     }
 
-    public bool IsFileOpen(string fileName, string viewKind = "{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}") =>
+    public bool IsFileOpen(string fileName, string viewKind = Constants.vsViewKindAny) =>
         dte.DteProtocolModel.ItemOperations_isOpen_File.Sync(new(Path.GetFullPath(fileName), viewKind));
 
     #region NotImplemented
 
-    public vsPromptResult PromptToSave { get; }
+    public vsPromptResult PromptToSave => throw new NotImplementedException();
 
-    public Window NewFile(string Item = "General\\Text File", string Name = "",
-        string ViewKind = "{00000000-0000-0000-0000-000000000000}") =>
+    public Window NewFile(string item = "General\\Text File", string name = "", string viewKind = Constants.vsViewKindPrimary) =>
         throw new NotImplementedException();
 
-    public ProjectItem AddExistingItem(string FileName) =>
+    public ProjectItem AddExistingItem(string fileName) =>
         throw new NotImplementedException();
 
-    public ProjectItem AddNewItem(string Item = "General\\Text File", string Name = "") =>
+    public ProjectItem AddNewItem(string item = "General\\Text File", string name = "") =>
         throw new NotImplementedException();
 
-    public Window Navigate(string URL = "", vsNavigateOptions Options = vsNavigateOptions.vsNavigateOptionsDefault) =>
+    public Window Navigate(string url = "", vsNavigateOptions options = vsNavigateOptions.vsNavigateOptionsDefault) =>
         throw new NotImplementedException();
 
     #endregion

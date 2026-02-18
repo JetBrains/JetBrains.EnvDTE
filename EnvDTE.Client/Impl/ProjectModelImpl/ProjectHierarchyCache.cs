@@ -49,7 +49,8 @@ public class ProjectHierarchyCache
         {
             if (arg.ParentProject is null) continue;
 
-            _projectCache[arg.Project].parentProjectItemImplementation = new SolutionFolderProjectItemImplementation(_dte, arg.Project, _projectCache[arg.ParentProject]);
+            _projectCache[arg.Project].ParentProjectItemImplementation =
+                new SolutionFolderProjectItemImplementation(_dte, arg.Project, _projectCache[arg.ParentProject]);
         }
     }
 
@@ -60,7 +61,7 @@ public class ProjectHierarchyCache
             _projectCache[args.Project] = ImplementationUtil.GetProjectImplementation(_dte, args.Project, args.IsCPS);
 
             if (args.ParentProject is not null)
-                _projectCache[args.Project].parentProjectItemImplementation =
+                _projectCache[args.Project].ParentProjectItemImplementation =
                     new SolutionFolderProjectItemImplementation(_dte, args.Project, _projectCache[args.ParentProject]);
         }
     }
@@ -78,14 +79,14 @@ public class ProjectHierarchyCache
         lock (_lock)
         {
             var project = _projectCache[args.Project];
-            if (project.parentProjectItemImplementation?.ProjectItemModel.Equals(args.ParentProject) ?? args.ParentProject is null)
+            if (project.ParentProjectItemImplementation?.ProjectItemModel.Equals(args.ParentProject) ?? args.ParentProject is null)
                 return;
 
             ProjectItemImplementation newParentItem = null;
             if (args.ParentProject is not null)
                 newParentItem = new SolutionFolderProjectItemImplementation(_dte, args.Project, _projectCache[args.ParentProject]);
 
-            project.parentProjectItemImplementation = newParentItem;
+            project.ParentProjectItemImplementation = newParentItem;
         }
     }
 }

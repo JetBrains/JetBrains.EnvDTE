@@ -91,42 +91,42 @@ namespace JetBrains.EnvDTE.Client.Impl.AstImpl
             set => throw new NotImplementedException();
         }
 
-        object CodeFunction.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeElement2.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeElement2.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
+        object CodeFunction.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeElement2.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeElement2.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
 
-        public void RenameSymbol(string NewName)
+        public void RenameSymbol(string newName)
         {
             throw new NotImplementedException();
         }
 
-        object CodeElement2.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeElement.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeElement.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
-        object CodeElement.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeFunction2.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeFunction2.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
-        string CodeFunction2.get_Prototype(int Flags) => throw new NotImplementedException();
+        object CodeElement2.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeElement.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeElement.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
+        object CodeElement.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeFunction2.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeFunction2.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
+        string CodeFunction2.get_Prototype(int flags) => throw new NotImplementedException();
 
-        CodeParameter CodeFunction2.AddParameter(string Name, object Type, object Position) =>
+        CodeParameter CodeFunction2.AddParameter(string name, object type, object position) =>
             throw new NotImplementedException();
 
-        CodeAttribute CodeFunction2.AddAttribute(string Name, string Value, object Position) =>
+        CodeAttribute CodeFunction2.AddAttribute(string name, string value, object position) =>
             throw new NotImplementedException();
 
-        void CodeFunction2.RemoveParameter(object Element) => throw new NotImplementedException();
-        object CodeFunction2.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeFunction.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeFunction.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
-        string CodeFunction.get_Prototype(int Flags) => throw new NotImplementedException();
+        void CodeFunction2.RemoveParameter(object element) => throw new NotImplementedException();
+        object CodeFunction2.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeFunction.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeFunction.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
+        string CodeFunction.get_Prototype(int flags) => throw new NotImplementedException();
 
-        CodeParameter CodeFunction.AddParameter(string Name, object Type, object Position) =>
+        CodeParameter CodeFunction.AddParameter(string name, object type, object position) =>
             throw new NotImplementedException();
 
-        CodeAttribute CodeFunction.AddAttribute(string Name, string Value, object Position) =>
+        CodeAttribute CodeFunction.AddAttribute(string name, string value, object position) =>
             throw new NotImplementedException();
 
-        void CodeFunction.RemoveParameter(object Element) => throw new NotImplementedException();
+        void CodeFunction.RemoveParameter(object element) => throw new NotImplementedException();
         #endregion
     }
 }

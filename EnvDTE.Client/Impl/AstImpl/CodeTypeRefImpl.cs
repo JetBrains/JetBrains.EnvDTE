@@ -37,8 +37,8 @@ namespace JetBrains.EnvDTE.Client.Impl.AstImpl
 
         public bool IsGeneric => throw new NotImplementedException();
 
-        CodeTypeRef CodeTypeRef2.CreateArrayType(int Rank) => throw new NotImplementedException();
+        CodeTypeRef CodeTypeRef2.CreateArrayType(int rank) => throw new NotImplementedException();
 
-        CodeTypeRef CodeTypeRef.CreateArrayType(int Rank) => throw new NotImplementedException();
+        CodeTypeRef CodeTypeRef.CreateArrayType(int rank) => throw new NotImplementedException();
     }
 }

@@ -49,7 +49,7 @@ namespace JetBrains.EnvDTE.Client.Impl.AstImpl
             return Registrar.Convert(CodeElementModels[number], Parent);
         }
 
-        public void Reserved1(object Element) => throw new NotImplementedException();
-        public bool CreateUniqueID(string Prefix, string NewName = "0") => throw new NotImplementedException();
+        public void Reserved1(object element) => throw new NotImplementedException();
+        public bool CreateUniqueID(string prefix, string newName = "0") => throw new NotImplementedException();
     }
 }

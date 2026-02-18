@@ -1,6 +1,7 @@
 using JetBrains.EnvDTE.Client.Impl;
 using JetBrains.Rider.Model;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.VisualStudio.ProjectSystem;
 
 public sealed class ConfiguredProjectImpl(DteImplementation dte, ProjectItemModel project) : ConfiguredProject

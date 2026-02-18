@@ -77,17 +77,17 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         public ConfigurationManager ConfigurationManager => throw new NotImplementedException();
         public Document Document => throw new NotImplementedException();
         public string get_FileNames(short index) => throw new NotImplementedException();
-        public bool SaveAs(string NewFileName) => throw new NotImplementedException();
+        public bool SaveAs(string newFileName) => throw new NotImplementedException();
 
-        public bool get_IsOpen(string ViewKind = "{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}") =>
+        public bool get_IsOpen(string viewKind = Constants.vsViewKindAny) =>
             throw new NotImplementedException();
 
-        public Window Open(string ViewKind = "{00000000-0000-0000-0000-000000000000}") =>
+        public Window Open(string viewKind = Constants.vsViewKindPrimary) =>
             throw new NotImplementedException();
 
         public void ExpandView() => throw new NotImplementedException();
-        public object get_Extender(string ExtenderName) => throw new NotImplementedException();
-        public void Save(string FileName = "") => throw new NotImplementedException();
+        public object get_Extender(string extenderName) => throw new NotImplementedException();
+        public void Save(string fileName = "") => throw new NotImplementedException();
         public void Delete() => throw new NotImplementedException();
 
         #endregion NotImplemented

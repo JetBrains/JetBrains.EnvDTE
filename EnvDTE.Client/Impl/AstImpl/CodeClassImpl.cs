@@ -57,107 +57,107 @@ namespace JetBrains.EnvDTE.Client.Impl.AstImpl
             set => throw new NotImplementedException();
         }
 
-        object CodeClass.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeElement2.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeElement2.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
+        object CodeClass.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeElement2.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeElement2.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
 
-        public void RenameSymbol(string NewName)
+        public void RenameSymbol(string newName)
         {
             throw new NotImplementedException();
         }
 
-        object CodeElement2.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeElement.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeElement.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
-        object CodeElement.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeClass2.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeClass2.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
-        CodeElement CodeClass2.AddBase(object Base, object Position) => throw new NotImplementedException();
+        object CodeElement2.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeElement.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeElement.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
+        object CodeElement.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeClass2.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeClass2.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
+        CodeElement CodeClass2.AddBase(object @base, object position) => throw new NotImplementedException();
 
-        CodeAttribute CodeClass2.AddAttribute(string Name, string Value, object Position) =>
+        CodeAttribute CodeClass2.AddAttribute(string name, string value, object position) =>
             throw new NotImplementedException();
 
-        void CodeClass2.RemoveBase(object Element) => throw new NotImplementedException();
-        void CodeClass2.RemoveMember(object Element) => throw new NotImplementedException();
-        bool CodeClass2.get_IsDerivedFrom(string FullName) => throw new NotImplementedException();
+        void CodeClass2.RemoveBase(object element) => throw new NotImplementedException();
+        void CodeClass2.RemoveMember(object element) => throw new NotImplementedException();
+        bool CodeClass2.get_IsDerivedFrom(string fullName) => throw new NotImplementedException();
 
-        CodeInterface CodeClass2.AddImplementedInterface(object Base, object Position) =>
+        CodeInterface CodeClass2.AddImplementedInterface(object @base, object position) =>
             throw new NotImplementedException();
 
-        CodeFunction CodeClass2.AddFunction(string Name, vsCMFunction Kind, object Type, object Position,
-            vsCMAccess Access, object Location) =>
+        CodeFunction CodeClass2.AddFunction(string name, vsCMFunction kind, object type, object position,
+            vsCMAccess access, object location) =>
             throw new NotImplementedException();
 
-        CodeVariable CodeClass2.AddVariable(string Name, object Type, object Position,
-            vsCMAccess Access, object Location) =>
+        CodeVariable CodeClass2.AddVariable(string name, object type, object position,
+            vsCMAccess access, object location) =>
             throw new NotImplementedException();
 
-        CodeProperty CodeClass2.AddProperty(string GetterName, string PutterName, object Type, object Position,
-            vsCMAccess Access, object Location) =>
+        CodeProperty CodeClass2.AddProperty(string getterName, string putterName, object type, object position,
+            vsCMAccess access, object location) =>
             throw new NotImplementedException();
 
-        CodeClass CodeClass2.AddClass(string Name, object Position, object Bases, object ImplementedInterfaces,
-            vsCMAccess Access) =>
+        CodeClass CodeClass2.AddClass(string name, object position, object bases, object implementedInterfaces,
+            vsCMAccess access) =>
             throw new NotImplementedException();
 
-        CodeStruct CodeClass2.AddStruct(string Name, object Position, object Bases, object ImplementedInterfaces,
-            vsCMAccess Access) =>
+        CodeStruct CodeClass2.AddStruct(string name, object position, object bases, object implementedInterfaces,
+            vsCMAccess access) =>
             throw new NotImplementedException();
 
-        CodeEnum CodeClass2.AddEnum(string Name, object Position, object Bases, vsCMAccess Access) =>
+        CodeEnum CodeClass2.AddEnum(string name, object position, object bases, vsCMAccess access) =>
             throw new NotImplementedException();
 
-        CodeDelegate CodeClass2.AddDelegate(string Name, object Type, object Position, vsCMAccess Access) =>
+        CodeDelegate CodeClass2.AddDelegate(string name, object type, object position, vsCMAccess access) =>
             throw new NotImplementedException();
 
-        void CodeClass2.RemoveInterface(object Element) => throw new NotImplementedException();
+        void CodeClass2.RemoveInterface(object element) => throw new NotImplementedException();
 
-        public CodeEvent AddEvent(string Name, string FullDelegateName, bool CreatePropertyStyleEvent = false,
-            object Location = null,
-            vsCMAccess Access = vsCMAccess.vsCMAccessDefault) =>
+        public CodeEvent AddEvent(string name, string fullDelegateName, bool createPropertyStyleEvent = false,
+            object location = null,
+            vsCMAccess access = vsCMAccess.vsCMAccessDefault) =>
             throw new NotImplementedException();
 
-        object CodeClass2.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeClass.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeClass.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
-        CodeElement CodeClass.AddBase(object Base, object Position) => throw new NotImplementedException();
+        object CodeClass2.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeClass.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeClass.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
+        CodeElement CodeClass.AddBase(object @base, object position) => throw new NotImplementedException();
 
-        CodeAttribute CodeClass.AddAttribute(string Name, string Value, object Position) =>
+        CodeAttribute CodeClass.AddAttribute(string name, string value, object position) =>
             throw new NotImplementedException();
 
-        void CodeClass.RemoveBase(object Element) => throw new NotImplementedException();
-        void CodeClass.RemoveMember(object Element) => throw new NotImplementedException();
-        bool CodeClass.get_IsDerivedFrom(string FullName) => throw new NotImplementedException();
+        void CodeClass.RemoveBase(object element) => throw new NotImplementedException();
+        void CodeClass.RemoveMember(object element) => throw new NotImplementedException();
+        bool CodeClass.get_IsDerivedFrom(string fullName) => throw new NotImplementedException();
 
-        CodeInterface CodeClass.AddImplementedInterface(object Base, object Position) =>
+        CodeInterface CodeClass.AddImplementedInterface(object @base, object position) =>
             throw new NotImplementedException();
 
-        CodeFunction CodeClass.AddFunction(string Name, vsCMFunction Kind, object Type, object Position,
-            vsCMAccess Access, object Location) =>
+        CodeFunction CodeClass.AddFunction(string name, vsCMFunction kind, object type, object position,
+            vsCMAccess access, object location) =>
             throw new NotImplementedException();
 
-        CodeVariable CodeClass.AddVariable(string Name, object Type, object Position,
-            vsCMAccess Access, object Location) =>
+        CodeVariable CodeClass.AddVariable(string name, object type, object position,
+            vsCMAccess access, object location) =>
             throw new NotImplementedException();
 
-        CodeProperty CodeClass.AddProperty(string GetterName, string PutterName, object Type, object Position,
-            vsCMAccess Access, object Location) =>
+        CodeProperty CodeClass.AddProperty(string getterName, string putterName, object type, object position,
+            vsCMAccess access, object location) =>
             throw new NotImplementedException();
 
-        CodeClass CodeClass.AddClass(string Name, object Position, object Bases, object ImplementedInterfaces,
-            vsCMAccess Access) =>
+        CodeClass CodeClass.AddClass(string name, object position, object bases, object implementedInterfaces,
+            vsCMAccess access) =>
             throw new NotImplementedException();
 
-        CodeStruct CodeClass.AddStruct(string Name, object Position, object Bases, object ImplementedInterfaces,
-            vsCMAccess Access) =>
+        CodeStruct CodeClass.AddStruct(string name, object position, object bases, object implementedInterfaces,
+            vsCMAccess access) =>
             throw new NotImplementedException();
 
-        CodeEnum CodeClass.AddEnum(string Name, object Position, object Bases, vsCMAccess Access) =>
+        CodeEnum CodeClass.AddEnum(string name, object position, object bases, vsCMAccess access) =>
             throw new NotImplementedException();
 
-        CodeDelegate CodeClass.AddDelegate(string Name, object Type, object Position, vsCMAccess Access) =>
+        CodeDelegate CodeClass.AddDelegate(string name, object type, object position, vsCMAccess access) =>
             throw new NotImplementedException();
 
-        void CodeClass.RemoveInterface(object Element) => throw new NotImplementedException();
+        void CodeClass.RemoveInterface(object element) => throw new NotImplementedException();
     }
 }

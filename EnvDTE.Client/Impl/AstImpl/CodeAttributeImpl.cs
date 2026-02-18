@@ -40,24 +40,24 @@ namespace JetBrains.EnvDTE.Client.Impl.AstImpl
         }
 
         public CodeElements Arguments => throw new NotImplementedException();
-        object CodeAttribute.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeElement2.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeElement2.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
-        public void RenameSymbol(string NewName) => throw new NotImplementedException();
-        object CodeElement2.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeElement.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeElement.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
-        object CodeElement.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeAttribute2.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeAttribute2.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
+        object CodeAttribute.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeElement2.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeElement2.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
+        public void RenameSymbol(string newName) => throw new NotImplementedException();
+        object CodeElement2.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeElement.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeElement.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
+        object CodeElement.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeAttribute2.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeAttribute2.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
         void CodeAttribute2.Delete() => throw new NotImplementedException();
 
-        public CodeAttributeArgument AddArgument(string Value, object Name, object Position) =>
+        public CodeAttributeArgument AddArgument(string value, object name, object position) =>
             throw new NotImplementedException();
 
-        object CodeAttribute2.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeAttribute.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeAttribute.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
+        object CodeAttribute2.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeAttribute.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeAttribute.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
         void CodeAttribute.Delete() => throw new NotImplementedException();
     }
 }
