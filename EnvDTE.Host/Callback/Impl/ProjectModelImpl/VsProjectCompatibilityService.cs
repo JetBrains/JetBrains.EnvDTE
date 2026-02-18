@@ -76,7 +76,7 @@ public class VsProjectCompatibilityService(ILogger logger, Lifetime lifetime)
         var solutionDirPath = project.GetSolution().SolutionDirectory;
         var projectFilePath = project.ProjectFileLocation;
 
-        return projectFilePath.MakeRelativeTo(solutionDirPath).FullPath;
+        return projectFilePath.TryMakeRelativeTo(solutionDirPath).FullPath;
     }
 
     // Currently, there is no need to invalidate values for any of the existing properties.
