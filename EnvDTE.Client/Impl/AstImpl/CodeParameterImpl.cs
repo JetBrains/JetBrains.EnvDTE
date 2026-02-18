@@ -60,22 +60,22 @@ namespace JetBrains.EnvDTE.Client.Impl.AstImpl
             set => throw new NotImplementedException();
         }
 
-        object CodeParameter.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        public TextPoint GetStartPoint(vsCMPart Part = vsCMPart.vsCMPartWholeWithAttributes) => throw new NotImplementedException();
+        object CodeParameter.get_Extender(string extenderName) => throw new NotImplementedException();
+        public TextPoint GetStartPoint(vsCMPart part = vsCMPart.vsCMPartWholeWithAttributes) => throw new NotImplementedException();
 
-        public TextPoint GetEndPoint(vsCMPart Part = vsCMPart.vsCMPartWholeWithAttributes) => throw new NotImplementedException();
-        public object get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeParameter2.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeParameter2.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
+        public TextPoint GetEndPoint(vsCMPart part = vsCMPart.vsCMPartWholeWithAttributes) => throw new NotImplementedException();
+        public object get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeParameter2.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeParameter2.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
 
-        CodeAttribute CodeParameter2.AddAttribute(string Name, string Value, object Position) =>
+        CodeAttribute CodeParameter2.AddAttribute(string name, string value, object position) =>
             throw new NotImplementedException();
 
-        object CodeParameter2.get_Extender(string ExtenderName) => throw new NotImplementedException();
-        TextPoint CodeParameter.GetStartPoint(vsCMPart Part) => throw new NotImplementedException();
-        TextPoint CodeParameter.GetEndPoint(vsCMPart Part) => throw new NotImplementedException();
+        object CodeParameter2.get_Extender(string extenderName) => throw new NotImplementedException();
+        TextPoint CodeParameter.GetStartPoint(vsCMPart part) => throw new NotImplementedException();
+        TextPoint CodeParameter.GetEndPoint(vsCMPart part) => throw new NotImplementedException();
 
-        CodeAttribute CodeParameter.AddAttribute(string Name, string Value, object Position) =>
+        CodeAttribute CodeParameter.AddAttribute(string name, string value, object position) =>
             throw new NotImplementedException();
         #endregion
     }

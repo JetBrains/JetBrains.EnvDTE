@@ -63,17 +63,17 @@ namespace JetBrains.EnvDTE.Client.Impl
         }
 
         public Commands Commands => throw new NotImplementedException();
-        public object GetObject(string Name) => throw new NotImplementedException();
-        public Properties get_Properties(string Category, string Page) => throw new NotImplementedException();
+        public object GetObject(string name) => throw new NotImplementedException();
+        public Properties get_Properties(string category, string page) => throw new NotImplementedException();
         public SelectedItems SelectedItems => throw new NotImplementedException();
-        public Window OpenFile(string ViewKind, string FileName) => throw new NotImplementedException();
-        public bool get_IsOpenFile(string ViewKind, string FileName) => throw new NotImplementedException();
+        public Window OpenFile(string viewKind, string fileName) => throw new NotImplementedException();
+        public bool get_IsOpenFile(string viewKind, string fileName) => throw new NotImplementedException();
         public int LocaleID => throw new NotImplementedException();
         public WindowConfigurations WindowConfigurations => throw new NotImplementedException();
         public Documents Documents => throw new NotImplementedException();
         public Document ActiveDocument => throw new NotImplementedException();
 
-        public void ExecuteCommand(string CommandName, string CommandArgs = "") =>
+        public void ExecuteCommand(string commandName, string commandArgs = "") =>
             throw new NotImplementedException();
 
         public Globals Globals => throw new NotImplementedException();
@@ -89,8 +89,8 @@ namespace JetBrains.EnvDTE.Client.Impl
         public Find Find => throw new NotImplementedException();
 
         public wizardResult LaunchWizard(
-            string VSZFile,
-            ref object[] ContextParams
+            string vszFile,
+            ref object[] contextParams
         ) => throw new NotImplementedException();
 
         public UndoContext UndoContext => throw new NotImplementedException();
@@ -109,10 +109,10 @@ namespace JetBrains.EnvDTE.Client.Impl
         }
 
         public Debugger Debugger => throw new NotImplementedException();
-        public string SatelliteDllPath(string Path, string Name) => throw new NotImplementedException();
+        public string SatelliteDllPath(string path, string name) => throw new NotImplementedException();
         public string Edition => throw new NotImplementedException();
         public ToolWindows ToolWindows => throw new NotImplementedException();
-        public uint GetThemeColor(vsThemeColors Element) => throw new NotImplementedException();
+        public uint GetThemeColor(vsThemeColors element) => throw new NotImplementedException();
 
         #endregion
     }

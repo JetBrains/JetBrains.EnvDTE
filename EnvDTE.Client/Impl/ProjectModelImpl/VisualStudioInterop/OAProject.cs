@@ -4,6 +4,7 @@ using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl;
 using JetBrains.Rider.Model;
 using Microsoft.VisualStudio.ProjectSystem.Properties;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.Package.Automation;
 
 public class OAProject(

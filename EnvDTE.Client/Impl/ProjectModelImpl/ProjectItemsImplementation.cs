@@ -72,8 +72,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         protected virtual ProjectItemImplementation CreateProjectItem([NotNull] ProjectItemModel projectItemModel) =>
             new(dte, projectItemModel, containingProject);
 
-        internal ProjectItemImplementation Item(ProjectItemModel projectItemModel) => CreateProjectItem(projectItemModel);
-
         [CanBeNull]
         private ProjectItem AddExistingItem(
             [NotNull] string path,
@@ -90,7 +88,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 
         #region NotImplemented
 
-        public ProjectItem AddFromTemplate(string FileName, string Name) => throw new NotImplementedException();
+        public ProjectItem AddFromTemplate(string fileName, string name) => throw new NotImplementedException();
 
         #endregion
     }

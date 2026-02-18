@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using EnvDTE;
 using EnvDTE100;
 using EnvDTE80;
@@ -64,69 +63,69 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 
         #region NotImplemented
 
-        public void SaveAs(string FileName) => throw new NotImplementedException();
+        public void SaveAs(string fileName) => throw new NotImplementedException();
 
         public Project AddFromTemplate(
-            string FileName,
-            string Destination,
-            string ProjectName,
-            bool Exclusive = false
+            string fileName,
+            string destination,
+            string projectName,
+            bool exclusive = false
         ) => throw new NotImplementedException();
 
-        public Project AddFromFile(string FileName, bool Exclusive = false) =>
+        public Project AddFromFile(string fileName, bool exclusive = false) =>
             throw new NotImplementedException();
 
-        public void Open(string FileName) => throw new NotImplementedException();
-        public void Close(bool SaveFirst = false) => throw new NotImplementedException();
+        public void Open(string fileName) => throw new NotImplementedException();
+        public void Close(bool saveFirst = false) => throw new NotImplementedException();
         public bool IsDirty { get; set; }
         public void Remove(Project proj) => throw new NotImplementedException();
-        public string get_TemplatePath(string ProjectType) => throw new NotImplementedException();
+        public string get_TemplatePath(string projectType) => throw new NotImplementedException();
         public bool Saved { get; set; }
         public Globals Globals => throw new NotImplementedException();
         public AddIns AddIns => throw new NotImplementedException();
-        public object get_Extender(string ExtenderName) => throw new NotImplementedException();
+        public object get_Extender(string extenderName) => throw new NotImplementedException();
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
         public bool IsOpen => throw new NotImplementedException();
-        public void Create(string Destination, string Name) => throw new NotImplementedException();
-        public string ProjectItemsTemplatePath(string ProjectKind) => throw new NotImplementedException();
-        Project Solution2.AddSolutionFolder(string Name) => throw new NotImplementedException();
+        public void Create(string destination, string name) => throw new NotImplementedException();
+        public string ProjectItemsTemplatePath(string projectKind) => throw new NotImplementedException();
+        Project Solution2.AddSolutionFolder(string name) => throw new NotImplementedException();
 
-        string Solution2.GetProjectTemplate(string TemplateName, string Language) =>
+        string Solution2.GetProjectTemplate(string templateName, string language) =>
             throw new NotImplementedException();
 
-        string Solution2.GetProjectItemTemplate(string TemplateName, string Language) =>
+        string Solution2.GetProjectItemTemplate(string templateName, string language) =>
             throw new NotImplementedException();
 
-        Project Solution3.AddSolutionFolder(string Name) => throw new NotImplementedException();
+        Project Solution3.AddSolutionFolder(string name) => throw new NotImplementedException();
 
-        string Solution3.GetProjectTemplate(string TemplateName, string Language) =>
+        string Solution3.GetProjectTemplate(string templateName, string language) =>
             throw new NotImplementedException();
 
-        string Solution3.GetProjectItemTemplate(string TemplateName, string Language) =>
+        string Solution3.GetProjectItemTemplate(string templateName, string language) =>
             throw new NotImplementedException();
 
-        Templates Solution3.GetProjectItemTemplates(string Language, string CustomDataSignature) =>
+        Templates Solution3.GetProjectItemTemplates(string language, string customDataSignature) =>
             throw new NotImplementedException();
 
-        Project Solution4.AddSolutionFolder(string Name) => throw new NotImplementedException();
+        Project Solution4.AddSolutionFolder(string name) => throw new NotImplementedException();
 
-        string Solution4.GetProjectTemplate(string TemplateName, string Language) =>
+        string Solution4.GetProjectTemplate(string templateName, string language) =>
             throw new NotImplementedException();
 
-        string Solution4.GetProjectItemTemplate(string TemplateName, string Language) =>
+        string Solution4.GetProjectItemTemplate(string templateName, string language) =>
             throw new NotImplementedException();
 
-        Templates Solution4.GetProjectItemTemplates(string Language, string CustomDataSignature) =>
+        Templates Solution4.GetProjectItemTemplates(string language, string customDataSignature) =>
             throw new NotImplementedException();
 
         public Project AddFromTemplateEx(
-            string FileName,
-            string Destination,
-            string ProjectName,
-            string SolutionName,
-            bool Exclusive = true,
-            uint Options = 0
+            string fileName,
+            string destination,
+            string projectName,
+            string solutionName,
+            bool exclusive = true,
+            uint options = 0
         ) => throw new NotImplementedException();
 
         #endregion

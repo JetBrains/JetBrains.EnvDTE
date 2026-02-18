@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.ConfigurationImpl;
 using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
-using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
 namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
@@ -18,7 +16,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         [CanBeNull] private ProjectPropertiesImplementation _properties;
         private readonly DteImplementation _dte = dte;
 
-        [CanBeNull] internal ProjectItemImplementation parentProjectItemImplementation = parentProjectItem;
+        [CanBeNull] internal ProjectItemImplementation ParentProjectItemImplementation = parentProjectItem;
 
         public string Name
         {
@@ -44,7 +42,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 
         public void Delete() => _dte.DteProtocolModel.Project_Delete.Sync(new(projectModel));
 
-        [CanBeNull] public ProjectItem ParentProjectItem => parentProjectItemImplementation;
+        [CanBeNull] public ProjectItem ParentProjectItem => ParentProjectItemImplementation;
 
         public Properties Properties
         {
@@ -81,9 +79,9 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
 
         public Globals Globals => throw new NotImplementedException();
         public CodeModel CodeModel => throw new NotImplementedException();
-        public void SaveAs(string NewFileName) => throw new NotImplementedException();
-        public object get_Extender(string ExtenderName) => throw new NotImplementedException();
-        public void Save(string FileName = "") => throw new NotImplementedException();
+        public void SaveAs(string newFileName) => throw new NotImplementedException();
+        public object get_Extender(string extenderName) => throw new NotImplementedException();
+        public void Save(string fileName = "") => throw new NotImplementedException();
 
         #endregion
     }

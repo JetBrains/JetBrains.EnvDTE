@@ -44,30 +44,30 @@ namespace JetBrains.EnvDTE.Client.Impl.AstImpl
         }
 
         public CodeElements DerivedTypes => throw new System.NotImplementedException();
-        public object get_Extender(string ExtenderName) => throw new System.NotImplementedException();
+        public object get_Extender(string extenderName) => throw new System.NotImplementedException();
 
-        public TextPoint GetStartPoint(vsCMPart Part = vsCMPart.vsCMPartWholeWithAttributes) =>
+        public TextPoint GetStartPoint(vsCMPart part = vsCMPart.vsCMPartWholeWithAttributes) =>
             throw new System.NotImplementedException();
 
-        public TextPoint GetEndPoint(vsCMPart Part = vsCMPart.vsCMPartWholeWithAttributes) =>
+        public TextPoint GetEndPoint(vsCMPart part = vsCMPart.vsCMPartWholeWithAttributes) =>
             throw new System.NotImplementedException();
 
-        public CodeElement AddBase(object Base, object Position) => throw new System.NotImplementedException();
+        public CodeElement AddBase(object @base, object position) => throw new System.NotImplementedException();
 
-        public CodeAttribute AddAttribute(string Name, string Value, object Position) =>
+        public CodeAttribute AddAttribute(string name, string value, object position) =>
             throw new System.NotImplementedException();
 
-        public void RemoveBase(object Element)
+        public void RemoveBase(object element)
         {
             throw new System.NotImplementedException();
         }
 
-        public void RemoveMember(object Element)
+        public void RemoveMember(object element)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool get_IsDerivedFrom(string FullName) => throw new System.NotImplementedException();
+        public bool get_IsDerivedFrom(string fullName) => throw new System.NotImplementedException();
 
         [NotNull]
         public CodeNamespace Namespace => (CodeNamespace) EnvDTEElementRegistrar.Convert(

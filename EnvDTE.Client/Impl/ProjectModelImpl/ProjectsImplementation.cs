@@ -32,8 +32,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             return CreateProject(ProjectModels[i]);
         }
 
-        internal ProjectImplementation Item(ProjectItemModel projectModel) => CreateProject(projectModel);
-
         private ProjectImplementation CreateProject(ProjectItemModel projectModel) =>
             ImplementationUtil.GetProjectImplementation(dte, projectModel);
 
