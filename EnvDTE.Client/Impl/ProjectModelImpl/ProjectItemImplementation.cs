@@ -2,6 +2,7 @@ using System;
 using EnvDTE;
 using JetBrains.Annotations;
 using JetBrains.EnvDTE.Client.Impl.AstImpl;
+using JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
 using JetBrains.EnvDTE.Client.Util;
 using JetBrains.Rider.Model;
 
@@ -13,6 +14,7 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         [NotNull] ProjectImplementation containingProject)
         : ProjectItem
     {
+        [CanBeNull] private ProjectItemPropertiesImplementation _properties;
         protected DteImplementation DteImplementation => dte;
         internal ProjectItemModel ProjectItemModel => projectItemModel;
 
@@ -54,6 +56,15 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         public virtual Project SubProject => null;
         public Project ContainingProject => containingProject;
 
+        public Properties Properties
+        {
+            get
+            {
+                _properties ??= new ProjectItemPropertiesImplementation(dte, this, projectItemModel);
+                return _properties;
+            }
+        }
+
         public void Remove() => dte.DteProtocolModel.ProjectItem_remove.Sync(new(projectItemModel));
 
         #region NotImplemented
@@ -64,7 +75,6 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
             set => throw new NotImplementedException();
         }
 
-        public Properties Properties => throw new NotImplementedException();
         public object ExtenderNames => throw new NotImplementedException();
         public string ExtenderCATID => throw new NotImplementedException();
 

@@ -206,6 +206,13 @@ object DteProtocolModel : Ext(DteRoot) {
         call("ProjectItem_get_SubItemIndex", structdef("ProjectItem_getSubItemIndexRequest") extends projectItemRequest {
             field("name", string)
         }, int.nullable)
+        call("ProjectItem_get_Property", structdef("ProjectItem_get_PropertyRequest") extends projectItemRequest {
+            field("name", string)
+        }, string.nullable)
+        call("ProjectItem_set_Property", structdef("ProjectItem_set_PropertyRequest") extends projectItemRequest {
+            field("name", string)
+            field("value", string.nullable)
+        }, void)
     }
 
     private fun createFileCodeModelCallbacks() {

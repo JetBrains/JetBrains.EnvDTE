@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
 using JetBrains.Collections.Viewable;
+using JetBrains.Core;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.ProjectModel;
@@ -84,6 +85,15 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 var index =  itemNames.IndexOf(req.Name, StringComparer.OrdinalIgnoreCase);
                 return index == -1 ? null : index;
             });
+
+            // TODO: Implement fully
+            model.ProjectItem_get_Property.SetWithProjectItemSync(host, (request, item) => request.Name switch
+            {
+                "FullPath" => item.Location.FullPath,
+                _ => null
+            });
+
+            model.ProjectItem_set_Property.SetWithProjectItemSync(host, (request, item) => Unit.Instance);
         }
 
         private IEnumerable<IProjectItem> GetFilteredProjectItems(IProjectItem projectItem)

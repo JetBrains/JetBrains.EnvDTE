@@ -43,6 +43,16 @@ namespace JetBrains.EnvDTE.Host.Callback.Util
                 return await func(lifetime, req, projectItem);
             });
 
+        public static void SetWithProjectItemSync<TReq, TRes>(
+            this IRdEndpoint<TReq, TRes> endpoint,
+            ProjectModelViewHost host,
+            Func<TReq, IProjectItem, TRes> func) where TReq : ProjectItemRequest =>
+            endpoint.SetSync(req =>
+            {
+                var projectItem = GetProjectItemOrThrow<TReq, IProjectItem>(host, req);
+                return func(req, projectItem);
+            });
+
         public static void SetWithProjectFolderAsync<TReq, TRes>(
             this IRdEndpoint<TReq, TRes> endpoint,
             ProjectModelViewHost host,
