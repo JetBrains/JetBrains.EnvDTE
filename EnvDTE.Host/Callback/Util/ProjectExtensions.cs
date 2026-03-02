@@ -125,4 +125,7 @@ public static class ProjectExtensions
     [PublicAPI]
     public static List<int> GetProjectPath([NotNull] this IProject project, ProjectModelViewHost viewHost) =>
         project.GetPathChain().Select(viewHost.GetIdByItem).Reverse().ToList();
+
+    internal static string GetProjectFullPath([NotNull] this IProject project) =>
+        project.ProjectFileLocation.IsEmpty ? project.Location.FullPath : project.ProjectFileLocation.FullPath;
 }

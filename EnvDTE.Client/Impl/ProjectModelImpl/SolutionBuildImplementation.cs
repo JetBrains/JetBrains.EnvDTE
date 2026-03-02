@@ -48,6 +48,12 @@ public class SolutionBuildImplementation(
     public void Build(bool waitForBuildToFinish) => BuildInternal(waitForBuildToFinish, RdBuildSessionTarget.Build);
     public void Clean(bool waitForCleanToFinish) => BuildInternal(waitForCleanToFinish, RdBuildSessionTarget.Clean);
 
+    public void BuildProject(string solutionConfiguration, string projectUniqueName, bool waitForBuildToFinish) =>
+        dte.DteProtocolModel.Solution_build_Project
+            .Start(dte.DteLifetime, new(solutionConfiguration, projectUniqueName, waitForBuildToFinish))
+            .GetAwaiter()
+            .GetResult();
+
     private void BuildInternal(bool waitForBuildToFinish, RdBuildSessionTarget target) => dte.DteProtocolModel.Solution_build
         .Start(dte.DteLifetime, new(waitForBuildToFinish, target))
         .GetAwaiter()
@@ -69,9 +75,6 @@ public class SolutionBuildImplementation(
     public void Debug() => throw new NotImplementedException();
     public void Deploy(bool waitForDeployToFinish) => throw new NotImplementedException();
     public void Run() => throw new NotImplementedException();
-
-    public void BuildProject(string solutionConfiguration, string projectUniqueName, bool waitForBuildToFinish) =>
-        throw new NotImplementedException();
 
     public void Publish(bool waitForPublishToFinish = false) => throw new NotImplementedException();
 

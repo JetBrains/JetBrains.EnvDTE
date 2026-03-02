@@ -92,6 +92,30 @@ public static class SolutionExtensions
         activeConfigurationManager.ActiveConfigurationAndPlatform.SetValue(configuration);
     }
 
+    [CanBeNull]
+    public static SolutionConfigurationAndPlatform GetConfiguration([NotNull] this ISolution solution, [NotNull] string value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return null;
+
+        var solutionMark = solution.GetSolutionMark();
+        if (solutionMark is null) return null;
+
+        var parts = value.Split('|');
+        if (parts.Length == 1)
+            // If the platform is not specified, use the first configuration
+            return solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms
+                .FirstOrDefault(cp => cp.Configuration.Equals(parts[0], StringComparison.OrdinalIgnoreCase));
+
+        if (parts.Length == 2 && !string.IsNullOrWhiteSpace(parts[0]) && !string.IsNullOrWhiteSpace(parts[1]))
+        {
+            var config = new SolutionConfigurationAndPlatform(parts[0], parts[1]);
+            return solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms
+                .SingleOrDefault(cp => cp.Equals(config));
+        }
+
+        return null;
+    }
+
     public static void SetActiveConfigurationAndPlatform([NotNull] this ISolution solution, [CanBeNull] string value)
     {
         if (string.IsNullOrWhiteSpace(value))

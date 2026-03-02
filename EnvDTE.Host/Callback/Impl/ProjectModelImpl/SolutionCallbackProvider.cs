@@ -14,6 +14,7 @@ using JetBrains.Platform.RdFramework.Impl;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Features.SolutionBuilders;
 using JetBrains.ProjectModel.Features.SolutionBuilders.Prototype.Services.Execution;
+using JetBrains.ProjectModel.MSBuild;
 using JetBrains.ProjectModel.SolutionStructure.SolutionConfigurations;
 using JetBrains.Rd.Tasks;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
@@ -154,7 +155,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             });
 
             model.Solution_get_StartupProjects.SetSync(_ =>
-                _startupProjects.Select(p => vsCompatibilityService.GetVSUniqueName(p)).ToList());
+                _startupProjects.Select(vsCompatibilityService.GetVSUniqueName).ToList());
 
             model.Solution_build.SetSync((lifetime, req) =>
             {
@@ -163,13 +164,36 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                     [],
                     SolutionBuilderRequestSilentMode.Default);
 
-                componentLifetime.OnTermination(() => request.Abort());
-                builder.ExecuteBuildRequest(request);
-
-                if (req.WaitForBuild)
-                    request.State.WaitForValue(lifetime, state => state.HasFlag(BuildRunState.Completed));
-
+                ExecuteBuildRequest(request, req.WaitForBuild, lifetime);
                 return Unit.Instance;
+            });
+
+            model.Solution_build_Project.SetVoidAsync(async (lifetime, req) =>
+            {
+                var configuration = solution.GetConfiguration(req.ConfigurationName);
+                if (configuration is null)
+                    throw new ArgumentException($"Invalid solution configuration: {req.ConfigurationName}", nameof(req.ConfigurationName));
+
+                var project = await lifetime.StartReadActionAsync(() =>
+                    solution.GetAllProjects().FirstOrDefault(p =>
+                        Equals(vsCompatibilityService.GetVSUniqueName(p), req.UniqueProjectName) ||
+                        Equals(p.GetProjectFullPath(), req.UniqueProjectName)));
+                if (project is null)
+                    throw new ArgumentException($"Invalid project: {req.UniqueProjectName}", nameof(req.UniqueProjectName));
+
+                var buildRequest = builder.CreateBuildRequest(
+                    BuildSessionTarget.Build,
+                    [project],
+                    SolutionBuilderRequestSilentMode.Default,
+                    new SolutionBuilderRequestAdvancedSettings
+                    {
+                        // TODO: This doesn't work for ReSharper build
+                        InputProperties = [
+                            new InputProperty(MSBuildProjectUtil.ConfigurationProperty, configuration.Configuration),
+                            new InputProperty(MSBuildProjectUtil.PlatformProperty, configuration.Platform)
+                        ]
+                    });
+                ExecuteBuildRequest(buildRequest, req.WaitForBuild, lifetime);
             });
 
             model.Solution_get_BuildState.SetSync(_ =>
@@ -236,6 +260,17 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         // the client side, I'm not going to do it now.
         private IEnumerable<IProject> GetFilteredProjects() => solution.GetTopLevelProjects()
             .Where(p => p.IsProjectFromUserView() || p.IsSolutionFolder());
+
+        private void ExecuteBuildRequest(SolutionBuilderRequest request, bool waitForBuild, Lifetime lifetime)
+        {
+            componentLifetime.OnTermination(request.Abort);
+            // TODO: Abort on lifetime as well if waitForBuild is set
+
+            builder.ExecuteBuildRequest(request);
+
+            if (waitForBuild)
+                request.State.WaitForValue(lifetime, state => state.HasFlag(BuildRunState.Completed));
+        }
 
         private class FindProjectItemVisitor(string name) : RecursiveProjectVisitor
         {

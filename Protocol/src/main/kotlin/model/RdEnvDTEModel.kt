@@ -148,6 +148,11 @@ object DteProtocolModel : Ext(DteRoot) {
                 +"Clean"
             })
         }, void)
+        call("Solution_build_Project", structdef("Solution_buildProjectRequest") {
+            field("configurationName", string)
+            field("uniqueProjectName", string)
+            field("waitForBuild", bool)
+        }, void)
         call("Solution_get_ConfigurationCount", void, int)
         call("Solution_get_ActiveConfiguration", void, rdSolutionConfiguration.nullable)
         call("Solution_set_ActiveConfiguration", rdSolutionConfiguration, void)

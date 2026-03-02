@@ -32,6 +32,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                 lifetime.StartReadActionAsync(() =>
                     solution.InvokeUnderTransaction(cookie => cookie.Rename(project, req.NewName))));
 
+            // TODO: Use project extension
             model.Project_get_FileName.SetWithProjectSync(host, (_, project) =>
                 project.IsWebProject() ? project.Location.FullPath : project.ProjectFileLocation.FullPath);
 
