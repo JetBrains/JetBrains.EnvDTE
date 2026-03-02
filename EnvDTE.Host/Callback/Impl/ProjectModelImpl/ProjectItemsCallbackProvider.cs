@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
 using JetBrains.Collections.Viewable;
@@ -22,14 +23,15 @@ public class ProjectItemsCallbackProvider(
     ILogger logger,
     ISolution solution,
     ProjectModelViewHost host,
-    ISimpleLazy<IProjectModelEditor> projectModelEditor) : IEnvDteCallbackProvider
+    ISimpleLazy<IProjectModelEditor> projectModelEditor
+    ) : IEnvDteCallbackProvider
 {
     public void RegisterCallbacks(DteProtocolModel model, IScheduler scheduler)
     {
         model.ProjectItems_addFolder.SetWithProjectFolderAsync(host, AddFolderAsync);
         model.ProjectItems_addFromFile.SetWithProjectFolderAsync(host, (lifetime, request, projectFolder) =>
             AddExistingItemAsync(lifetime, request, projectFolder));
-        model.ProjectItems_addFromDirectory.SetWithProjectFolderAsync(host, (lifetime, request , projectFolder) =>
+        model.ProjectItems_addFromDirectory.SetWithProjectFolderAsync(host, (lifetime, request, projectFolder) =>
             AddExistingItemAsync(lifetime, request, projectFolder, copyBeforeAdd: true));
         model.ProjectItems_addFromFileCopy.SetWithProjectFolderAsync(host, (lifetime, request, projectFolder) =>
             AddExistingItemAsync(lifetime, request, projectFolder, copyBeforeAdd: true));
@@ -46,6 +48,29 @@ public class ProjectItemsCallbackProvider(
         return result is null
             ? null
             : new ProjectItemModel(host.GetIdByItem(result));
+    }
+
+    [CanBeNull]
+    private string GetDependsUponFileName(VirtualFileSystemPath filePath)
+    {
+        var fileName = filePath.Name;
+        var nameWithoutExt = filePath.NameWithoutExtension;
+
+        foreach (var codeExt in new[] { ".cs", ".vb", ".fs" })
+        {
+            string baseName;
+            if (fileName.EndsWith(".Designer" + codeExt, StringComparison.OrdinalIgnoreCase))
+                baseName = nameWithoutExt.Substring(0, nameWithoutExt.Length - ".Designer".Length);
+            else if (filePath.ExtensionNoDot.Equals("resx", StringComparison.OrdinalIgnoreCase))
+                baseName = nameWithoutExt;
+            else
+                continue;
+
+            var codeFile = filePath.Parent / (baseName + codeExt);
+            if (codeFile.ExistsFile) return baseName + codeExt;
+        }
+
+        return null;
     }
 
     private async Task<ProjectItemModel> AddExistingItemAsync(
@@ -83,10 +108,8 @@ public class ProjectItemsCallbackProvider(
 
         logger.Trace($"Adding existing item from '{sourcePath}' to '{parentFolder.Location}'");
 
-        // Based on `JetBrains.RdBackend.Common.Features.ProjectModel.View.ProjectModelTaskHandler.AddItemsHandler`
         IProjectItem result = null;
         await lifetime.StartMainWrite(() =>
-            // TODO: Maybe ordering context is necessary
             solution.InvokeUnderTransaction(cookie =>
             {
                 AddItemTaskAction action;
@@ -96,6 +119,13 @@ public class ProjectItemsCallbackProvider(
                     action = new AddItemPreserveDirectoriesTaskAction(lifetime, cookie, parentFolder, sourcePath);
                 else
                     action = new AddItemAsLinkTaskAction(lifetime, cookie, parentFolder, sourcePath);
+
+                // This is a hack needed because Rider doesn't set the necessary 'DependentUpon' metadata for resource and Designer files created under code files.
+                // EF6 generates the resource files next to migration files, and they have to be properly placed for 'Update-Database' to work.
+                // TODO: Figure out if there's any better way to handle this
+                var dependsUponName = GetDependsUponFileName(sourcePath);
+                if (dependsUponName != null)
+                    action.Parameters.SetDependentUpon(dependsUponName);
 
                 result = action.Execute();
             }));
