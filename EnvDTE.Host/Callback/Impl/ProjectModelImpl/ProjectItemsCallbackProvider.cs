@@ -1,16 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
 using JetBrains.Collections.Viewable;
+using JetBrains.DataFlow;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.DocumentManagers.Transactions.ProjectHostActions.Modifications;
 using JetBrains.EnvDTE.Host.Callback.Util;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
+using JetBrains.ProjectModel.ProjectImplementation.Structure;
 using JetBrains.RdBackend.Common.Features.ProjectModel;
+using JetBrains.RdBackend.Common.Features.ProjectModel.FileNesting;
 using JetBrains.RdBackend.Common.Features.ProjectModel.View;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Rider.Model;
@@ -19,58 +24,105 @@ using JetBrains.Util;
 namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl;
 
 [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
-public class ProjectItemsCallbackProvider(
-    ILogger logger,
-    ISolution solution,
-    ProjectModelViewHost host,
-    ISimpleLazy<IProjectModelEditor> projectModelEditor
-    ) : IEnvDteCallbackProvider
+public class ProjectItemsCallbackProvider : IEnvDteCallbackProvider
 {
+    private readonly StringSuffixTree<HashSet<string>> _customNestingRules;
+    [CanBeNull] private StringSuffixTree<HashSet<string>> _riderNestingRules;
+
+    private readonly ILogger _logger;
+    private readonly ISolution _solution;
+    private readonly ProjectModelViewHost _host;
+    private readonly ISimpleLazy<IProjectModelEditor> _projectModelEditor;
+
+    public ProjectItemsCallbackProvider(
+        Lifetime lifetime,
+        ILogger logger,
+        ISolution solution,
+        ProjectModelViewHost host,
+        ISimpleLazy<IProjectModelEditor> projectModelEditor,
+        FileNestingHost fileNestingHost)
+    {
+        _logger = logger;
+        _solution = solution;
+        _host = host;
+        _projectModelEditor = projectModelEditor;
+
+        // Even though we do have Rider's nesting rules, the default set of rules is missing a rule that puts 'resx' files under code files.
+        // This rule is really important for EF6, which generates resource files for migrations, and 'Update-Database' won't work
+        // unless that file is nested properly under the code file (has a 'DependentUpon' metadata set).
+        _customNestingRules = CreateNestingRules(
+            (".resx", ".cs"),
+            (".resx", ".vb"),
+            (".resx", ".fs")
+        );
+        fileNestingHost.Rules.Change.Advise_HasNew(lifetime, x => _riderNestingRules = x.New);
+    }
+
     public void RegisterCallbacks(DteProtocolModel model, IScheduler scheduler)
     {
-        model.ProjectItems_addFolder.SetWithProjectFolderAsync(host, AddFolderAsync);
-        model.ProjectItems_addFromFile.SetWithProjectFolderAsync(host, (lifetime, request, projectFolder) =>
+        model.ProjectItems_addFolder.SetWithProjectFolderAsync(_host, AddFolderAsync);
+        model.ProjectItems_addFromFile.SetWithProjectFolderAsync(_host, (lifetime, request, projectFolder) =>
             AddExistingItemAsync(lifetime, request, projectFolder));
-        model.ProjectItems_addFromDirectory.SetWithProjectFolderAsync(host, (lifetime, request, projectFolder) =>
+        model.ProjectItems_addFromDirectory.SetWithProjectFolderAsync(_host, (lifetime, request, projectFolder) =>
             AddExistingItemAsync(lifetime, request, projectFolder, copyBeforeAdd: true));
-        model.ProjectItems_addFromFileCopy.SetWithProjectFolderAsync(host, (lifetime, request, projectFolder) =>
+        model.ProjectItems_addFromFileCopy.SetWithProjectFolderAsync(_host, (lifetime, request, projectFolder) =>
             AddExistingItemAsync(lifetime, request, projectFolder, copyBeforeAdd: true));
     }
 
     private async Task<ProjectItemModel> AddFolderAsync(Lifetime lifetime, ProjectItems_addFolderRequest request,
         IProjectFolder parentFolder)
     {
-        logger.Trace($"Adding folder '{request.Name}' to '{parentFolder.Location}'");
+        _logger.Trace($"Adding folder '{request.Name}' to '{parentFolder.Location}'");
 
         var result = await lifetime.StartMainWrite(() =>
-            projectModelEditor.Value.AddFolder(parentFolder, request.Name));
+            _projectModelEditor.Value.AddFolder(parentFolder, request.Name));
 
         return result is null
             ? null
-            : new ProjectItemModel(host.GetIdByItem(result));
+            : new ProjectItemModel(_host.GetIdByItem(result));
     }
 
     [CanBeNull]
     private string GetDependsUponFileName(VirtualFileSystemPath filePath)
     {
         var fileName = filePath.Name;
-        var nameWithoutExt = filePath.NameWithoutExtension;
+        var parentPath = filePath.Parent;
 
-        foreach (var codeExt in new[] { ".cs", ".vb", ".fs" })
+        var result =
+            GetDependsUponFileNameBasedOnRules(_customNestingRules) ??
+            GetDependsUponFileNameBasedOnRules(_riderNestingRules);
+
+        _logger.Trace($"GetDependsUponFileName: {parentPath}, found: {result.QuoteIfNeeded()}");
+
+        return result;
+
+        string GetDependsUponFileNameBasedOnRules([CanBeNull] StringSuffixTree<HashSet<string>> nestingRules)
         {
-            string baseName;
-            if (fileName.EndsWith(".Designer" + codeExt, StringComparison.OrdinalIgnoreCase))
-                baseName = nameWithoutExt.Substring(0, nameWithoutExt.Length - ".Designer".Length);
-            else if (filePath.ExtensionNoDot.Equals("resx", StringComparison.OrdinalIgnoreCase))
-                baseName = nameWithoutExt;
-            else
-                continue;
+            var suffixData = nestingRules?.FindLongestSuffix(fileName);
+            if (suffixData is null) return null;
 
-            var codeFile = filePath.Parent / (baseName + codeExt);
-            if (codeFile.ExistsFile) return baseName + codeExt;
+            var baseName = fileName.Substring(0, fileName.Length - suffixData.Value.SuffixLength);
+            foreach (var parentSuffix in suffixData.Value.Data)
+            {
+                var dependsUponFiles = parentPath / (baseName + parentSuffix);
+
+                if (dependsUponFiles.ExistsFile)
+                    return dependsUponFiles.Name;
+            }
+
+            return null;
+        }
+    }
+
+    private StringSuffixTree<HashSet<string>> CreateNestingRules(params (string Suffix, string NestUnderSuffix)[] rules)
+    {
+        var result = new StringSuffixTree<HashSet<string>>();
+        foreach (var group in rules.GroupBy(x => x.Suffix))
+        {
+            result.Add(group.Key, group.Select(x => x.NestUnderSuffix).ToHashSet());
         }
 
-        return null;
+        return result;
     }
 
     private async Task<ProjectItemModel> AddExistingItemAsync(
@@ -91,7 +143,7 @@ public class ProjectItemsCallbackProvider(
         if (copyBeforeAdd)
         {
             var destinationPath = parentFolder.Location / sourcePath.Name;
-            logger.Trace($"Copying {sourcePath} to {destinationPath}");
+            _logger.Trace($"Copying {sourcePath} to {destinationPath}");
 
             try
             {
@@ -99,18 +151,18 @@ public class ProjectItemsCallbackProvider(
             }
             catch (Exception e)
             {
-                logger.Error(e, $"Failed to copy {sourcePath} to {destinationPath}");
+                _logger.Error(e, $"Failed to copy {sourcePath} to {destinationPath}");
                 throw new IOException("Failed to copy the item");
             }
 
             sourcePath = destinationPath;
         }
 
-        logger.Trace($"Adding existing item from '{sourcePath}' to '{parentFolder.Location}'");
+        _logger.Trace($"Adding existing item from '{sourcePath}' to '{parentFolder.Location}'");
 
         IProjectItem result = null;
         await lifetime.StartMainWrite(() =>
-            solution.InvokeUnderTransaction(cookie =>
+            _solution.InvokeUnderTransaction(cookie =>
             {
                 AddItemTaskAction action;
                 if (parentFolder.IsSolutionFolder())
@@ -120,11 +172,9 @@ public class ProjectItemsCallbackProvider(
                 else
                     action = new AddItemAsLinkTaskAction(lifetime, cookie, parentFolder, sourcePath);
 
-                // This is a hack needed because Rider doesn't set the necessary 'DependentUpon' metadata for resource and Designer files created under code files.
-                // EF6 generates the resource files next to migration files, and they have to be properly placed for 'Update-Database' to work.
-                // TODO: Figure out if there's any better way to handle this
+                // We are not using `IDependsUponProvider` because it requires an already existing `IProjectFile`
                 var dependsUponName = GetDependsUponFileName(sourcePath);
-                if (dependsUponName != null)
+                if (dependsUponName is not null)
                     action.Parameters.SetDependentUpon(dependsUponName);
 
                 result = action.Execute();
@@ -132,6 +182,6 @@ public class ProjectItemsCallbackProvider(
 
         return result is null
             ? null
-            : new ProjectItemModel(host.GetIdByItem(result));
+            : new ProjectItemModel(_host.GetIdByItem(result));
     }
 }
