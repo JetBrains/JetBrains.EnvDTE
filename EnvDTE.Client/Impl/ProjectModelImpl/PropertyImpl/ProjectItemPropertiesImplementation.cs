@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
 using JetBrains.Annotations;
@@ -12,14 +13,17 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl.PropertyImpl;
 public class ProjectItemPropertiesImplementation(
     [NotNull] DteImplementation dte,
     [NotNull] object parent,
-    [NotNull] ProjectItemModel projectItemModel)
+    [NotNull] ProjectItemModel projectItemModel,
+    ProjectItemKindModel itemKind)
     : PropertiesImplementation(dte, parent)
 {
-    public override int Count => VisualStudioProperties.ProjectItemPropertiesMap.Count;
+    private IReadOnlyDictionary<string, StringPropertyInfo> PropertyMap => VisualStudioProperties.GetItemKindSpecificMap(itemKind);
+
+    public override int Count => PropertyMap.Count;
 
     public override Property Item(object index)
     {
-        var map = VisualStudioProperties.ProjectItemPropertiesMap;
+        var map = PropertyMap;
 
         if (index is int intIndex)
         {
@@ -28,16 +32,13 @@ public class ProjectItemPropertiesImplementation(
             return new ProjectItemPropertyImplementation(DteImplementation, this, projectItemModel, propertyInfoAtIndex);
         }
 
-        if (index is string stringIndex)
-        {
-            return map.TryGetValue(stringIndex, out var propertyInfoByName)
-                ? new ProjectItemPropertyImplementation(DteImplementation, this, projectItemModel, propertyInfoByName)
-                : new NullPropertyImplementation(DteImplementation, this, stringIndex);
-        }
+        if (index is string stringIndex && map.TryGetValue(stringIndex, out var propertyInfoByName))
+            return new ProjectItemPropertyImplementation(DteImplementation, this, projectItemModel, propertyInfoByName);
 
         throw new ArgumentException(nameof(index));
     }
 
-    public override IEnumerator GetEnumerator() => VisualStudioProperties.ProjectItemPropertiesMap.Values.Select(info =>
-        new ProjectItemPropertyImplementation(DteImplementation, this, projectItemModel, info)).GetEnumerator();
+    public override IEnumerator GetEnumerator() => PropertyMap.Values
+        .Select(info => new ProjectItemPropertyImplementation(DteImplementation, this, projectItemModel, info))
+        .GetEnumerator();
 }
