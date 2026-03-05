@@ -60,7 +60,8 @@ namespace JetBrains.EnvDTE.Client.Impl.ProjectModelImpl
         {
             get
             {
-                _properties ??= new ProjectItemPropertiesImplementation(dte, this, projectItemModel);
+                _properties ??= new ProjectItemPropertiesImplementation(dte, this, projectItemModel,
+                    dte.DteProtocolModel.ProjectItem_get_Kind.Sync(new(projectItemModel)));
                 return _properties;
             }
         }

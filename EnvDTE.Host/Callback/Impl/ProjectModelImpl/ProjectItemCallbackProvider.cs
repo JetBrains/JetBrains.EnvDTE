@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using JetBrains.Application.Components;
 using JetBrains.Application.Parts;
 using JetBrains.Collections.Viewable;
@@ -27,6 +28,8 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         ISimpleLazy<IProjectModelEditor> projectModelEditor)
         : IEnvDteCallbackProvider
     {
+        private const string DateTimeFormat = "MM/dd/yyyy HH:mm:ss";
+
         public void RegisterCallbacks(DteProtocolModel model, IScheduler scheduler)
         {
             model.ProjectItem_get_Name.SetWithProjectItemAsync(host, async (lifetime, _, projectItem) =>
@@ -82,18 +85,32 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
             {
                 var itemNames = await lifetime.StartReadActionAsync(() =>
                     GetFilteredProjectItems(projectItem).Select(item => item.Name).ToArray());
-                var index =  itemNames.IndexOf(req.Name, StringComparer.OrdinalIgnoreCase);
+                var index = itemNames.IndexOf(req.Name, StringComparer.OrdinalIgnoreCase);
                 return index == -1 ? null : index;
             });
 
-            // TODO: Implement fully
             model.ProjectItem_get_Property.SetWithProjectItemSync(host, (request, item) => request.Name switch
             {
+                "DateCreated" => (GetCachedFileSystemData(item)?.CreationTimeUtc ??
+                                  item.Location.ToNativeFileSystemPath().FileCreationTimeUtc).ToString(DateTimeFormat),
+                "DateModified" => (GetCachedFileSystemData(item)?.LastWriteTimeUtc ??
+                                   item.Location.ToNativeFileSystemPath().FileModificationTimeUtc).ToString(DateTimeFormat),
+                "Extension" => item.Location.ExtensionWithDot,
+                "FileName" => item.Location.Name,
+                "FileSize" => item.Location.ToNativeFileSystemPath().Info?.Length.ToString(),
+                "LocalPath" => item.Location.FullPath,
                 "FullPath" => item.Location.FullPath,
                 _ => null
             });
 
-            model.ProjectItem_set_Property.SetWithProjectItemSync(host, (request, item) => Unit.Instance);
+            model.ProjectItem_set_Property.SetWithProjectItemSync(host, (_, _) => Unit.Instance);
+        }
+
+        [CanBeNull]
+        private CachedFileSystemData GetCachedFileSystemData(IProjectItem projectItem)
+        {
+            if (projectItem is ProjectFileImpl projectFile) return projectFile.CachedFileSystemData;
+            return null;
         }
 
         private IEnumerable<IProjectItem> GetFilteredProjectItems(IProjectItem projectItem)
