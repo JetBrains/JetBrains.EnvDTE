@@ -187,7 +187,6 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
                     SolutionBuilderRequestSilentMode.Default,
                     new SolutionBuilderRequestAdvancedSettings
                     {
-                        // TODO: This doesn't work for ReSharper build
                         InputProperties = [
                             new InputProperty(MSBuildProjectUtil.ConfigurationProperty, configuration.Configuration),
                             new InputProperty(MSBuildProjectUtil.PlatformProperty, configuration.Platform)
@@ -226,7 +225,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
 
             model.Solution_get_ConfigurationByName.SetWithSolutionMarkSync(solution, (name, solutionMark) =>
                 solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms
-                    .FirstOrDefault(cp => cp.Configuration.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    .FirstOrDefault(cp => cp.Configuration.Equals(name))
                     ?.ToRdSolutionConfiguration());
         }
 
