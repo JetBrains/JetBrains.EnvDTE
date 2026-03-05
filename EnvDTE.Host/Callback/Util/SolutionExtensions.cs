@@ -100,20 +100,18 @@ public static class SolutionExtensions
         var solutionMark = solution.GetSolutionMark();
         if (solutionMark is null) return null;
 
+        var configurations = solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms;
         var parts = value.Split('|');
-        if (parts.Length == 1)
-            // If the platform is not specified, use the first configuration
-            return solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms
-                .FirstOrDefault(cp => cp.Configuration.Equals(parts[0], StringComparison.OrdinalIgnoreCase));
 
-        if (parts.Length == 2 && !string.IsNullOrWhiteSpace(parts[0]) && !string.IsNullOrWhiteSpace(parts[1]))
+        // NOTE: Configuration names in Rider are case-sensitive, but in VS they are not. We will follow Rider's behavior here
+        return parts.Length switch
         {
-            var config = new SolutionConfigurationAndPlatform(parts[0], parts[1]);
-            return solutionMark.ConfigurationAndPlatformStore.ConfigurationsAndPlatforms
-                .SingleOrDefault(cp => cp.Equals(config));
-        }
-
-        return null;
+            // If the platform is not specified, use the first configuration
+            1 => configurations.FirstOrDefault(cp => cp.Configuration.Equals(parts[0])),
+            2 when !string.IsNullOrWhiteSpace(parts[0]) && !string.IsNullOrWhiteSpace(parts[1])
+                => configurations.SingleOrDefault(cp => cp.Equals(new SolutionConfigurationAndPlatform(parts[0], parts[1]))),
+            _ => null
+        };
     }
 
     public static void SetActiveConfigurationAndPlatform([NotNull] this ISolution solution, [CanBeNull] string value)
