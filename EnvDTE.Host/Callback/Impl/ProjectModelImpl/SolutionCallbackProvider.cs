@@ -258,7 +258,7 @@ namespace JetBrains.EnvDTE.Host.Callback.Impl.ProjectModelImpl
         // have a unique id. In the future it would be better to start using project guids instead, but since that complicates
         // the client side, I'm not going to do it now.
         private IEnumerable<IProject> GetFilteredProjects() => solution.GetTopLevelProjects()
-            .Where(p => p.IsProjectFromUserView() || p.IsSolutionFolder());
+            .Where(p => (p.IsProjectFromUserView() || p.IsSolutionFolder()) && !p.IsFileBasedProgramProject());
 
         private void ExecuteBuildRequest(SolutionBuilderRequest request, bool waitForBuild, Lifetime lifetime)
         {
