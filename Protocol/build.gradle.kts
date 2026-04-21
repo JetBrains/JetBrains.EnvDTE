@@ -66,11 +66,11 @@ rdgen {
     }
 }
 
-val dotNetSdkPath by lazy {
+val riderSdkPath by lazy {
     val sdkPath = intellijPlatform.platformPath.resolve("lib/DotNetSdkForRdPlugins").absolute()
     if (!sdkPath.isDirectory()) error("$sdkPath does not exist or not a directory")
 
-    println("SDK path: $sdkPath")
+    println("Rider SDK path: $sdkPath")
     return@lazy sdkPath
 }
 
@@ -78,27 +78,27 @@ tasks {
     val generateDotNetSdkProperties by registering {
         val dotNetSdkPathPropsPath = File("build", "DotNetSdkPath.generated.props")
         doLast {
-            dotNetSdkPathPropsPath.writeTextIfChanged(
-                """<Project>
-  <PropertyGroup>
-    <DotNetSdkPath>$dotNetSdkPath</DotNetSdkPath>
-  </PropertyGroup>
-</Project>
-"""
+            dotNetSdkPathPropsPath.writeTextIfChanged("""
+                <Project>
+                  <PropertyGroup>
+                    <DotNetSdkPath>$riderSdkPath</DotNetSdkPath>
+                  </PropertyGroup>
+                </Project>
+                """.trimIndent()
             )
         }
     }
     val generateNuGetConfig by registering {
-        val nuGetConfigFile = File(repoRoot, "NuGet.Config")
+        val nuGetConfigFile = repoRoot.resolve("NuGet.Config")
         doLast {
-            nuGetConfigFile.writeTextIfChanged(
-                """<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <packageSources>
-    <add key="resharper-sdk" value="$dotNetSdkPath" />
-  </packageSources>
-</configuration>
-"""
+            nuGetConfigFile.writeTextIfChanged("""
+                <?xml version="1.0" encoding="utf-8"?>
+                <configuration>
+                  <packageSources>
+                    <add key="rider-sdk" value="$riderSdkPath" />
+                  </packageSources>
+                </configuration>
+                """.trimIndent()
             )
         }
     }
