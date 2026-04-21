@@ -1,4 +1,5 @@
 import com.jetbrains.plugin.structure.base.utils.isFile
+import com.jetbrains.rd.generator.gradle.RdGenTask
 import org.jetbrains.intellij.platform.gradle.Constants
 import kotlin.io.path.absolute
 import kotlin.io.path.isDirectory
@@ -36,30 +37,31 @@ intellijPlatform {
     instrumentCode = false
 }
 
-val repoRoot = projectDir.parentFile!!
+val repoRoot: File = projectDir.parentFile
+
+val modelRoot = "model.DteRoot"
+val modelNamespace = "JetBrains.Rider.Model"
 
 rdgen {
-    val hostOutput = File(repoRoot, "EnvDTE.Host/Protocol")
-    val clientOutput = File(repoRoot, "EnvDTE.Client/Protocol")
+    val hostOutput = repoRoot.resolve("EnvDTE.Host/Protocol")
+    val clientOutput = repoRoot.resolve("EnvDTE.Client/Protocol")
 
     verbose = true
-    hashFolder = "build/rdgen"
-    sources(File(projectDir, "src/main/kotlin/model"))
     packages = "model"
 
     generator {
         language = "csharp"
         transform = "asis"
-        root = "model.DteRoot"
-        namespace = "JetBrains.Rider.Model"
+        root = modelRoot
+        namespace = modelNamespace
         directory = "$clientOutput"
     }
 
     generator {
         language = "csharp"
         transform = "reversed"
-        root = "model.DteRoot"
-        namespace = "JetBrains.Rider.Model"
+        root = modelRoot
+        namespace = modelNamespace
         directory = "$hostOutput"
     }
 }
@@ -104,6 +106,12 @@ tasks {
     register("prepare") {
         dependsOn("rdgen", generateDotNetSdkProperties, generateNuGetConfig)
     }
+}
+
+tasks.withType<RdGenTask> {
+    val classPath = sourceSets["main"].runtimeClasspath
+    dependsOn(classPath)
+    classpath(classPath)
 }
 
 defaultTasks("prepare")
