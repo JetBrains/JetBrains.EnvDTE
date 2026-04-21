@@ -1,5 +1,6 @@
 ﻿<Project>
-    <Import Project="$(MSBuildThisFileDirectory)Protocol\build\DotNetSdkPath.generated.props"/>
+    <Import Project="$(MSBuildThisFileDirectory)Protocol\build\DotNetSdkPath.generated.props" 
+            Condition="Exists('$(MSBuildThisFileDirectory)Protocol\build\DotNetSdkPath.generated.props')" />
     
     <PropertyGroup>
         <RepositoryRootPath>$(MSBuildThisFileDirectory)</RepositoryRootPath>
