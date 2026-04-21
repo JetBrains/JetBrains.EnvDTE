@@ -21,7 +21,6 @@ dependencies {
             useInstaller = false
         }
     }
-    implementation(libs.kotlinStdLib)
 }
 
 repositories {
