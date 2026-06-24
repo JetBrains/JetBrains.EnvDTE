@@ -11,6 +11,6 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="$(DotNetCliPath) run --project EnvDTE.Processor -- $(TargetPath)" WorkingDirectory="$(RepositoryRootPath)" />
+      <Exec Command="$(DotNetCliPath) run --no-build --project EnvDTE.Processor -- $(TargetPath)" WorkingDirectory="$(RepositoryRootPath)" />
     </Target>
 </Project>
