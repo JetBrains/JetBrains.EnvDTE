@@ -15,12 +15,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-        
-      - name: Setup JDK (JBR) 25
-        uses: actions/setup-java@v4
-        with:
-          distribution: jetbrains
-          java-version: 25
 
       - name: Run PowerShell build script
         shell: pwsh
