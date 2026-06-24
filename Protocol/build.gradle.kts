@@ -75,7 +75,7 @@ val riderSdkPath by lazy {
 
 tasks {
     val generateDotNetSdkProperties by registering {
-        val dotNetSdkPathPropsPath = File("build", "DotNetSdkPath.generated.props")
+        val dotNetSdkPathPropsPath = File(projectDir, "build/DotNetSdkPath.generated.props")
         doLast {
             dotNetSdkPathPropsPath.writeTextIfChanged("""
                 <Project>
