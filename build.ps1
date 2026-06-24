@@ -5,7 +5,10 @@ param(
 
 $progressPreference = 'SilentlyContinue'
 
+# https://github.com/mfilippov/command-line-wrappers/blob/main/dotnet.cmd
 ./dotnet.cmd --version
+# https://github.com/JetBrains/intellij-community/blob/394ce9d7034b52906e2f54481176eb4f606a4062/build/java.cmd
+./java.cmd --version
 
 Push-Location -Path Protocol
 Try {
