@@ -4,4 +4,4 @@ using JetBrains.RdBackend.Common.Env;
 namespace JetBrains.EnvDTE.Host;
 
 [ZoneMarker]
-public class ZoneMarker : IRequire<IReSharperHostCoreSharedFeatureZone>;
+public class ZoneMarker : IRequire<IReSharperHostCoreFeatureZone>;
